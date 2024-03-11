@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="move_dark">#31255a</color>
+    <color name="white_blue">#8fe0ff</color>
+    <color name="blue_dark">#75b4e3</color>
+    <color name="move_medium">#54416d</color>
+    <color name="move_light">#2b235a</color>
+
+</resources>
