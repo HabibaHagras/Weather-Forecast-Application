@@ -1,25 +1,26 @@
 package com.example.weatherforecastapplication.network
-
-import com.example.weatherforecastapplication.WeatherData
-import com.example.weatherforecastapplication.WeatherForecastResponse
+//
+//import com.example.weatherforecastapplication.WeatherData
+//import com.example.weatherforecastapplication.WeatherForecastResponse
+import com.example.weatherforecastapplication.model.ForecastEntry
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface Api_Service {
-    @GET("weather")
-    suspend fun getWeather(
-        @Query("q") city: String,
-        @Query("appid") apiKey: String
-    ): WeatherData
+//    @GET("weather")
+//    suspend fun getWeather(
+//        @Query("q") city: String,
+//        @Query("appid") apiKey: String
+//    ): WeatherData
     @GET("forecast")
     suspend fun get5DayForecast(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("appid") apiKey: String,
         @Query("units") units: String = "metric"
-    ): WeatherForecastResponse
+    ): ForecastEntry
 }
 
 
