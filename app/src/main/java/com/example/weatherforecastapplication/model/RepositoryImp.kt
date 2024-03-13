@@ -29,4 +29,7 @@ class RepositoryImp private constructor(
     ): ForecastEntry {
         Log.i("TAG", "getAllProduct: ProductRepositoryImp")
         return RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,units)    }
+
+    override suspend fun getWeatherWithCity(city: String, apiKey: String): WeatherData {
+return RemoteDataSource.getWeatherWithCityOverNetwork(city,apiKey)   }
 }

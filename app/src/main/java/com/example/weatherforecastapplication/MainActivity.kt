@@ -8,6 +8,7 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,6 +22,7 @@ import com.example.weatherforecastapplication.model.RepositoryImp
 import com.example.weatherforecastapplication.network.API.retrofitService
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view.HomeAdapter
+import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view_model.home
 import com.example.weatherforecastapplication.view_model.homeFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -48,11 +50,20 @@ class MainActivity : AppCompatActivity() {
     //private lateinit var textViewTemperature: TextView
     var longitude:Double = 0.0
     var latitude :Double = 0.0
+    lateinit var o:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         textViewCity=findViewById(R.id.textViewCity)
         rv = findViewById(R.id.rv)
+        o=findViewById(R.id.button)
+        o.setOnClickListener {  val fragment = NotificationFragment()
+
+            // Use supportFragmentManager directly without requireActivity()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack(null) // Optional: add to back stack if you want to enable back navigation
+                .commit()}
         mLayoutManager = LinearLayoutManager(this,  RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter()
         rv.apply {

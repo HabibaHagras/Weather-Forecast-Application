@@ -7,4 +7,7 @@ interface Repository {
                               longitude: Double,
                               apiKey: String,
                               units: String ):ForecastEntry
+    suspend fun getWeatherWithCity(
+
+        city: String,   apiKey: String ):WeatherData
 }
