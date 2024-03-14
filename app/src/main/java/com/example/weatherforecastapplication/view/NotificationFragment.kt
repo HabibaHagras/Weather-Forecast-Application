@@ -96,7 +96,23 @@ class NotificationFragment : Fragment() {
                 requestPermissions()
             } else {
                 Log.i("TAG", "onViewCreated:scheduleNotification ")
-               scheduleNotification(title, text, selectedTime)
+                allProductViewModel.products.observe(viewLifecycleOwner,
+
+                    object: Observer<WeatherData> {
+                        override fun onChanged(value: WeatherData) {
+                            Log.i("TAG", "Observer: Observer")
+                            if (value != null) {
+                                Log.i("TAG", "Observer: $value")
+
+                                val titles = "Cairo" // Use the city name as the title
+                                val temperature = value.main.temp.toString() // Use temperatu
+                                scheduleNotification(titles, temperature,selectedTime)
+
+                            }
+
+
+                        }})
+           //    scheduleNotification(title, text, selectedTime)
             }
         }
 
@@ -192,7 +208,7 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val title = intent.getStringExtra("title")
         val text = intent.getStringExtra("text")
-
+        Log.i("TAG", "onReceive: onReceive onReceive onReceive onReceive ")
         if (title != null && text != null) {
             val notification = buildNotification(context, title, text)
             Log.i("TAG", "onReceive: $notification")
@@ -219,11 +235,6 @@ class NotificationReceiver : BroadcastReceiver() {
         text: String
     ): NotificationCompat.Builder {
         val intent = Intent(context, MainActivity::class.java)
-        intent.putExtra(
-            "fragment_to_open",
-            NotificationFragment::class.java.simpleName
-        ) // Pass the fragment to open
-
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)
             getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
@@ -236,4 +247,5 @@ class NotificationReceiver : BroadcastReceiver() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
     }
+
 }
