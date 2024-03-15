@@ -17,14 +17,16 @@ class notification (private val repo: Repository): ViewModel() {
     val products: LiveData<WeatherData> = _products
 
     init {
-        getAllProducts("Cairo,eg","7f6473d2786753ccda5811e204914fff")
+        getAllProducts(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","metric")
     }
 
-    private fun getAllProducts(     city: String,
-                                    apiKey: String) {
+    private fun getAllProducts(   latitude: Double,
+                                  longitude: Double,
+                                  apiKey: String,
+                                  units: String) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewMOdel")
-            val ProductList=repo.getWeatherWithCity(city,apiKey)
+            val ProductList=repo.getWeatherWithCity(latitude,longitude,apiKey,units)
             Log.i("TAG", "getAllProducts: $ProductList")
 
             _products.postValue(ProductList)

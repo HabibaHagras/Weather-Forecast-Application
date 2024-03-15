@@ -2,7 +2,7 @@ package com.example.weatherforecastapplication.model
 
 import android.util.Log
 import com.example.weatherforecastapplication.network.RemoteDataSource
-import kotlin.collections.List
+import com.example.weatherforecastapplication.model2.Responce
 
 class RepositoryImp private constructor(
     private var RemoteDataSource: RemoteDataSource
@@ -26,10 +26,13 @@ class RepositoryImp private constructor(
         longitude: Double,
         apiKey: String,
         units: String
-    ): ForecastEntry {
+    ): Responce {
         Log.i("TAG", "getAllProduct: ProductRepositoryImp")
         return RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,units)    }
 
-    override suspend fun getWeatherWithCity(city: String, apiKey: String): WeatherData {
-return RemoteDataSource.getWeatherWithCityOverNetwork(city,apiKey)   }
+    override suspend fun getWeatherWithCity(latitude: Double,
+                                            longitude: Double,
+                                            apiKey: String,
+                                            units: String): WeatherData {
+return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,units)   }
 }

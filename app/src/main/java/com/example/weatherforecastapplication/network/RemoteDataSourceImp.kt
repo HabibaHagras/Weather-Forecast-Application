@@ -1,8 +1,8 @@
 package com.example.weatherforecastapplication.network
 
 import android.util.Log
-import com.example.weatherforecastapplication.model.ForecastEntry
 import com.example.weatherforecastapplication.model.WeatherData
+import com.example.weatherforecastapplication.model2.Responce
 
 class RemoteDataSourceImp private constructor():RemoteDataSource{
     private val weather_Service :Api_Service by lazy {
@@ -27,13 +27,16 @@ class RemoteDataSourceImp private constructor():RemoteDataSource{
         longitude: Double,
         apiKey: String,
         units: String
-    ): ForecastEntry {
+    ): Responce {
         Log.i("TAG", "getAllProduct: ProductRemoteDataSourceImp")
         val responce= weather_Service.get5DayForecast(latitude,longitude,apiKey,units)
         return responce    }
 
-    override suspend fun getWeatherWithCityOverNetwork( city: String,apiKey: String,): WeatherData {
+    override suspend fun getWeatherWithCityOverNetwork( latitude: Double,
+                                                        longitude: Double,
+                                                        apiKey: String,
+                                                        units: String): WeatherData {
         Log.i("TAG", "getAllProduct: ProductRemoteDataSourceImp")
-        val responce= weather_Service.getWeather(city,apiKey)
+        val responce= weather_Service.getWeather(latitude,longitude,apiKey,units)
         return responce      }
 }

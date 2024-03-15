@@ -104,7 +104,7 @@ class NotificationFragment : Fragment() {
                             if (value != null) {
                                 Log.i("TAG", "Observer: $value")
 
-                                val titles = "Cairo" // Use the city name as the title
+                                val titles = value.name // uUse the city name as the title
                                 val temperature = value.main.temp.toString() // Use temperatu
                                 scheduleNotification(titles, temperature,selectedTime)
 

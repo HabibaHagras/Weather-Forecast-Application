@@ -17,20 +17,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.weatherforecastapplication.model.ForecastEntry
 import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.network.API.retrofitService
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
 import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view_model.home
 import com.example.weatherforecastapplication.view_model.homeFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -65,7 +60,9 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null) // Optional: add to back stack if you want to enable back navigation
                 .commit()}
         mLayoutManager = LinearLayoutManager(this,  RecyclerView.HORIZONTAL, false)
-        mAdapter = HomeAdapter()
+        mAdapter = HomeAdapter(this)
+//        val weatherData: List<Listt> = // populate this list with your weather data
+//        val adapter = HomeAdapter(weatherData)
         rv.apply {
             adapter = mAdapter
             layoutManager = mLayoutManager}
@@ -83,11 +80,10 @@ class MainActivity : AppCompatActivity() {
         allProductViewModel= ViewModelProvider(this,allProductFactroy).get(home::class.java)
 
         allProductViewModel.products.observe(this,
+            object: Observer<Responce> {
+                override fun onChanged(value: Responce) {
 
-            object: Observer<ForecastEntry> {
-                override fun onChanged(value: ForecastEntry) {
-
-                   mAdapter.submitList(listOf(value))
+                   mAdapter.setData(value.list)
                     Log.i("TAG", "oooooooooooooooo :$value ")
 
                     updateUI(value)
@@ -119,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 //            .into(findViewById(R.id.imageViewWeatherIcon))
 //
 //    }
-private fun updateUI(weatherForecast: ForecastEntry) {
+private fun updateUI(weatherForecast: Responce) {
     val currentDate = getCurrentDate()
     Log.i("TAG", "currentDate: $currentDate")
 
@@ -244,9 +240,10 @@ private fun updateUI(weatherForecast: ForecastEntry) {
         } catch (se: SecurityException) {
         }
     }
-    private fun updateLocationTextView(location: Location) {
+     fun updateLocationTextView(location: Location) {
          latitude = location.latitude
         longitude = location.longitude
+
     }
 
 }
