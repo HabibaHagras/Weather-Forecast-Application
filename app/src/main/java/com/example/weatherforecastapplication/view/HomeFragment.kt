@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ import com.example.weatherforecastapplication.model.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
+import com.example.weatherforecastapplication.view.HomeWeekAdapter
 import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
@@ -46,7 +48,11 @@ class HomeFragment : Fragment() {
 
     val LOCATION_PERMISSION_REQUEST_CODE = 10
     lateinit var mAdapter: HomeAdapter
+    lateinit var mWeekAdapter:HomeWeekAdapter
+    lateinit var mWeekLayoutManager: LinearLayoutManager
+
     lateinit var rv: RecyclerView
+    lateinit var rvWeek: RecyclerView
     lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var textViewCity: TextView
     var longitude: Double = 0.0
@@ -61,23 +67,19 @@ class HomeFragment : Fragment() {
 
         textViewCity = rootView.findViewById(R.id.textViewCity)
         rv = rootView.findViewById(R.id.rv)
-        o = rootView.findViewById(R.id.button)
+        rvWeek = rootView.findViewById(R.id.rv_Week)
         val cityName = arguments?.getString("selected_city")
-
-        o.setOnClickListener {
-            val fragment = NotificationFragment()
-
-            // Use childFragmentManager for fragments inside fragments
-            childFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(null) // Optional: add to back stack if you want to enable back navigation
-                .commit()
-        }
+        mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
+        mWeekAdapter = HomeWeekAdapter(requireContext())
         rv.apply {
             adapter = mAdapter
             layoutManager = mLayoutManager
+        }
+        rvWeek.apply {
+            adapter=mWeekAdapter
+            layoutManager=mWeekLayoutManager
         }
 
         geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -109,6 +111,7 @@ class HomeFragment : Fragment() {
             allProductViewModel.products.observe(viewLifecycleOwner,
                 Observer<Responce> { value ->
                     mAdapter.setDataAndFilterByDate(value.list)
+                    mWeekAdapter.setData(value.list)
                     updateUI(value)
                 })
         }
@@ -126,29 +129,29 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateUI(weatherForecast: Responce) {
-        val currentDate = getCurrentDate()
-
-        val rootView = view // Get the root view of the fragment
+        val rootView = view ?: return  // Check if the root view is null
 
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
 
-            rootView?.findViewById<TextView>(R.id.textViewTemperature)?.text =
+            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
                 "${todayWeather.main.temp.toInt()}°C"
 
             val iconCode = todayWeather.weather[0].icon
             val iconUrl = getIconUrl(iconCode)
 
-            rootView?.let {
+            val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
+            imageViewWeatherIcon?.let {
                 Glide.with(requireContext())
                     .load(iconUrl)
-                    .into(it.findViewById(R.id.imageViewWeatherIcon))
+                    .into(it)
             }
         } else {
             Log.i("TAG", "updateUI: No data available")
         }
     }
+
 
 
     private fun getIconUrl(iconCode: String): String {
