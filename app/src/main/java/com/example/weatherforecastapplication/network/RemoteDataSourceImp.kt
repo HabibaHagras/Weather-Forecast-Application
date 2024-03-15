@@ -39,4 +39,9 @@ class RemoteDataSourceImp private constructor():RemoteDataSource{
         Log.i("TAG", "getAllProduct: ProductRemoteDataSourceImp")
         val responce= weather_Service.getWeather(latitude,longitude,apiKey,units)
         return responce      }
+
+    override suspend fun getWeatherWithCity(city: String, apiKey: String):WeatherData {
+        val responce= weather_Service.getWeatherWithCity(city,apiKey)
+        return responce
+    }
 }

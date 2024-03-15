@@ -11,4 +11,6 @@ interface Repository {
                                    longitude: Double,
                                    apiKey: String,
                                    units: String):WeatherData
+    suspend fun getWeatherWithCity2(city: String,apiKey:String):WeatherData
+
 }

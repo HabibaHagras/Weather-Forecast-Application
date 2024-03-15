@@ -26,6 +26,13 @@ interface Api_Service {
         @Query("appid") apiKey: String,
         @Query("units") units: String = "metric"
     ): Responce
+
+    @GET("weather")
+    suspend fun getWeatherWithCity(
+        @Query("q") city: String,
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "metric"
+    ): WeatherData
 }
 
 

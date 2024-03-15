@@ -12,11 +12,11 @@
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_launcher_background"
-                android:title="Settings"/>
+                android:title="Favorite"/>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_launcher_background"
-                android:title="Share"/>
+                android:title="Notification"/>
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_launcher_background"

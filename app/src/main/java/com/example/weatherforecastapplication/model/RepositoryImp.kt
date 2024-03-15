@@ -35,4 +35,8 @@ class RepositoryImp private constructor(
                                             apiKey: String,
                                             units: String): WeatherData {
 return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,units)   }
+
+    override suspend fun getWeatherWithCity2(city: String, apiKey: String): WeatherData {
+      return  RemoteDataSource.getWeatherWithCity(city,apiKey)
+    }
 }

@@ -28,14 +28,14 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
             toggle.syncState()
             if (savedInstanceState == null) {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, NotificationFragment()).commit()
+                    .replace(R.id.fragment_container, HomeFragment()).commit()
                 navigationView.setCheckedItem(R.id.nav_home)
             }
         }
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
             when (item.itemId) {
                 R.id.nav_home -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, NotificationFragment()).commit()
+                    .replace(R.id.fragment_container, HomeFragment()).commit()
                 R.id.nav_settings -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, FavFragment()).commit()
                 R.id.nav_share -> supportFragmentManager.beginTransaction()

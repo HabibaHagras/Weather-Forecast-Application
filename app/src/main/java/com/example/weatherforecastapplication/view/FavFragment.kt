@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +11,10 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherforecastapplication.HomeFragment
+import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.R
+import com.example.weatherforecastapplication.model.Repository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,7 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FavFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FavFragment : Fragment() {
+class FavFragment : Fragment(), FavListener {
     private lateinit var fab: FloatingActionButton
 
     private lateinit var adapter:FavAdapter
@@ -35,20 +39,16 @@ class FavFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_fav, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-         adapter = FavAdapter()
+         adapter = FavAdapter(FavFragment(),this)
         recyclerView.adapter = adapter
-
-        // Retrieve FloatingActionButton instance
         fab = view.findViewById(R.id.fab)
-
-        // Set OnClickListener to FloatingActionButton
         fab.setOnClickListener {
             showAddCityDialog()
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, NotificationFragment())
-                .addToBackStack(null)
-                .commit()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, NotificationFragment())
+//                .addToBackStack(null)
+//                .commit()
         }
 
         return view
@@ -62,7 +62,6 @@ class FavFragment : Fragment() {
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Add Favorite City")
-
         val alertDialog = dialogBuilder.create()
 
         saveButton.setOnClickListener {
@@ -77,5 +76,27 @@ class FavFragment : Fragment() {
         }
 
         alertDialog.show()
+    }
+
+    override fun OnCLickIteamFav(city: String) {
+        val anotherFragment = HomeFragment()
+
+        // Pass the city name to the target fragment using arguments
+        val bundle = Bundle().apply {
+            putString("selected_city", city)
+        }
+        anotherFragment.arguments = bundle
+
+        // Replace the current fragment with the target fragment
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, anotherFragment)
+            .addToBackStack(null)
+            .commit()
+//        // Create an Intent to start the MainActivity
+//        val intent = Intent(requireContext(), MainActivity::class.java)
+//        // Pass any data you want to the MainActivity using Intent extras
+//        intent.putExtra("selected_city", city)
+//        // Start the MainActivity
+//        startActivity(intent)
     }
 }

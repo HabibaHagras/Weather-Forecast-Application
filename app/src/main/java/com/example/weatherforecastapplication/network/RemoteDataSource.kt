@@ -12,4 +12,6 @@ interface RemoteDataSource {
                                               longitude: Double,
                                               apiKey: String,
                                               units: String ):WeatherData
+
+    suspend fun getWeatherWithCity(city:String,apiKey: String):WeatherData
 }
