@@ -6,6 +6,7 @@
 package com.example.weatherforecastapplication.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
 import com.example.weatherforecastapplication.model2.Responce
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapter.FavViewHolder>() {
 
@@ -27,7 +31,18 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
         listOfWeatherToday = data
         notifyDataSetChanged()
     }
-
+    fun setDataAndFilterByDate(data: List<Listt>) {
+        val currentDate = getCurrentDate()
+        Log.i("TAG", "setDataAndFilterByDate: $currentDate ")
+        listOfWeatherToday = data.filter { item ->
+           item.dt_txt.startsWith(currentDate)
+        }
+        notifyDataSetChanged()
+    }
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.wether_item, parent, false)

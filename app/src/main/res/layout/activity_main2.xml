@@ -31,15 +31,15 @@
 
         </LinearLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/nav_view"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/nav_menu"
-            android:background="@drawable/ic_launcher_foreground"
-            app:itemIconTint="@color/lavender"
-            app:itemTextColor="@color/lavender"/>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/img_4"
+        android:paddingTop="70dp"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/move_dark"
+        app:menu="@menu/nav_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

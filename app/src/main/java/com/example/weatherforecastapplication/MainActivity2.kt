@@ -42,7 +42,7 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                     .replace(R.id.fragment_container, NotificationFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, NotificationFragment()).commit()
-                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
+//                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             return true

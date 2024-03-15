@@ -67,7 +67,7 @@ class FavFragment : Fragment(), FavListener {
         saveButton.setOnClickListener {
             val city = editTextFavCity.text.toString().trim()
             if (city.isNotEmpty()) {
-                adapter.addCity(city)
+                adapter.addCity( city)
                 alertDialog.dismiss()
             } else {
                 // Handle empty city name

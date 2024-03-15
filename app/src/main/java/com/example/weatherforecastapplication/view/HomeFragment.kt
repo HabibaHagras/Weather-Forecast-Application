@@ -108,7 +108,7 @@ class HomeFragment : Fragment() {
 
             allProductViewModel.products.observe(viewLifecycleOwner,
                 Observer<Responce> { value ->
-                    mAdapter.setData(value.list)
+                    mAdapter.setDataAndFilterByDate(value.list)
                     updateUI(value)
                 })
         }
