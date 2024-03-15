@@ -16,7 +16,6 @@ import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -29,13 +28,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.databinding.FragmentNotificationBinding
-import com.example.weatherforecastapplication.model.ForecastEntry
 import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model.WeatherData
+import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
-import com.example.weatherforecastapplication.view.NotificationFragment.Companion.CHANNEL_ID
-import com.example.weatherforecastapplication.view_model.home
-import com.example.weatherforecastapplication.view_model.homeFactory
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
 import java.util.*

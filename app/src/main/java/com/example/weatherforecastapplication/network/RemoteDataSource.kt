@@ -1,6 +1,6 @@
 package com.example.weatherforecastapplication.network
 
-import com.example.weatherforecastapplication.model.WeatherData
+import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.model2.Responce
 
 interface RemoteDataSource {
@@ -11,7 +11,7 @@ interface RemoteDataSource {
     suspend fun getWeatherWithCityOverNetwork(latitude: Double,
                                               longitude: Double,
                                               apiKey: String,
-                                              units: String ):WeatherData
+                                              units: String ): WeatherData
 
-    suspend fun getWeatherWithCity(city:String,apiKey: String):WeatherData
+    suspend fun getWeatherWithCity(city:String,apiKey: String): WeatherData
 }

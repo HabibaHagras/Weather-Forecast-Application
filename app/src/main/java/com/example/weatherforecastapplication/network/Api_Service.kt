@@ -2,7 +2,7 @@ package com.example.weatherforecastapplication.network
 //
 //import com.example.weatherforecastapplication.WeatherData
 //import com.example.weatherforecastapplication.WeatherForecastResponse
-import com.example.weatherforecastapplication.model.WeatherData
+import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.model2.Responce
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

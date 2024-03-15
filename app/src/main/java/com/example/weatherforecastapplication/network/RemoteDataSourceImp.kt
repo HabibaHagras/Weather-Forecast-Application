@@ -1,7 +1,7 @@
 package com.example.weatherforecastapplication.network
 
 import android.util.Log
-import com.example.weatherforecastapplication.model.WeatherData
+import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.model2.Responce
 
 class RemoteDataSourceImp private constructor():RemoteDataSource{
@@ -40,7 +40,7 @@ class RemoteDataSourceImp private constructor():RemoteDataSource{
         val responce= weather_Service.getWeather(latitude,longitude,apiKey,units)
         return responce      }
 
-    override suspend fun getWeatherWithCity(city: String, apiKey: String):WeatherData {
+    override suspend fun getWeatherWithCity(city: String, apiKey: String): WeatherData {
         val responce= weather_Service.getWeatherWithCity(city,apiKey)
         return responce
     }
