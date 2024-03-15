@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         lottieAnimationView = findViewById(R.id.animationView)
         Handler().postDelayed({
             Log.i("TAG", "SplashActivity")
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
             finish()
         }, 3000)
