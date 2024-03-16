@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.model
 
+import com.example.weatherforecastapplication.model2.Weather
 import kotlin.collections.List
 
 data class List (

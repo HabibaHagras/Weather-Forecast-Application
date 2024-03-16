@@ -46,4 +46,8 @@ return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,
     override suspend fun getStored(): List<WeatherData> {
         return LocalDataSource.getStoredProducts()
     }
+
+    override suspend fun insertWeatherData(product: WeatherData) {
+        return LocalDataSource.insertWeatherData(product)
+    }
 }

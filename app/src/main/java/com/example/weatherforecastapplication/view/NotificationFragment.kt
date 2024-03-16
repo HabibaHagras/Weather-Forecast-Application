@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.view
 
+import WeatherLocalDataSourceImp
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -71,7 +72,7 @@ class NotificationFragment : Fragment() {
         createNotificationChannel()
         allProductFactroy= notificationFactory(
             RepositoryImp.getInstance(
-                RemoteDataSourceImp.getInstance()))
+                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())))
         allProductViewModel= ViewModelProvider(this,allProductFactroy).get(notification::class.java)
 
 

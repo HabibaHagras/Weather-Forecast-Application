@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.view
 
+import WeatherLocalDataSourceImp
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,12 +10,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecastapplication.HomeFragment
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model.Repository
+import com.example.weatherforecastapplication.model.RepositoryImp
+import com.example.weatherforecastapplication.model.Main
+import com.example.weatherforecastapplication.model2.WeatherData
+import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.view_model.Fav
+import com.example.weatherforecastapplication.view_model.FavFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,8 +38,9 @@ private const val ARG_PARAM2 = "param2"
  */
 class FavFragment : Fragment(), FavListener {
     private lateinit var fab: FloatingActionButton
-
-    private lateinit var adapter:FavAdapter
+    lateinit var allFavViewModel: Fav
+    lateinit var allFavFactroy: FavFactory
+    private lateinit var adapter: FavAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +49,16 @@ class FavFragment : Fragment(), FavListener {
         val view = inflater.inflate(R.layout.fragment_fav, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-         adapter = FavAdapter(FavFragment(),this)
+        adapter = FavAdapter(FavFragment(), this)
+        allFavFactroy = FavFactory(
+            RepositoryImp.getInstance(
+                RemoteDataSourceImp.getInstance(),
+                WeatherLocalDataSourceImp(requireContext())
+            ), "Tanta"
+        )
+        allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
+        allFavViewModel.products.observe(viewLifecycleOwner, Observer { weatherDataList ->
+            adapter.setData(listOf(weatherDataList))})
         recyclerView.adapter = adapter
         fab = view.findViewById(R.id.fab)
         fab.setOnClickListener {
@@ -55,7 +74,8 @@ class FavFragment : Fragment(), FavListener {
     }
 
     private fun showAddCityDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.fav_city_dialog, null)
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.fav_city_dialog, null)
         val editTextFavCity = dialogView.findViewById<EditText>(R.id.edit_text_fav_city)
         val saveButton = dialogView.findViewById<Button>(R.id.button_save)
 
@@ -65,9 +85,22 @@ class FavFragment : Fragment(), FavListener {
         val alertDialog = dialogBuilder.create()
 
         saveButton.setOnClickListener {
-            val city = editTextFavCity.text.toString().trim()
-            if (city.isNotEmpty()) {
-                adapter.addCity( city)
+            val cityName = editTextFavCity.text.toString().trim()
+            if (cityName.isNotEmpty()) {
+                val city =
+                    WeatherData(
+                        name = cityName,
+                        main = Main(
+
+                            temp = 0.0,
+
+                            ),
+                        weather = emptyList()
+                    ) // Create a new WeatherData object
+
+                adapter.addCity(city)
+                allFavViewModel.insertProducts(city)
+
                 alertDialog.dismiss()
             } else {
                 // Handle empty city name

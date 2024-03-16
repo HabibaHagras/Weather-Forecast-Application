@@ -3,7 +3,8 @@ package com.example.weatherforecastapplication.model2
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weatherforecastapplication.model.Main
-import kotlin.collections.List
+
+
 @Entity(tableName = "weatherData_table")
 
 data class WeatherData(
@@ -11,5 +12,6 @@ data class WeatherData(
     val id: Long = 0, // or any appropriate type
     val name: String,
     val main: Main,
-    val weather: List<Weather>
+    val weather: List<Weather>? = null
+
 )

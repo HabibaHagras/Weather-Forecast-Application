@@ -1,4 +1,5 @@
 import android.content.Context
+import android.util.Log
 import com.example.weatherforecastapplication.dp.WeatherDataDAO
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.dp.db
@@ -9,6 +10,7 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     private val dao: WeatherDataDAO by lazy {
         val dbInstance = db.getInstance(context)
         dbInstance.getWeatherDataDao()
+
     }
 
     override suspend fun insertWeather(weather: Weather) {
@@ -16,6 +18,7 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     }
 
     override suspend fun insertWeatherData(weatherData: WeatherData) {
+        Log.i("TAG", "insertWeatherData: insertWeatherData")
         dao.insert(weatherData)
     }
 

@@ -7,17 +7,20 @@ package com.example.weatherforecastapplication.view
     import androidx.cardview.widget.CardView
     import androidx.recyclerview.widget.RecyclerView
     import com.example.weatherforecastapplication.R
+    import com.example.weatherforecastapplication.model2.WeatherData
 
 class FavAdapter(private val context: FavFragment,private val listener: FavListener) : RecyclerView.Adapter<FavAdapter.FavAdapterViewHolder>() {
 
-    private var listOfCities =mutableListOf<String>()
 
-    fun setData(data: MutableList<String>) {
+    private var listOfCities = listOf<WeatherData>()
+
+    fun setData(data: List<WeatherData>) {
         listOfCities = data
         notifyDataSetChanged()
     }
-    fun addCity(city: String) {
-        listOfCities.add(city)
+
+    fun addCity(city: WeatherData) {
+        listOfCities = listOfCities + city
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavAdapterViewHolder {
@@ -29,9 +32,9 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
     override fun onBindViewHolder(holder: FavAdapterViewHolder, position: Int) {
         val currentItem = listOfCities[position]
 
-        holder.name.text = currentItem
+        holder.name.text = currentItem.toString()
         holder.card.setOnClickListener {
-            listener.OnCLickIteamFav(currentItem)
+            listener.OnCLickIteamFav(currentItem.toString())
         }
     }
     override fun getItemCount(): Int {

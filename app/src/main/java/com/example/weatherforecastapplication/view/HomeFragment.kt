@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication
 
+import WeatherLocalDataSourceImp
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
@@ -89,7 +90,7 @@ class HomeFragment : Fragment() {
         if (!cityName.isNullOrEmpty()) {
             allFavFactroy = FavFactory(
                 RepositoryImp.getInstance(
-                    RemoteDataSourceImp.getInstance()
+                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
                 ),cityName
             )
             allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
@@ -102,7 +103,7 @@ class HomeFragment : Fragment() {
         else{
             allProductFactroy = homeFactory(
                 RepositoryImp.getInstance(
-                    RemoteDataSourceImp.getInstance()
+                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
                 )
             )
             allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
@@ -121,11 +122,12 @@ class HomeFragment : Fragment() {
         view?.findViewById<TextView>(R.id.textViewCity)?.text = weatherData.name
         view?.findViewById<TextView>(R.id.textViewTemperature)?.text =
             "${weatherData.main.temp.toInt()}°C"
-        val iconUrl = "https://openweathermap.org/img/w/${weatherData.weather[0].icon}.png"
+        val iconUrl = "https://openweathermap.org/img/w/${weatherData.weather?.get(0)?.icon}.png"
         Glide.with(requireContext())
             .load(iconUrl)
             .into(requireView().findViewById(R.id.imageViewWeatherIcon))
     }
+
 
     private fun updateUI(weatherForecast: Responce) {
         val rootView = view ?: return  // Check if the root view is null

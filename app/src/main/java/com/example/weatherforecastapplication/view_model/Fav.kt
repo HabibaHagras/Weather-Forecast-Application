@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +17,7 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
     val productsw: LiveData<List<WeatherData>> = _productw
 
     init {
-        getAllProducts(cityName, "7f6473d2786753ccda5811e204914fff", )
+     //   getAllProducts(cityName, "7f6473d2786753ccda5811e204914fff", )
         getStored()
     }
 
@@ -35,6 +36,15 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
         viewModelScope.launch(Dispatchers.IO) {
             val productList = repo.getWeatherWithCity2(cityName, apiKey)
             _products.postValue(productList)
+        }
+    }
+    fun insertProducts(product:WeatherData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("TAG", "insertProducts: ViewMOdel")
+            repo.insertWeatherData(product)
+            getStored()
+
+
         }
     }
 }

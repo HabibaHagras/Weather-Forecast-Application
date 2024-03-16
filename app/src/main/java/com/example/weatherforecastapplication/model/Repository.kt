@@ -15,5 +15,7 @@ interface Repository {
                                    units: String): WeatherData
     suspend fun getWeatherWithCity2(city: String,apiKey:String): WeatherData
     suspend fun getStored(): List<WeatherData>
+    suspend fun insertWeatherData(product: WeatherData)
+
 
 }

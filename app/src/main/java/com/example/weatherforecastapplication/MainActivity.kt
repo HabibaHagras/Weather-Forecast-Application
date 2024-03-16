@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication
 
+import WeatherLocalDataSourceImp
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
@@ -76,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         allProductFactroy= homeFactory(
             RepositoryImp.getInstance(
-            RemoteDataSourceImp.getInstance()))
+            RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(this) ))
         allProductViewModel= ViewModelProvider(this,allProductFactroy).get(home::class.java)
 
         allProductViewModel.products.observe(this,
@@ -135,7 +136,7 @@ private fun updateUI(weatherForecast: Responce) {
 
         Glide.with(this)
             .load(iconUrl)
-            .into(findViewById(R.id.imageViewWeatherIcon))
+            .into(findViewById(R.id.imageViewWeatherIsskcon))
     } else {
         Log.i("TAG", "updateUI: elseeeeeee no thing")
     }
