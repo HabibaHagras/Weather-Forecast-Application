@@ -49,6 +49,20 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLanguage(): String? {
         return sharedPreferences?.getString("language", null)
     }
+    fun saveMetricState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("metricState", isChecked).apply()
+    }
+
+    fun getMetricState(): Boolean {
+        return sharedPreferences?.getBoolean("metricState", false)!!
+    }
+    fun saveStandardState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("standardState", isChecked).apply()
+    }
+
+    fun getStandardState(): Boolean {
+        return sharedPreferences?.getBoolean("standardState", false)!!
+    }
     fun clearPreferences() {
         editor?.clear()!!.apply()
     }

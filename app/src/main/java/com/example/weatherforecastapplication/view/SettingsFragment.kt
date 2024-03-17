@@ -41,6 +41,8 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val metricSwitch = binding.metric
+        val standardSwitch = binding.Standard
         binding.switch1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 startActivity(Intent(requireContext(), MapsActivity::class.java))
@@ -59,9 +61,20 @@ class SettingsFragment : Fragment() {
             }
         }
         binding.metric.apply {
-            buttonDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.custom_checkbox)
-            isChecked = false
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getMetricState()
             setOnCheckedChangeListener { _, isChecked ->
+                binding.Standard.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveStandardState(binding.Standard.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveMetricState(isChecked)
+                Log.i("TAG", "onViewCreated:  lolollolallllllllllllllll ")
+            }
+        }
+        binding.Standard.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getStandardState()
+            setOnCheckedChangeListener { _, isChecked ->
+                binding.metric.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveMetricState( binding.metric.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveStandardState(isChecked)
                 Log.i("TAG", "onViewCreated:  lolollolallllllllllllllll ")
             }
         }

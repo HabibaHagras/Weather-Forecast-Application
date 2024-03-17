@@ -8,32 +8,37 @@
     android:background="@color/weather4"
     tools:context=".view.SettingsFragment">
 
-    <CheckBox
-        android:id="@+id/metric"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="347dp"
-        android:background="@drawable/custom_checkbox"
-        android:button="@null"
-        android:checked="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchLanguageEnglish" />
 
-    <CheckBox
-        android:id="@+id/Standard"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <Switch
+        android:id="@+id/metric"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="347dp"
-        android:background="@drawable/custom_checkbox"
-        android:button="@null"
-        android:checked="false"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/meter_sec"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Standard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/Standard"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="224dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/mile_hour"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchLanguageEnglish" />
 
@@ -47,6 +52,7 @@
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/map"
+        android:textColor="@color/weather1"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +65,7 @@
         android:layout_gravity="center|right"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="29dp"
-        android:layout_marginBottom="263dp"
+        android:layout_marginBottom="440dp"
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/arabic"
@@ -67,7 +73,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
@@ -77,7 +83,7 @@
         android:layout_gravity="center|right"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="29dp"
-        android:layout_marginBottom="176dp"
+        android:layout_marginBottom="356dp"
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/english"
@@ -85,7 +91,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -94,12 +100,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="326dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/language"
-        android:textColor="@color/weather2"
+        android:textColor="@color/weather1"
         app:layout_constraintBottom_toTopOf="@+id/switchLanguageArabic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -127,5 +133,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Standard" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="329dp"
+        android:layout_marginBottom="46dp"
+        android:text="@string/wind_speed"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toTopOf="@+id/metric"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
