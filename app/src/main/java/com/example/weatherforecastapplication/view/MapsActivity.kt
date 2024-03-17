@@ -1,9 +1,13 @@
 package com.example.weatherforecastapplication.view
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.weatherforecastapplication.HomeFragment
+import com.example.weatherforecastapplication.MainActivity
+import com.example.weatherforecastapplication.MainActivity2
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.SplashActivity
 
@@ -48,24 +52,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapClickListener { latLng ->
-            // Clear existing markers
             mMap.clear()
-            // Add a new marker at the clicked position
             mMap.addMarker(MarkerOptions().position(latLng).title("Selected Location"))
-            // Move the camera to the clicked position
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7f))
-
             val selectedLatitude = latLng.latitude
             val selectedLongitude = latLng.longitude
             sharedPreferencesManager.saveLatitude(selectedLatitude.toFloat())
             sharedPreferencesManager.saveLongitude(selectedLongitude.toFloat())
-//            val sharedPreferences = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-//            val editor = sharedPreferences.edit()
-//            editor.putFloat("latitude", selectedLatitude.toFloat())
-//            editor.putFloat("longitude", selectedLongitude.toFloat())
-//            editor.apply()
+
             Toast.makeText(this,"Latitude = $selectedLatitude & Longitude = $selectedLongitude",
                 Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, MainActivity2::class.java))
+
         }
 
     }

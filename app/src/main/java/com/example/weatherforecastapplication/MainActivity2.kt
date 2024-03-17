@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.weatherforecastapplication.view.FavFragment
 import com.example.weatherforecastapplication.view.NotificationFragment
+import com.example.weatherforecastapplication.view.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 
 private lateinit var drawerLayout: DrawerLayout
@@ -41,7 +42,7 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                 R.id.nav_share -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, NotificationFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, NotificationFragment()).commit()
+                    .replace(R.id.fragment_container, SettingsFragment()).commit()
 //                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
             }
             drawerLayout.closeDrawer(GravityCompat.START)
