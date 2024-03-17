@@ -42,7 +42,13 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLongitude(): Float {
         return sharedPreferences?.getFloat("longitude", 0.0f)!!
     }
+    fun saveLanguage(languageCode: String) {
+        editor?.putString("language", languageCode)?.apply()
+    }
 
+    fun getLanguage(): String? {
+        return sharedPreferences?.getString("language", null)
+    }
     fun clearPreferences() {
         editor?.clear()!!.apply()
     }

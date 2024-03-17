@@ -9,22 +9,22 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/home_black_24dp"
-            android:title="Home" />
+            android:title="@string/title_home" />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/favorite_black_24dp"
-            android:title="Favorite" />
+            android:title="@string/title_favorite" />
 
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/alarm_black_24dp"
-            android:title="Notification" />
+            android:title="@string/title_alerts" />
 
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_launcher_background"
-            android:title="Settings" />
+            android:icon="@drawable/settings_white_24dp"
+            android:title="@string/title_settings" />
 
     </group>
 

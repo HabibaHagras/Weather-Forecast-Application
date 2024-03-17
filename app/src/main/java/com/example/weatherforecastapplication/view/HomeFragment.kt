@@ -193,7 +193,7 @@ class HomeFragment : Fragment() {
                 val address: Address = addresses[0]
                 val city = address.locality
                 if (!city.isNullOrBlank()) {
-                    textViewCity.text = "City: $city"
+                    textViewCity.text = "  $city  "
                 } else {
                     textViewCity.text = "City not found"
                 }
