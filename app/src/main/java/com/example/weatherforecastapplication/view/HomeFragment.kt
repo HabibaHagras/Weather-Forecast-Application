@@ -60,7 +60,6 @@ class HomeFragment : Fragment() {
     private lateinit var textViewCity: TextView
     var longitude: Double = 0.0
     var latitude: Double = 0.0
-    lateinit var o: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,16 +70,11 @@ class HomeFragment : Fragment() {
         textViewCity = rootView.findViewById(R.id.textViewCity)
         rv = rootView.findViewById(R.id.rv)
         rvWeek = rootView.findViewById(R.id.rv_Week)
-        o=rootView.findViewById(R.id.button2)
         val cityName = arguments?.getString("selected_city")
         mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
         mWeekAdapter = HomeWeekAdapter(requireContext())
-        o.setOnClickListener {
-            val intent = Intent(requireContext(), MapsActivity::class.java)
-            startActivity(intent)
-        }
         rv.apply {
             adapter = mAdapter
             layoutManager = mLayoutManager

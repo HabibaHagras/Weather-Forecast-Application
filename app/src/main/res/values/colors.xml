@@ -15,4 +15,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="lavender">#8692f7</color>
 
+
+    <color name="weather1">#BDD8F1</color>
+    <color name="weather2">#82A6CB</color>
+    <color name="weather3">#3667A6</color>
+    <color name="weather4">#214177</color>
+
+
+
 </resources>
