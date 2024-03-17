@@ -5,8 +5,37 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/weather4"
     tools:context=".view.SettingsFragment">
 
+    <CheckBox
+        android:id="@+id/metric"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="347dp"
+        android:background="@drawable/custom_checkbox"
+        android:button="@null"
+        android:checked="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchLanguageEnglish" />
+
+    <CheckBox
+        android:id="@+id/Standard"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="347dp"
+        android:background="@drawable/custom_checkbox"
+        android:button="@null"
+        android:checked="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchLanguageEnglish" />
 
     <Switch
         android:id="@+id/switch1"
@@ -34,6 +63,7 @@
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/arabic"
+        android:textColor="@color/weather2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +81,7 @@
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/english"
+        android:textColor="@color/weather2"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,9 +96,36 @@
         android:layout_marginEnd="326dp"
         android:layout_marginBottom="44dp"
         android:text="@string/language"
+        android:textColor="@color/weather2"
         app:layout_constraintBottom_toTopOf="@+id/switchLanguageArabic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Meter_Sec"
+        android:layout_width="91dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="235dp"
+        android:layout_marginBottom="89dp"
+        android:text="@string/meter_sec"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/metric" />
+
+    <TextView
+        android:id="@+id/standard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginBottom="35dp"
+        android:text="@string/mile_hour"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Standard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
