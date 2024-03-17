@@ -58,7 +58,7 @@ class FavFragment : Fragment(), FavListener {
         )
         allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
         allFavViewModel.products.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(listOf(weatherDataList))})
+            adapter.setData(weatherDataList)})
         recyclerView.adapter = adapter
         fab = view.findViewById(R.id.fab)
         fab.setOnClickListener {

@@ -2,6 +2,7 @@ package com.example.weatherforecastapplication
 
 import WeatherLocalDataSourceImp
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -23,11 +24,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherforecastapplication.model.RepositoryImp
+import com.example.weatherforecastapplication.model.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
 import com.example.weatherforecastapplication.view.HomeWeekAdapter
+import com.example.weatherforecastapplication.view.MapsActivity
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
 import com.example.weatherforecastapplication.view_model.home
@@ -68,11 +71,16 @@ class HomeFragment : Fragment() {
         textViewCity = rootView.findViewById(R.id.textViewCity)
         rv = rootView.findViewById(R.id.rv)
         rvWeek = rootView.findViewById(R.id.rv_Week)
+        o=rootView.findViewById(R.id.button2)
         val cityName = arguments?.getString("selected_city")
         mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
         mWeekAdapter = HomeWeekAdapter(requireContext())
+        o.setOnClickListener {
+            val intent = Intent(requireContext(), MapsActivity::class.java)
+            startActivity(intent)
+        }
         rv.apply {
             adapter = mAdapter
             layoutManager = mLayoutManager
@@ -104,8 +112,8 @@ class HomeFragment : Fragment() {
             allProductFactroy = homeFactory(
                 RepositoryImp.getInstance(
                     RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-                )
-            )
+                ), SharedPreferencesManager.getInstance(requireContext()
+            ))
             allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
 
             allProductViewModel.products.observe(viewLifecycleOwner,

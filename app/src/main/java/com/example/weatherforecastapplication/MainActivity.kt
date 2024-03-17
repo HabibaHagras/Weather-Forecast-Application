@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weatherforecastapplication.model.RepositoryImp
+import com.example.weatherforecastapplication.model.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
@@ -47,11 +48,16 @@ class MainActivity : AppCompatActivity() {
     var longitude:Double = 0.0
     var latitude :Double = 0.0
     lateinit var o:Button
+    companion object {
+        lateinit var instance: MainActivity
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         textViewCity=findViewById(R.id.textViewCity)
         rv = findViewById(R.id.rv)
+        instance = this
+
         o=findViewById(R.id.button)
         o.setOnClickListener {  val fragment = NotificationFragment()
 
@@ -77,7 +83,8 @@ class MainActivity : AppCompatActivity() {
 
         allProductFactroy= homeFactory(
             RepositoryImp.getInstance(
-            RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(this) ))
+            RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(this) ),
+            SharedPreferencesManager.getInstance(this))
         allProductViewModel= ViewModelProvider(this,allProductFactroy).get(home::class.java)
 
         allProductViewModel.products.observe(this,

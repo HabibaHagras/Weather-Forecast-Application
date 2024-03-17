@@ -14,8 +14,8 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
 
     private var listOfCities = listOf<WeatherData>()
 
-    fun setData(data: List<WeatherData>) {
-        listOfCities = data
+    fun setData(data: WeatherData ) {
+        listOfCities = listOf(data)
         notifyDataSetChanged()
     }
 
