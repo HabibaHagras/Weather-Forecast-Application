@@ -75,7 +75,7 @@ dependencies {
     kapt ("androidx.room:room-compiler:2.6.1")
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    
+
 //ViewModel
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation( "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")

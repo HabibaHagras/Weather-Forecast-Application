@@ -89,10 +89,18 @@ class FavFragment : Fragment(), FavListener {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.i("TAG", "onViewCreated:  ")
+
+        refreshFavorites()
+
+    }
+
     override fun onStart() {
         super.onStart()
         Log.i("TAG", "onStart: ")
-
+        allFavViewModel.getStored()
         refreshFavorites()
 
     }

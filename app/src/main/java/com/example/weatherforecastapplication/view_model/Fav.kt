@@ -22,7 +22,7 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
         getStored()
     }
 
-    private  fun getStored() {
+      fun getStored() {
         viewModelScope.launch(Dispatchers.IO) {
 
             val productList = repo.getStored()
