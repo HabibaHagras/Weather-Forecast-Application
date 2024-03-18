@@ -3,6 +3,7 @@ package com.example.weatherforecastapplication.view
 import WeatherLocalDataSourceImp
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,6 @@ import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model.Repository
 import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model.Main
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.Fav
@@ -57,12 +57,17 @@ class FavFragment : Fragment(), FavListener {
             ), "Tanta"
         )
         allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
-        allFavViewModel.products.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(weatherDataList)})
         recyclerView.adapter = adapter
+        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
+            adapter.setData(weatherDataList)})
         fab = view.findViewById(R.id.fab)
         fab.setOnClickListener {
-            showAddCityDialog()
+//            showAddCityDialog()
+            val intent = Intent(requireContext(), MapsActivity::class.java).apply {
+                putExtra("favorite",0) // Replace latitudeValue with the actual latitude
+            }
+            startActivity(intent)
+            //startActivity(Intent(requireContext(), MapsActivity::class.java))
 
 //            requireActivity().supportFragmentManager.beginTransaction()
 //                .replace(R.id.fragment_container, NotificationFragment())
@@ -72,7 +77,29 @@ class FavFragment : Fragment(), FavListener {
 
         return view
     }
+    override fun onResume() {
+        super.onResume()
+        refreshFavorites()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        Log.i("TAG", "onStop: ")
+        refreshFavorites()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("TAG", "onStart: ")
+
+        refreshFavorites()
+
+    }
+    private fun refreshFavorites() {
+        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
+            adapter.setData(weatherDataList)})
+    }
     private fun showAddCityDialog() {
         val dialogView =
             LayoutInflater.from(requireContext()).inflate(R.layout.fav_city_dialog, null)
@@ -87,19 +114,19 @@ class FavFragment : Fragment(), FavListener {
         saveButton.setOnClickListener {
             val cityName = editTextFavCity.text.toString().trim()
             if (cityName.isNotEmpty()) {
-                val city =
-                    WeatherData(
-                        name = cityName,
-                        main = Main(
-
-                            temp = 0.0,
-
-                            ),
-                        weather = emptyList()
-                    ) // Create a new WeatherData object
-
-                adapter.addCity(city)
-                allFavViewModel.insertProducts(city)
+//                val city =
+//                    WeatherData(
+//                        name = cityName,
+//                        main = Main(
+//
+//                            temp = 0.0,
+//
+//                            ),
+//                        weather = emptyList()
+//                    ) // Create a new WeatherData object
+//
+//                adapter.addCity(city)
+//                allFavViewModel.insertProducts(city)
 
                 alertDialog.dismiss()
             } else {

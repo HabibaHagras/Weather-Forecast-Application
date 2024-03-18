@@ -14,8 +14,8 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
 
     private var listOfCities = listOf<WeatherData>()
 
-    fun setData(data: WeatherData ) {
-        listOfCities = listOf(data)
+    fun setData(data: List<WeatherData> ) {
+        listOfCities = data
         notifyDataSetChanged()
     }
 
@@ -32,7 +32,7 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
     override fun onBindViewHolder(holder: FavAdapterViewHolder, position: Int) {
         val currentItem = listOfCities[position]
 
-        holder.name.text = currentItem.toString()
+        holder.name.text = currentItem.name.toString()
         holder.card.setOnClickListener {
             listener.OnCLickIteamFav(currentItem.toString())
         }

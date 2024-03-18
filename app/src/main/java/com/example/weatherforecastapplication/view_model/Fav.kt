@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecastapplication.model.Repository
+import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,3 +49,4 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
         }
     }
 }
+

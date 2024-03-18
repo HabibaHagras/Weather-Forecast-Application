@@ -3,8 +3,13 @@ import android.util.Log
 import com.example.weatherforecastapplication.dp.WeatherDataDAO
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.dp.db
+import com.example.weatherforecastapplication.model2.Clouds
+import com.example.weatherforecastapplication.model2.Coord
+import com.example.weatherforecastapplication.model2.Main
+import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
+import com.example.weatherforecastapplication.model2.Wind
 
 class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     private val dao: WeatherDataDAO by lazy {
@@ -31,6 +36,7 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     }
 
     override suspend fun getStoredProducts(): List<WeatherData> {
+
         return dao.getAll().map { weatherDataEntity ->
             val weatherEntities = dao.getWeatherByParentId(weatherDataEntity.id)
             val weatherList = weatherEntities.map { weatherEntity ->
@@ -41,11 +47,29 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
                     main = weatherEntity.main
                 )
             }
+//            WeatherData(
+//                name = weatherDataEntity.name,
+//                main = weatherDataEntity.main,
+//                weather = weatherList
+//            )
+
+
+
             WeatherData(
-                name = weatherDataEntity.name,
+                base = "baseValue",
+                clouds = Clouds(all = 0),
+                cod = 200,
+                coord = Coord(lat = 0.0, lon = 0.0),
+                dt = 123456789,
                 main = weatherDataEntity.main,
-                weather = weatherList
+                name = weatherDataEntity.name,
+                sys = Sys(""),
+                timezone = 0,
+                visibility = 1000,
+                weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
+                wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
             )
+
         }
     }
 }

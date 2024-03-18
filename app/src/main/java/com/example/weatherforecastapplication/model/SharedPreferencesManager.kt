@@ -42,6 +42,24 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLongitude(): Float {
         return sharedPreferences?.getFloat("longitude", 0.0f)!!
     }
+    fun saveFavLatitude(latitude: Float) {
+        editor?.putFloat("fav_latitude", latitude)!!.apply()
+    }
+
+    fun saveFavLongitude(longitude: Float) {
+        editor?.putFloat("fav_longitude", longitude)!!.apply()
+    }
+
+    fun getFavLatitude(): Float {
+        return sharedPreferences?.getFloat("fav_latitude", 0.0f) !!
+    }
+
+    fun getFavLongitude(): Float {
+        return sharedPreferences?.getFloat("fav_longitude", 0.0f)!!
+    }
+
+
+
     fun saveLanguage(languageCode: String) {
         editor?.putString("language", languageCode)?.apply()
     }
@@ -49,6 +67,16 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLanguage(): String? {
         return sharedPreferences?.getString("language", null)
     }
+
+
+    fun saveFavCity(city: String) {
+        editor?.putString("fav_city", city)!!.apply()
+    }
+
+    fun getFavCity(): String {
+        return sharedPreferences?.getString("fav_city", "") !!
+    }
+
     fun saveMetricState(isChecked: Boolean) {
         sharedPreferences?.edit()!!.putBoolean("metricState", isChecked).apply()
     }

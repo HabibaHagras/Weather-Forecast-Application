@@ -40,9 +40,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val metricSwitch = binding.metric
-        val standardSwitch = binding.Standard
         binding.switch1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 startActivity(Intent(requireContext(), MapsActivity::class.java))

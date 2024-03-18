@@ -18,7 +18,7 @@ interface WeatherDataDAO {
     fun update(product: WeatherData)
 
     @Query("SELECT * FROM weather_table WHERE id = :parentId")
-    suspend fun getWeatherByParentId(parentId: Long): List<Weather>
+    suspend fun getWeatherByParentId(parentId: Int): List<Weather>
     @Delete
     fun delete(product: WeatherData): Int
 }
