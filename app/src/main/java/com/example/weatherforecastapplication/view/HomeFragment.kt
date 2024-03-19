@@ -120,6 +120,13 @@ class HomeFragment : Fragment() {
 
         return rootView
     }
+    private fun convertWindSpeedToKmh(windSpeed: Double): Double {
+        return windSpeed * 3.6
+    }
+
+    private fun convertWindSpeedToMs(windSpeed: Double): Double {
+        return windSpeed / 3.6
+    }
     private fun updateUI2(weatherData: WeatherData) {
         view?.findViewById<TextView>(R.id.textViewCity)?.text = weatherData.name
         view?.findViewById<TextView>(R.id.textViewTemperature)?.text =
@@ -139,8 +146,17 @@ class HomeFragment : Fragment() {
             val todayWeather = todayEntries[0]
             rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
           "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
-            rootView.findViewById<TextView>(R.id.Wind)?.text=
-                todayWeather.wind.speed.toString()
+
+            val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
+                "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
+                else -> todayWeather.wind.speed // Default to original value if no unit is found
+            }
+
+            rootView.findViewById<TextView>(R.id.Wind)?.text = "${windSpeed.toInt().toString()}"
+
+//            rootView.findViewById<TextView>(R.id.Wind)?.text=
+//                todayWeather.wind.speed.toString()
             rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()
             rootView.findViewById<TextView>(R.id.humidity)?.text=
                  "${todayWeather.main.humidity.toString()} %"

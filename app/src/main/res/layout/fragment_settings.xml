@@ -10,7 +10,7 @@
 
 
     <Switch
-        android:id="@+id/metric"
+        android:id="@+id/m_sec"
         android:layout_width="365dp"
         android:layout_height="72dp"
         android:layout_marginStart="16dp"
@@ -20,13 +20,13 @@
         android:text="@string/meter_sec"
         android:textColor="@color/weather2"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/Standard"
+        app:layout_constraintBottom_toTopOf="@+id/km_hour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
-        android:id="@+id/Standard"
+        android:id="@+id/km_hour"
         android:layout_width="365dp"
         android:layout_height="72dp"
         android:layout_marginStart="16dp"
@@ -119,7 +119,7 @@
         android:textColor="@color/weather1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/metric" />
+        app:layout_constraintStart_toEndOf="@+id/m_sec" />
 
     <TextView
         android:id="@+id/standard"
@@ -132,7 +132,7 @@
         android:textColor="@color/weather1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/Standard" />
+        app:layout_constraintStart_toEndOf="@+id/km_hour" />
 
     <TextView
         android:id="@+id/textView4"
@@ -143,7 +143,7 @@
         android:layout_marginBottom="46dp"
         android:text="@string/wind_speed"
         android:textColor="@color/weather1"
-        app:layout_constraintBottom_toTopOf="@+id/metric"
+        app:layout_constraintBottom_toTopOf="@+id/m_sec"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

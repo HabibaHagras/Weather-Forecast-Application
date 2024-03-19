@@ -77,19 +77,30 @@ class  SharedPreferencesManager private constructor(context: Context){
         return sharedPreferences?.getString("fav_city", "") !!
     }
 
-    fun saveMetricState(isChecked: Boolean) {
-        sharedPreferences?.edit()!!.putBoolean("metricState", isChecked).apply()
+    fun saveMperSecState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("MperSec", isChecked).apply()
     }
 
-    fun getMetricState(): Boolean {
-        return sharedPreferences?.getBoolean("metricState", false)!!
-    }
-    fun saveStandardState(isChecked: Boolean) {
-        sharedPreferences?.edit()!!.putBoolean("standardState", isChecked).apply()
+    fun getMperSecState(): Boolean {
+        return sharedPreferences?.getBoolean("MperSec", false)!!
     }
 
-    fun getStandardState(): Boolean {
-        return sharedPreferences?.getBoolean("standardState", false)!!
+
+
+    fun saveWind(wind: String) {
+        sharedPreferences?.edit()!!.putString("Wind", wind).apply()
+    }
+
+    fun getUnitWind(): String {
+        return sharedPreferences?.getString("Wind", "m/s")!!
+    }
+
+    fun saveKmperHourState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("KmperHourState", isChecked).apply()
+    }
+
+    fun getKmperHourState(): Boolean {
+        return sharedPreferences?.getBoolean("KmperHourState", false)!!
     }
     fun clearPreferences() {
         editor?.clear()!!.apply()

@@ -57,22 +57,23 @@ class SettingsFragment : Fragment() {
                 startActivity(Intent(requireContext(), MainActivity2::class.java))
             }
         }
-        binding.metric.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getMetricState()
+        binding.mSec.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getMperSecState()
             setOnCheckedChangeListener { _, isChecked ->
-                binding.Standard.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveStandardState(binding.Standard.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveMetricState(isChecked)
-                Log.i("TAG", "onViewCreated:  lolollolallllllllllllllll ")
-            }
+                binding.kmHour.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveWind("m/s")
+                SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(binding.kmHour.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveMperSecState(isChecked)
+                startActivity(Intent(requireContext(), MainActivity2::class.java)) }
         }
-        binding.Standard.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getStandardState()
+        binding.kmHour.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getKmperHourState()
             setOnCheckedChangeListener { _, isChecked ->
-                binding.metric.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveMetricState( binding.metric.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveStandardState(isChecked)
-                Log.i("TAG", "onViewCreated:  lolollolallllllllllllllll ")
+                binding.mSec.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveWind("km/h")
+                SharedPreferencesManager.getInstance(requireContext()).saveMperSecState( binding.mSec.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(isChecked)
+                startActivity(Intent(requireContext(), MainActivity2::class.java))
             }
         }
     }
