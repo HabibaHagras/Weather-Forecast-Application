@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     lateinit var allProductViewModel: home
    lateinit var allFavViewModel:Fav
     lateinit var allFavFactroy: FavFactory
-
+    lateinit var FeelsLike:TextView
     val LOCATION_PERMISSION_REQUEST_CODE = 10
     lateinit var mAdapter: HomeAdapter
     lateinit var mWeekAdapter:HomeWeekAdapter
@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
-
+        FeelsLike=rootView.findViewById(R.id.Feels_Like)
         textViewCity = rootView.findViewById(R.id.textViewCity)
         rv = rootView.findViewById(R.id.rv)
         rvWeek = rootView.findViewById(R.id.rv_Week)
@@ -137,7 +137,15 @@ class HomeFragment : Fragment() {
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
-
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
+          "Feels Like :  ${ todayWeather.main.feels_like.toString() }"
+            rootView.findViewById<TextView>(R.id.Wind)?.text=
+                todayWeather.wind.speed.toString()
+            rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()
+            rootView.findViewById<TextView>(R.id.humidity)?.text=
+                 "${todayWeather.main.humidity.toString()} %"
+            rootView.findViewById<TextView>(R.id.clouds)?.text=
+             "${ todayWeather.clouds.all.toString()} %"
             rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
                 "${todayWeather.main.temp.toInt()}°C"
 

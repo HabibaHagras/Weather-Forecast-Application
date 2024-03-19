@@ -73,20 +73,95 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/Wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginBottom="49dp"
                 android:text="Wind"
-                tools:layout_editor_absoluteX="11dp"
-                tools:layout_editor_absoluteY="35dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/clouds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="49dp"
                 android:text="Clouds"
-                tools:layout_editor_absoluteX="78dp"
-                tools:layout_editor_absoluteY="35dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/Wind" />
+
+            <ImageView
+                android:id="@+id/imageair"
+                android:layout_width="39dp"
+                android:layout_height="31dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|start|right"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="19dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/air_white_24dp"
+                app:layout_constraintBottom_toTopOf="@+id/Wind"
+                app:layout_constraintEnd_toStartOf="@+id/imagecloud"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/imagecloud"
+                android:layout_width="39dp"
+                android:layout_height="31dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|start|right"
+                android:layout_marginStart="19dp"
+                android:layout_marginBottom="2dp"
+                android:src="@drawable/cloud_white_24dp"
+                app:layout_constraintBottom_toTopOf="@+id/clouds"
+                app:layout_constraintStart_toEndOf="@+id/imageair" />
+
+            <ImageView
+                android:id="@+id/imagepressure"
+                android:layout_width="39dp"
+                android:layout_height="31dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|start|right"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/compress_white_24dp"
+                app:layout_constraintBottom_toTopOf="@+id/pressurs"
+                app:layout_constraintStart_toEndOf="@+id/imagecloud"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imagehum"
+                android:layout_width="39dp"
+                android:layout_height="31dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|start|right"
+                android:layout_marginStart="25dp"
+                android:layout_marginBottom="1dp"
+                android:src="@drawable/water_drop_white_24dp"
+                app:layout_constraintBottom_toTopOf="@+id/humidity"
+                app:layout_constraintStart_toEndOf="@+id/imagepressure" />
+
+            <TextView
+                android:id="@+id/pressurs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginBottom="49dp"
+                android:text="pressurs"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/clouds" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="130dp"
+                android:layout_marginBottom="48dp"
+                android:text="humidity"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -113,14 +188,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/Feels_Like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
         android:layout_marginTop="8dp"
         android:text="Feels Like"
         android:textColor="@color/weather1"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCity"
-        tools:layout_editor_absoluteX="25dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCity" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
