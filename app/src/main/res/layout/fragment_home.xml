@@ -10,50 +10,91 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textViewCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:text="City Name"
-        android:textColor="@color/weather1"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTemperature"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textViewTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="125dp"
         android:text="Temperature"
         android:textColor="@color/weather1"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageViewWeatherIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewWeatherIcon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:text="City Name"
+        android:textColor="@color/weather1"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTemperature" />
 
     <ImageView
         android:id="@+id/imageViewWeatherIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="74dp"
+        android:layout_height="75dp"
         android:layout_below="@id/textViewTemperature"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="128dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/rv"
+        android:layout_gravity="center|start|right"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="26dp"
+        android:src="@drawable/settings_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="137dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="152dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="@color/weather3"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.567"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wind"
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="35dp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clouds"
+                tools:layout_editor_absoluteX="78dp"
+                tools:layout_editor_absoluteY="35dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
-        android:layout_width="336dp"
-        android:layout_height="274dp"
+        android:layout_width="319dp"
+        android:layout_height="206dp"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toTopOf="@+id/rv_Week"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +111,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Feels Like"
+        android:textColor="@color/weather1"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCity"
+        tools:layout_editor_absoluteX="25dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
