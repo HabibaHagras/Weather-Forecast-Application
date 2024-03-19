@@ -138,7 +138,7 @@ class HomeFragment : Fragment() {
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
             rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
-          "Feels Like :  ${ todayWeather.main.feels_like.toString() }"
+          "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
             rootView.findViewById<TextView>(R.id.Wind)?.text=
                 todayWeather.wind.speed.toString()
             rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()

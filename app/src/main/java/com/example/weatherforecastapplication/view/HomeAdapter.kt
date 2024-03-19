@@ -45,21 +45,28 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.wether_item, parent, false)
+        val view = inflater.inflate(R.layout.wether_item_today, parent, false)
         return FavViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: FavViewHolder, position: Int) {
         val currentItem = listOfWeatherToday[position]
 
-        holder.name.text = currentItem.main.temp.toString()
+        holder.name.text = currentItem.main.temp.toInt().toString()
         Glide.with(context)
             .load(getIconUrl(currentItem.weather[0].icon))
             .apply(RequestOptions().placeholder(R.drawable.ic_launcher_foreground))
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(holder.thumbnail)
+        val timeFormatted = formatTime(currentItem.dt_txt.substring(11))
+        holder.clock.text = timeFormatted
     }
-
+    private fun formatTime(time: String): String {
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val parsedDate = sdf.parse(time)
+        val sdf12hr = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        return sdf12hr.format(parsedDate)
+    }
     override fun getItemCount(): Int {
         return listOfWeatherToday.size
     }
@@ -69,8 +76,9 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
     }
 
     class FavViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var thumbnail: ImageView = view.findViewById(R.id.product_img)
-        var name: TextView = view.findViewById(R.id.product_name)
+        var thumbnail: ImageView = view.findViewById(R.id.product_img_today)
+        var name: TextView = view.findViewById(R.id.product_name_today)
+        var clock: TextView = view.findViewById(R.id.clock_Name_today)
     }
 }
 

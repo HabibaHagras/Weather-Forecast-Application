@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
         android:text="City Name"
         android:textColor="@color/weather1"
         android:textSize="24sp"
@@ -41,8 +40,8 @@
 
     <ImageView
         android:id="@+id/imageViewWeatherIcon"
-        android:layout_width="74dp"
-        android:layout_height="75dp"
+        android:layout_width="86dp"
+        android:layout_height="87dp"
         android:layout_below="@id/textViewTemperature"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center|start|right"

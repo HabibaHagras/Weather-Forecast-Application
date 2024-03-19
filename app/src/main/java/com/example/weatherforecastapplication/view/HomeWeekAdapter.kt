@@ -1,7 +1,6 @@
 package com.example.weatherforecastapplication.view
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,7 +86,7 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
     class HomeWeekAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var thumbnail: ImageView = view.findViewById(R.id.product_img)
         var name: TextView = view.findViewById(R.id.product_name)
-        var day: TextView = view.findViewById(R.id.day_name)
+        var day: TextView = view.findViewById(R.id.Day_Name)
         var temp: TextView = view.findViewById(R.id.temp_week)
     }
 }
