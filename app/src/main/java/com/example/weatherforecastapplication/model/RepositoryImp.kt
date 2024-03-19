@@ -28,10 +28,11 @@ class RepositoryImp private constructor(
         latitude: Double,
         longitude: Double,
         apiKey: String,
+        lang: String,
         units: String
     ): Responce {
         Log.i("TAG", "getAllProduct: ProductRepositoryImp")
-        return RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,units)    }
+        return RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,lang,units)    }
 
     override suspend fun getWeatherWithCity(latitude: Double,
                                             longitude: Double,

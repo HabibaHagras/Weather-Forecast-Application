@@ -47,12 +47,14 @@ class SettingsFragment : Fragment() {
         }
         binding.switchLanguageArabic.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("ar")
                 setAppLanguage("ar")
                 startActivity(Intent(requireContext(), MainActivity2::class.java))
             }
         }
         binding.switchLanguageEnglish.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("en")
                 setAppLanguage("en")
                 startActivity(Intent(requireContext(), MainActivity2::class.java))
             }

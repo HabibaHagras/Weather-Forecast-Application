@@ -24,6 +24,7 @@ interface Api_Service {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("appid") apiKey: String,
+        @Query("lang") Lang: String,
         @Query("units") units: String = "metric"
     ): Responce
 

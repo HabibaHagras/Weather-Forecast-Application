@@ -24,6 +24,7 @@ class home(private val repo: Repository,private val sharedPreferenceSource: Shar
     private var location: Locations = Locations()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+    private var lang: String = "en"
 
     init {
         updateLocationFromSharedPreferences()
@@ -36,13 +37,14 @@ class home(private val repo: Repository,private val sharedPreferenceSource: Shar
 //        longitude = sharedPreferences.getFloat("longitude", 0.0f).toDouble()//
         latitude = sharedPreferenceSource.getLatitude().toDouble()
        longitude = sharedPreferenceSource.getLongitude().toDouble()
+        lang=sharedPreferenceSource.getLanguageUnit().toString()
     }
 
     private fun getAllProducts() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewModel")
-            val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", "metric")
-            Log.i("TAG", "getAllProducts: $productList")
+            val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),"metric")
+            Log.i("TAG", "getAllProducts: $lang")
 
             _products.postValue(productList)
         }

@@ -26,10 +26,11 @@ class RemoteDataSourceImp private constructor():RemoteDataSource{
         latitude: Double,
         longitude: Double,
         apiKey: String,
+        lang: String,
         units: String
     ): Responce {
         Log.i("TAG", "getAllProduct: ProductRemoteDataSourceImp")
-        val responce= weather_Service.get5DayForecast(latitude,longitude,apiKey,units)
+        val responce= weather_Service.get5DayForecast(latitude,longitude,apiKey,lang,units)
         return responce    }
 
     override suspend fun getWeatherWithCityOverNetwork( latitude: Double,

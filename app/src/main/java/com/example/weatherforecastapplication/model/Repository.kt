@@ -8,6 +8,7 @@ interface Repository {
     suspend fun getAllWeather(latitude: Double,
                               longitude: Double,
                               apiKey: String,
+                              lang: String,
                               units: String ): Responce
     suspend fun getWeatherWithCity(latitude: Double,
                                    longitude: Double,

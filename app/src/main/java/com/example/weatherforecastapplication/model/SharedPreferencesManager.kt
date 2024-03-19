@@ -67,7 +67,13 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLanguage(): String? {
         return sharedPreferences?.getString("language", null)
     }
+    fun saveLanguageUnit(language: String) {
+        editor?.putString("languageCode", language)?.apply()
+    }
 
+    fun getLanguageUnit(): String? {
+        return sharedPreferences?.getString("languageCode", "en")
+    }
 
     fun saveFavCity(city: String) {
         editor?.putString("fav_city", city)!!.apply()
