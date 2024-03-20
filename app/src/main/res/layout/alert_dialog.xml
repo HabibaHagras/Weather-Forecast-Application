@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/weather4"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:textColor="@color/weather1"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Message TextView -->
+    <TextView
+        android:id="@+id/messageTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="@color/weather1"
+        android:textSize="16sp" />
+
+    <!-- Dismiss Button -->
+    <Button
+        android:id="@+id/dismissButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/weather3"
+        android:text="Dismiss"
+        android:textColor="#E3F2FD"
+        android:textColorHighlight="@color/weather1"
+        android:textColorLink="@color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

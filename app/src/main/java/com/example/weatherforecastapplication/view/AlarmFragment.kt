@@ -9,17 +9,25 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.PixelFormat
 import android.media.MediaPlayer
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -69,6 +77,7 @@ class AlarmFragment : Fragment() {
       allProductViewModel = ViewModelProvider(this,
             allProductFactroy
         ).get(notification::class.java)
+
         allProductViewModel.products.observe(viewLifecycleOwner,
 
             object: Observer<WeatherData> {
@@ -77,11 +86,9 @@ class AlarmFragment : Fragment() {
                     if (value != null) {
                         Log.i("TAG", "Observer: $value")
 
-                        title = value.name // uUse the city name as the title
-                        text = value.main.temp.toString() // Use temperatu
+                        title = value.name
+                        text = value.main.temp.toString()
                     }
-
-
                 }})
 
 
@@ -134,13 +141,24 @@ class AlarmFragment : Fragment() {
             )
         } catch (e: SecurityException) {
             // Handle SecurityException here
+            openDrawOverOtherAppsSettings(requireContext())
+
             // You can show a message to the user indicating that the app doesn't have permission to set exact alarms
         }
     }
 
-
+//     fun openDrawOverOtherAppsSettings(context: Context) {
+//        Log.i("TAG", "openDrawOverOtherAppsSettings: ")
+//        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + requireContext().packageName))
+//         context.startActivity(intent)
+//    }
     companion object {
         @JvmStatic
+        fun openDrawOverOtherAppsSettings(context: Context) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.packageName))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK // Add the flag here
+            context.startActivity(intent)
+        }
         fun newInstance(param1: String, param2: String) =
             AlarmFragment().apply {
                 arguments = Bundle().apply {
@@ -227,6 +245,11 @@ class AlarmFragment : Fragment() {
 class AlarmReceiver : BroadcastReceiver() {
     companion object {
         var alarmMediaPlayer: MediaPlayer? = null
+        private  val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        } else {
+            WindowManager.LayoutParams.TYPE_PHONE
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -295,6 +318,76 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmMediaPlayer = MediaPlayer.create(context, ringtone)
         alarmMediaPlayer?.isLooping = true
         alarmMediaPlayer?.start()
+
+
+        val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
+
+        // Add the alert dialog view to the window manager
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val layoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_PHONE
+            },
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
+        layoutParams.gravity = Gravity.TOP
+        windowManager.addView(alertView, layoutParams)
+        var cityname:TextView=alertView.findViewById<Button>(R.id.titleTextView)
+        cityname.text=title
+        var temp:TextView=alertView.findViewById<Button>(R.id.messageTextView)
+        temp.text=text
+
+        val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
+        dismissButton.setOnClickListener {
+            // Stop the alarm sound
+            alarmMediaPlayer?.stop()
+            alarmMediaPlayer?.release()
+            alarmMediaPlayer = null
+
+            // Remove the alert dialog view from the window manager
+            windowManager.removeView(alertView)
+
+            // Cancel the notification
+            notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
+        }
+
+
+
+        /*
+
+        val layoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            LAYOUT_FLAG,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
+        layoutParams.gravity = Gravity.TOP
+
+        val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
+//        val windowManager = context.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//        windowManager.addView(alertView, layoutParams)
+        val windowManager = context.applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
+            // Permission not granted, handle accordingly
+            // You can prompt the user to grant the permission here
+            // For demonstration purposes, I'm simply logging an error
+
+            AlarmFragment.openDrawOverOtherAppsSettings(context)
+
+            Log.i("AlarmReceiver", "SYSTEM_ALERT_WINDOW permission not granted")
+
+        } else {
+            // Permission granted, add the view to the window manager
+            windowManager.addView(alertView, layoutParams)
+        }
+        */
     }
 }
 
