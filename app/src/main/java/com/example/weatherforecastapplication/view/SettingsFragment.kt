@@ -40,7 +40,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.switch1.setOnCheckedChangeListener { _, isChecked ->
+        binding.map.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 startActivity(Intent(requireContext(), MapsActivity::class.java))
             }
@@ -56,6 +56,42 @@ class SettingsFragment : Fragment() {
             if (isChecked) {
                 SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("en")
                 setAppLanguage("en")
+                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            }
+        }
+        binding.switchDefaultKelvin.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getKelvinState()
+            setOnCheckedChangeListener { _, isChecked ->
+                binding.switchImperialFahrenheit.isChecked = false
+                binding.switchMetricCelsius.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveUnits("")
+                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchMetricCelsius.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveKelvinState(isChecked)
+                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            }
+        }
+        binding.switchMetricCelsius.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getCelsuisState()
+            setOnCheckedChangeListener { _, isChecked ->
+                binding.switchImperialFahrenheit.isChecked = false
+                binding.switchDefaultKelvin.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveUnits("metric")
+                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(isChecked)
+                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            }
+        }
+        binding.switchImperialFahrenheit.apply {
+            isChecked = SharedPreferencesManager.getInstance(requireContext()).getFahrenheitState()
+            setOnCheckedChangeListener { _, isChecked ->
+                binding.switchMetricCelsius.isChecked = false
+                binding.switchDefaultKelvin.isChecked = false
+                SharedPreferencesManager.getInstance(requireContext()).saveUnits("imperial")
+                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchMetricCelsius.isChecked)
+                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(isChecked)
                 startActivity(Intent(requireContext(), MainActivity2::class.java))
             }
         }

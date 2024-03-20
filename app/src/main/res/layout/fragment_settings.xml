@@ -30,24 +30,24 @@
         android:layout_width="365dp"
         android:layout_height="72dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="224dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="17dp"
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/mile_hour"
         android:textColor="@color/weather2"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchLanguageEnglish" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/map"
         android:layout_width="365dp"
         android:layout_height="72dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="30dp"
         android:layout_weight="1"
         android:minHeight="48dp"
@@ -55,6 +55,24 @@
         android:textColor="@color/weather1"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/gps"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/gps"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +101,7 @@
         android:layout_gravity="center|right"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="29dp"
-        android:layout_marginBottom="356dp"
+        android:layout_marginBottom="372dp"
         android:layout_weight="1"
         android:minHeight="48dp"
         android:text="@string/english"
@@ -91,8 +109,56 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:id="@+id/temperatureUnitLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="52dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Switch
+            android:id="@+id/switchMetric_Celsius"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/celsius"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchImperial_Fahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/fahrenheit"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchDefault_Kelvin"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="29dp"
+            android:minHeight="48dp"
+            android:text="@string/kelvin"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textView"
@@ -100,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="326dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/language"
         android:textColor="@color/weather1"
         app:layout_constraintBottom_toTopOf="@+id/switchLanguageArabic"
@@ -140,10 +206,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="329dp"
-        android:layout_marginBottom="46dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/wind_speed"
         android:textColor="@color/weather1"
         app:layout_constraintBottom_toTopOf="@+id/m_sec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="307dp"
+        android:layout_marginBottom="129dp"
+        android:text="@string/temperature"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

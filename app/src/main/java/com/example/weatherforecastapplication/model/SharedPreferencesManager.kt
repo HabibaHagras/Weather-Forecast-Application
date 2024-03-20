@@ -91,8 +91,35 @@ class  SharedPreferencesManager private constructor(context: Context){
         return sharedPreferences?.getBoolean("MperSec", false)!!
     }
 
+    fun saveKelvinState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("KelvinState", isChecked).apply()
+    }
 
+    fun getKelvinState(): Boolean {
+        return sharedPreferences?.getBoolean("KelvinState", false)!!
+    }
+    fun saveCelsuisState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("CelsuisState", isChecked).apply()
+    }
 
+    fun getCelsuisState(): Boolean {
+        return sharedPreferences?.getBoolean("CelsuisState", false)!!
+    }
+    fun saveFahrenheitState(isChecked: Boolean) {
+        sharedPreferences?.edit()!!.putBoolean("FahrenheitState", isChecked).apply()
+    }
+
+    fun getFahrenheitState(): Boolean {
+        return sharedPreferences?.getBoolean("FahrenheitState", false)!!
+    }
+
+    fun saveUnits(unit: String) {
+        sharedPreferences?.edit()!!.putString("unit", unit).apply()
+    }
+
+    fun getUnits(): String {
+        return sharedPreferences?.getString("unit", "")!!
+    }
     fun saveWind(wind: String) {
         sharedPreferences?.edit()!!.putString("Wind", wind).apply()
     }

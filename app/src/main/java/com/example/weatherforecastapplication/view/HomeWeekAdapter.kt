@@ -24,9 +24,7 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
         val currentDate = getCurrentDate()
         listOfWeatherToday = data.filterNot { item ->
             item.dt_txt.substring(0, 10) == currentDate
-        }
-//        // Group the data by day and take the first item of each group
-//        listOfWeatherToday = data.groupBy { it.dt_txt.substring(0, 10) }.values.map { it.first() }
+        }.groupBy { it.dt_txt.substring(0, 10) }.values.map { it.first() }
         notifyDataSetChanged()
     }
     fun getCurrentDate(): String {

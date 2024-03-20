@@ -1,8 +1,3 @@
-
-
-
-
-
 package com.example.weatherforecastapplication.view
 
 import android.content.Context
