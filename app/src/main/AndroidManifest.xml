@@ -56,6 +56,9 @@
             android:name=".view.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
+        <receiver android:name=".view.AlarmReceiver"/>
+        <receiver android:name=".view.DismissAlarmReceiver"/>
+
 
         <activity
             android:name=".MainActivity"

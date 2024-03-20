@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.weatherforecastapplication.model.SharedPreferencesManager
+import com.example.weatherforecastapplication.view.AlarmFragment
 import com.example.weatherforecastapplication.view.FavFragment
 import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view.SettingsFragment
@@ -52,7 +53,7 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                 R.id.nav_settings -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, FavFragment()).commit()
                 R.id.nav_share -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, NotificationFragment()).commit()
+                    .replace(R.id.fragment_container, AlarmFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment()).commit()
 //                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()

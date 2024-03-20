@@ -239,7 +239,7 @@ class NotificationReceiver : BroadcastReceiver() {
         return NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(text)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.cloud_white_24dp)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
     }
