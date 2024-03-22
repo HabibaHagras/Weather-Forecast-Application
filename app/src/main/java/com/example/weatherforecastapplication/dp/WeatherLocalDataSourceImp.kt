@@ -5,6 +5,7 @@ import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.dp.db
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
+import com.example.weatherforecastapplication.model2.CoordWeather
 import com.example.weatherforecastapplication.model2.Main
 import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
@@ -59,7 +60,7 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
                 base = "baseValue",
                 clouds = Clouds(all = 0),
                 cod = 200,
-                coord = Coord(lat = 0.0, lon = 0.0),
+                coord = CoordWeather(lon =weatherDataEntity.coord.lon,lat = weatherDataEntity.coord.lat),
                 dt = 123456789,
                 main = weatherDataEntity.main,
                 name = weatherDataEntity.name,

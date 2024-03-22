@@ -3,6 +3,7 @@ package com.example.weatherforecastapplication.dp
 import androidx.room.TypeConverter
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
+import com.example.weatherforecastapplication.model2.CoordWeather
 import com.example.weatherforecastapplication.model2.Main
 import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
@@ -42,12 +43,12 @@ class WeatherListConverter {
         return Gson().toJson(clouds)
     }
     @TypeConverter
-    fun fromCoord(value: String): Coord {
-        return Gson().fromJson(value, Coord::class.java)
+    fun fromCoord(value: String): CoordWeather {
+        return Gson().fromJson(value, CoordWeather::class.java)
     }
 
     @TypeConverter
-    fun toCoord(coord: Coord): String {
+    fun toCoord(coord: CoordWeather): String {
         return Gson().toJson(coord)
     }
     @TypeConverter

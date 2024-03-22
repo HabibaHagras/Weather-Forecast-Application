@@ -11,7 +11,7 @@ data class WeatherData(
     val base: String,
     val clouds: Clouds,
     val cod: Int,
-    val coord: Coord,
+    val coord: CoordWeather,
     val dt: Int,
     val main: Main,
     val name: String,

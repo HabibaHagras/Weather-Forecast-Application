@@ -35,7 +35,7 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
 
         holder.name.text = currentItem.name.toString()
         holder.card.setOnClickListener {
-            Log.i("TAGMap", "onBindViewHolder: ${currentItem.coord.lat} + ${currentItem.coord.lon} ")
+            Log.i("TAGMap", "onBindViewHolder: ${currentItem.coord.lat} + ${currentItem.coord.lon}   +${currentItem.name}")
             listener.OnCLickIteamFav(currentItem.coord.lat,currentItem.coord.lon,currentItem.name)
         }
     }

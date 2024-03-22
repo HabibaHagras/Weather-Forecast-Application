@@ -23,6 +23,7 @@ import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
+import com.example.weatherforecastapplication.model2.CoordWeather
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
@@ -108,7 +109,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 base = "baseValue",
                                 clouds = Clouds(all = 0),
                                 cod = 200,
-                                coord = Coord(lat = selectedLatitude, lon = selectedLongitude),
+                                coord = CoordWeather(selectedLongitude.toDouble() ,selectedLatitude.toDouble()),
                                 dt = 123456789,
                                 main = Main(
                                     feels_like = 0.0,
