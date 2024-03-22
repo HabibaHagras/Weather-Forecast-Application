@@ -29,7 +29,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.databinding.FragmentNotificationBinding
-import com.example.weatherforecastapplication.model.RepositoryImp
+import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.notification

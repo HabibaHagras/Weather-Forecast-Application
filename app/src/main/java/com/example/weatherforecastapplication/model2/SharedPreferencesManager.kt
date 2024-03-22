@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.model
+package com.example.weatherforecastapplication.model2
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -17,7 +17,7 @@ class  SharedPreferencesManager private constructor(context: Context){
         @Volatile
         private var INSTANCE : SharedPreferencesManager? = null
 
-        fun getInstance(context: Context) : SharedPreferencesManager{
+        fun getInstance(context: Context) : SharedPreferencesManager {
             return INSTANCE ?: synchronized(context){
                 val instance = SharedPreferencesManager(context)
                 INSTANCE = instance
@@ -42,6 +42,15 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun getLongitude(): Float {
         return sharedPreferences?.getFloat("longitude", 0.0f)!!
     }
+
+
+
+
+
+
+
+
+
     fun saveFavLatitude(latitude: Float) {
         editor?.putFloat("fav_latitude", latitude)!!.apply()
     }

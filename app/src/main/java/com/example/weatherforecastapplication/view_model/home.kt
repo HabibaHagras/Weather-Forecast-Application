@@ -1,22 +1,18 @@
 package com.example.weatherforecastapplication.view_model
 
 import android.util.Log
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecastapplication.Locations
-import com.example.weatherforecastapplication.MainActivity
-import com.example.weatherforecastapplication.SplashActivity
-import com.example.weatherforecastapplication.model.Repository
-import com.example.weatherforecastapplication.model.SharedPreferencesManager
+import com.example.weatherforecastapplication.model2.Repository
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.Responce
-import com.example.weatherforecastapplication.view.MapsActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class home(private val repo: Repository,private val sharedPreferenceSource: SharedPreferencesManager
+class home(private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager
 ): ViewModel() {
     private var _products: MutableLiveData<Responce> =
         MutableLiveData<Responce>()

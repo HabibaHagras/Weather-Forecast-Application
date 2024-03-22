@@ -4,15 +4,13 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.weatherforecastapplication.model.SharedPreferencesManager
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.view.AlarmFragment
 import com.example.weatherforecastapplication.view.FavFragment
-import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import java.util.Locale

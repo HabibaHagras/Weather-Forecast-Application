@@ -1,37 +1,16 @@
 package com.example.weatherforecastapplication
 
-import WeatherLocalDataSourceImp
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model.SharedPreferencesManager
-import com.example.weatherforecastapplication.network.RemoteDataSourceImp
-import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
-import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view_model.home
 import com.example.weatherforecastapplication.view_model.homeFactory
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.collections.List
 
 
 class MainActivity : AppCompatActivity() {

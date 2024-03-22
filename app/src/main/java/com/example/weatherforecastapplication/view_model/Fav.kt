@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherforecastapplication.model.Repository
-import com.example.weatherforecastapplication.model2.Weather
+import com.example.weatherforecastapplication.model2.Repository
 import com.example.weatherforecastapplication.model2.WeatherData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +17,6 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
     val productsw: LiveData<List<WeatherData>> = _productw
 
     init {
-     //   getAllProducts(cityName, "7f6473d2786753ccda5811e204914fff", )
         getStored()
     }
 

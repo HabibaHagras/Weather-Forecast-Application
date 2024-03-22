@@ -1,10 +1,8 @@
-package com.example.weatherforecastapplication.model
+package com.example.weatherforecastapplication.model2
 
 import android.util.Log
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSource
-import com.example.weatherforecastapplication.model2.Responce
-import com.example.weatherforecastapplication.model2.WeatherData
 import kotlin.collections.List
 
 class RepositoryImp private constructor(
@@ -16,9 +14,9 @@ class RepositoryImp private constructor(
         fun getInstance( productRemoteDataSource: RemoteDataSource,
                          productLocalDataSource: WeatherLocalDataSource,        )
                 : RepositoryImp {
-            return instance?: synchronized(this){
+            return instance ?: synchronized(this){
                 val temp= RepositoryImp(productRemoteDataSource,productLocalDataSource)
-                instance=temp
+                instance =temp
                 temp
             }
         }

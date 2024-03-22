@@ -27,15 +27,14 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.databinding.FragmentAlarmBinding
-import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model2.WeatherData
+import com.example.weatherforecastapplication.model2.RepositoryImp
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
@@ -71,25 +70,25 @@ class AlarmFragment : Fragment() {
         binding.setAlarmButton.setOnClickListener {
             setAlarm()
         }
-      allProductFactroy = notificationFactory(
-            RepositoryImp.getInstance(
-                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())))
-      allProductViewModel = ViewModelProvider(this,
-            allProductFactroy
-        ).get(notification::class.java)
-
-        allProductViewModel.products.observe(viewLifecycleOwner,
-
-            object: Observer<WeatherData> {
-                override fun onChanged(value: WeatherData) {
-                    Log.i("TAG", "Observer: Observer")
-                    if (value != null) {
-                        Log.i("TAG", "Observer: $value")
-
-                        title = value.name
-                        text = value.main.temp.toString()
-                    }
-                }})
+//      allProductFactroy = notificationFactory(
+//            RepositoryImp.getInstance(
+//                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())))
+//      allProductViewModel = ViewModelProvider(this,
+//            allProductFactroy
+//        ).get(notification::class.java)
+//
+//        allProductViewModel.products.observe(viewLifecycleOwner,
+//
+//            object: Observer<WeatherData> {
+//                override fun onChanged(value: WeatherData) {
+//                    Log.i("TAG", "Observer: Observer")
+//                    if (value != null) {
+//                        Log.i("TAG", "Observer: $value")
+//
+//                        title = value.name
+//                        text = value.main.temp.toString()
+//                    }
+//                }})
 
 
 
@@ -266,7 +265,17 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationIntent,
             PendingIntent.FLAG_IMMUTABLE // Add mutability flag here
         )
+        val allProductFactory = notificationFactory(
+            RepositoryImp.getInstance(
+                RemoteDataSourceImp.getInstance(), WeatherLocalDataSourceImp(context)
+            ), SharedPreferencesManager.getInstance(context)
+        )
+        val allProductViewModel = ViewModelProvider(ViewModelStore(), allProductFactory).get(notification::class.java)
 
+
+
+//        allProductViewModel.getAllProducts(30.7914776, 30.9957296, "7f6473d2786753ccda5811e204914fff", "metric")
+        Log.i("TAG,", "onReceive:2 ")
         // Create a dismiss intent
         val dismissIntent = Intent(context, DismissAlarmReceiver::class.java)
         val dismissPendingIntent = PendingIntent.getBroadcast(
@@ -318,6 +327,9 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmMediaPlayer = MediaPlayer.create(context, ringtone)
         alarmMediaPlayer?.isLooping = true
         alarmMediaPlayer?.start()
+        allProductViewModel.products.observeForever { weatherData ->
+
+
 
 
         val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
@@ -337,10 +349,10 @@ class AlarmReceiver : BroadcastReceiver() {
         )
         layoutParams.gravity = Gravity.TOP
         windowManager.addView(alertView, layoutParams)
-        var cityname:TextView=alertView.findViewById<Button>(R.id.titleTextView)
-        cityname.text=title
-        var temp:TextView=alertView.findViewById<Button>(R.id.messageTextView)
-        temp.text=text
+        var cityname: TextView = alertView.findViewById<Button>(R.id.titleTextView)
+        cityname.text = weatherData.name
+        var temp: TextView = alertView.findViewById<Button>(R.id.messageTextView)
+        temp.text = weatherData.main.temp.toString()
 
         val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
         dismissButton.setOnClickListener {
@@ -356,7 +368,7 @@ class AlarmReceiver : BroadcastReceiver() {
             notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
         }
 
-
+    }
 
         /*
 

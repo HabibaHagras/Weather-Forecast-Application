@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.model
+package com.example.weatherforecastapplication.model2
 
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.WeatherData

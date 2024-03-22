@@ -1,31 +1,28 @@
 package com.example.weatherforecastapplication.view
 
 import WeatherLocalDataSourceImp
-import android.content.Context
 import android.content.Intent
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.weatherforecastapplication.HomeFragment
-import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.MainActivity2
 import com.example.weatherforecastapplication.R
-import com.example.weatherforecastapplication.SplashActivity
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.weatherforecastapplication.databinding.ActivityMapsBinding
 import com.example.weatherforecastapplication.model2.Main
-import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model.SharedPreferencesManager
+import com.example.weatherforecastapplication.model2.RepositoryImp
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
+import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
@@ -33,7 +30,10 @@ import com.example.weatherforecastapplication.model2.Wind
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
-import com.google.android.material.navigation.NavigationView
+import com.example.weatherforecastapplication.view_model.Maps
+import com.example.weatherforecastapplication.view_model.MapsFactory
+import com.example.weatherforecastapplication.view_model.home
+import com.example.weatherforecastapplication.view_model.homeFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
@@ -44,6 +44,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
     lateinit var allFavViewModel: Fav
     lateinit var allFavFactroy: FavFactory
+    lateinit var allMapsFactroy: MapsFactory
+    lateinit var allMapsViewModel: Maps
+     var city_name:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +54,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         instance=this
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
-
-//    override fun onMapReady(googleMap: GoogleMap) {
-//        mMap = googleMap
-//
-//        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-//    }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapClickListener { latLng ->
@@ -74,30 +66,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7f))
             val selectedLatitude = latLng.latitude
             val selectedLongitude = latLng.longitude
-//            sharedPreferencesManager.saveLatitude(selectedLatitude.toFloat())
-//            sharedPreferencesManager.saveLongitude(selectedLongitude.toFloat())
-//            Toast.makeText(
-//                this, "Latitude = $selectedLatitude & Longitude = $selectedLongitude",
-//                Toast.LENGTH_LONG
-//            ).show()
             val receivedIntent = intent
             if (receivedIntent != null && receivedIntent.hasExtra("favorite")) {
                 sharedPreferencesManager.saveFavLatitude(selectedLatitude.toFloat())
                 sharedPreferencesManager.saveFavLongitude(selectedLongitude.toFloat())
+                allMapsFactroy = MapsFactory(
+                    RepositoryImp.getInstance(
+                        RemoteDataSourceImp.getInstance(),
+                        WeatherLocalDataSourceImp(this)
+                    ), SharedPreferencesManager.getInstance(this)
+                )
+                allMapsViewModel =
+                    ViewModelProvider(this, allMapsFactroy).get(Maps::class.java)
+
+                allMapsViewModel.weatherMaps.observe(this,
+                    Observer<Responce> { value ->
+                        city_name=value.city.toString()
+                    })
+
                 val geocoder = Geocoder(this)
                 val addresses = geocoder.getFromLocation(selectedLatitude, selectedLongitude, 1)
                 if (addresses != null && addresses.isNotEmpty()) {
                     val cityName = addresses[0].locality
                     if (cityName != null) {
                         sharedPreferencesManager.saveFavCity(cityName)
-                        // Your further logic here
-
                         sharedPreferencesManager.saveFavCity(cityName)
                         allFavFactroy = FavFactory(
                             RepositoryImp.getInstance(
                                 RemoteDataSourceImp.getInstance(),
                                 WeatherLocalDataSourceImp(this)
-                            ), cityName
+                            ), city_name
                         )
                         allFavViewModel =
                             ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
@@ -119,7 +117,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     temp_max = 0.0,
                                     temp_min = 0.0
                                 ),
-                                name = cityName,
+                                name = city_name,
                                 sys = Sys(""),
                                 timezone = 0,
                                 visibility = 1000,

@@ -2,7 +2,6 @@ package com.example.weatherforecastapplication
 
 import WeatherLocalDataSourceImp
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -12,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -23,14 +21,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model.SharedPreferencesManager
+import com.example.weatherforecastapplication.model2.RepositoryImp
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.view.HomeAdapter
 import com.example.weatherforecastapplication.view.HomeWeekAdapter
-import com.example.weatherforecastapplication.view.MapsActivity
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
 import com.example.weatherforecastapplication.view_model.home

@@ -16,11 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecastapplication.HomeFragment
-import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.R
-import com.example.weatherforecastapplication.model.Repository
-import com.example.weatherforecastapplication.model.RepositoryImp
-import com.example.weatherforecastapplication.model2.WeatherData
+import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
@@ -122,20 +119,6 @@ class FavFragment : Fragment(), FavListener {
         saveButton.setOnClickListener {
             val cityName = editTextFavCity.text.toString().trim()
             if (cityName.isNotEmpty()) {
-//                val city =
-//                    WeatherData(
-//                        name = cityName,
-//                        main = Main(
-//
-//                            temp = 0.0,
-//
-//                            ),
-//                        weather = emptyList()
-//                    ) // Create a new WeatherData object
-//
-//                adapter.addCity(city)
-//                allFavViewModel.insertProducts(city)
-
                 alertDialog.dismiss()
             } else {
                 // Handle empty city name
@@ -148,23 +131,13 @@ class FavFragment : Fragment(), FavListener {
 
     override fun OnCLickIteamFav(city: String) {
         val anotherFragment = HomeFragment()
-
-        // Pass the city name to the target fragment using arguments
         val bundle = Bundle().apply {
             putString("selected_city", city)
         }
         anotherFragment.arguments = bundle
-
-        // Replace the current fragment with the target fragment
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, anotherFragment)
             .addToBackStack(null)
             .commit()
-//        // Create an Intent to start the MainActivity
-//        val intent = Intent(requireContext(), MainActivity::class.java)
-//        // Pass any data you want to the MainActivity using Intent extras
-//        intent.putExtra("selected_city", city)
-//        // Start the MainActivity
-//        startActivity(intent)
     }
 }
