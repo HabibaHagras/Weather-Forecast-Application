@@ -63,15 +63,105 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
-        FeelsLike=rootView.findViewById(R.id.Feels_Like)
-        textViewCity = rootView.findViewById(R.id.textViewCity)
-        rv = rootView.findViewById(R.id.rv)
-        rvWeek = rootView.findViewById(R.id.rv_Week)
-        val cityName = arguments?.getString("selected_city")
+//        FeelsLike=rootView.findViewById(R.id.Feels_Like)
+//        textViewCity = rootView.findViewById(R.id.textViewCity)
+//        rv = rootView.findViewById(R.id.rv)
+//        rvWeek = rootView.findViewById(R.id.rv_Week)
+//        val favName = arguments?.getString("selected_city")
+//        val favLat = arguments?.getDouble("selected_lat")
+//        val favLon = arguments?.getDouble("selected_lon")
+//        Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
+//
+//        mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+//        mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+//        mAdapter = HomeAdapter(requireContext())
+//        mWeekAdapter = HomeWeekAdapter(requireContext())
+//        allProductFactroy = homeFactory(
+//            RepositoryImp.getInstance(
+//                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+//            ), SharedPreferencesManager.getInstance(requireContext()
+//            ))
+//        allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
+//        rv.apply {
+//            adapter = mAdapter
+//            layoutManager = mLayoutManager
+//        }
+//        rvWeek.apply {
+//            adapter=mWeekAdapter
+//            layoutManager=mWeekLayoutManager
+//        }
+//
+//        geocoder = Geocoder(requireContext(), Locale.getDefault())
+//
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+//
+//        requestLocationPermission()
+//        if (!favName.isNullOrEmpty()) {
+////            allFavFactroy = FavFactory(
+////                RepositoryImp.getInstance(
+////                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+////                ),favName
+////            )
+////            allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
+////
+////            allFavViewModel.products.observe(viewLifecycleOwner,
+////                Observer<WeatherData> { value ->
+////                    updateUI2(value)
+////                })
+//            if (favLat != null) {
+//                if (favLon != null) {
+//                    allProductViewModel.getAllWeatherFromFav(favLat,favLon)
+//                    Log.i("TAGMap", "onCreateView: $favLat +   $favLon ")
+//                }
+//            }
+//            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
+//                Observer<Responce> { value ->
+//                    mAdapter.setDataAndFilterByDate(value.list)
+//                    mWeekAdapter.setData(value.list)
+//                    updateUIFromFav(value,favName)
+//                })
+//        }
+//
+//        else{
+////            allProductFactroy = homeFactory(
+////                RepositoryImp.getInstance(
+////                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+////                ), SharedPreferencesManager.getInstance(requireContext()
+////            ))
+////            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
+//            allProductViewModel.getAllProducts()
+//            allProductViewModel.products.observe(viewLifecycleOwner,
+//                Observer<Responce> { value ->
+//                    mAdapter.setDataAndFilterByDate(value.list)
+//                    mWeekAdapter.setData(value.list)
+//                    updateUI(value)
+//                })
+//        }
+
+        return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        FeelsLike=view.findViewById(R.id.Feels_Like)
+        textViewCity = view.findViewById(R.id.textViewCity)
+        rv = view.findViewById(R.id.rv)
+        rvWeek = view.findViewById(R.id.rv_Week)
+        val favName = arguments?.getString("selected_city")
+        val favLat = arguments?.getDouble("selected_lat")
+        val favLon = arguments?.getDouble("selected_lon")
+        Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
+
         mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
         mWeekAdapter = HomeWeekAdapter(requireContext())
+        allProductFactroy = homeFactory(
+            RepositoryImp.getInstance(
+                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+            ), SharedPreferencesManager.getInstance(requireContext()
+            ))
+        allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
         rv.apply {
             adapter = mAdapter
             layoutManager = mLayoutManager
@@ -86,27 +176,40 @@ class HomeFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         requestLocationPermission()
-        if (!cityName.isNullOrEmpty()) {
-            allFavFactroy = FavFactory(
-                RepositoryImp.getInstance(
-                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-                ),cityName
-            )
-            allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
-
-            allFavViewModel.products.observe(viewLifecycleOwner,
-                Observer<WeatherData> { value ->
-                    updateUI2(value)
+        if (!favName.isNullOrEmpty()) {
+//            allFavFactroy = FavFactory(
+//                RepositoryImp.getInstance(
+//                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+//                ),favName
+//            )
+//            allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
+//
+//            allFavViewModel.products.observe(viewLifecycleOwner,
+//                Observer<WeatherData> { value ->
+//                    updateUI2(value)
+//                })
+            if (favLat != null) {
+                if (favLon != null) {
+                    allProductViewModel.getAllWeatherFromFav(favLat,favLon)
+                    Log.i("TAGMap", "onCreateView: $favLat +   $favLon ")
+                }
+            }
+            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
+                Observer<Responce> { value ->
+                    mAdapter.setDataAndFilterByDate(value.list)
+                    mWeekAdapter.setData(value.list)
+                    updateUIFromFav(value,favName)
                 })
         }
-        else{
-            allProductFactroy = homeFactory(
-                RepositoryImp.getInstance(
-                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-                ), SharedPreferencesManager.getInstance(requireContext()
-            ))
-            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
 
+        else{
+//            allProductFactroy = homeFactory(
+//                RepositoryImp.getInstance(
+//                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
+//                ), SharedPreferencesManager.getInstance(requireContext()
+//            ))
+//            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
+            allProductViewModel.getAllProducts()
             allProductViewModel.products.observe(viewLifecycleOwner,
                 Observer<Responce> { value ->
                     mAdapter.setDataAndFilterByDate(value.list)
@@ -114,8 +217,6 @@ class HomeFragment : Fragment() {
                     updateUI(value)
                 })
         }
-
-        return rootView
     }
     private fun convertWindSpeedToKmh(windSpeed: Double): Double {
         return windSpeed * 3.6
@@ -124,23 +225,50 @@ class HomeFragment : Fragment() {
     private fun convertWindSpeedToMs(windSpeed: Double): Double {
         return windSpeed / 3.6
     }
-    private fun updateUI2(weatherData: WeatherData) {
-        view?.findViewById<TextView>(R.id.textViewCity)?.text = weatherData.name
-        view?.findViewById<TextView>(R.id.textViewTemperature)?.text =
-            "${weatherData.main.temp.toInt()}°C"
-        val iconUrl = "https://openweathermap.org/img/w/${weatherData.weather?.get(0)?.icon}.png"
-        Glide.with(requireContext())
-            .load(iconUrl)
-            .into(requireView().findViewById(R.id.imageViewWeatherIcon))
+    private fun updateUIFromFav(weatherForecast: Responce,city:String) {
+        val rootView = view ?: return
+        textViewCity.text=city
+        val todayEntries = weatherForecast.list
+        if (todayEntries.isNotEmpty()) {
+            val todayWeather = todayEntries[0]
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
+                "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
+            val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
+                "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
+                else -> todayWeather.wind.speed // Default to original value if no unit is found
+            }
+            rootView.findViewById<TextView>(R.id.Wind)?.text = "${windSpeed.toInt().toString()}"
+            rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()
+            rootView.findViewById<TextView>(R.id.humidity)?.text=
+                "${todayWeather.main.humidity.toString()} %"
+            rootView.findViewById<TextView>(R.id.clouds)?.text=
+                "${ todayWeather.clouds.all.toString()} %"
+            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
+                "${todayWeather.main.temp.toInt()}°C"
+
+            val iconCode = todayWeather.weather[0].icon
+            val iconUrl = getIconUrl(iconCode)
+
+            val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
+            imageViewWeatherIcon?.let {
+                Glide.with(requireContext())
+                    .load(iconUrl)
+                    .into(it)
+            }
+        } else {
+            Log.i("TAG", "updateUI: No data available")
+        }
     }
 
 
     private fun updateUI(weatherForecast: Responce) {
         val rootView = view ?: return  // Check if the root view is null
-
+        textViewCity.text=weatherForecast.city.name.toString()
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
+
             rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
           "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
 

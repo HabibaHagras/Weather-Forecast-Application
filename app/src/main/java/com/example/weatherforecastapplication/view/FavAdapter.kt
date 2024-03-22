@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.view
 
+    import android.util.Log
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
@@ -34,7 +35,8 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
 
         holder.name.text = currentItem.name.toString()
         holder.card.setOnClickListener {
-            listener.OnCLickIteamFav(currentItem.toString())
+            Log.i("TAGMap", "onBindViewHolder: ${currentItem.coord.lat} + ${currentItem.coord.lon} ")
+            listener.OnCLickIteamFav(currentItem.coord.lat,currentItem.coord.lon,currentItem.name)
         }
     }
     override fun getItemCount(): Int {

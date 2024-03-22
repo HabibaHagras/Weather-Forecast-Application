@@ -129,10 +129,14 @@ class FavFragment : Fragment(), FavListener {
         alertDialog.show()
     }
 
-    override fun OnCLickIteamFav(city: String) {
+    override fun OnCLickIteamFav(lat: Double ,lon:Double,city:String) {
         val anotherFragment = HomeFragment()
         val bundle = Bundle().apply {
+            Log.i("TAGMap", "OnCLickIteamFav:$lat + $lon  ")
+            putDouble("selected_lat", lat)
+            putDouble("selected_lon", lon)
             putString("selected_city", city)
+
         }
         anotherFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()

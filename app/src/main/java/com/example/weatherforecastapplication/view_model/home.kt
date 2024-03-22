@@ -17,6 +17,9 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
     private var _products: MutableLiveData<Responce> =
         MutableLiveData<Responce>()
     val products: LiveData<Responce> = _products
+    private var _Favproducts: MutableLiveData<Responce> =
+        MutableLiveData<Responce>()
+    val Favproducts: LiveData<Responce> = _Favproducts
     private var location: Locations = Locations()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -25,7 +28,8 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 
     init {
         updateLocationFromSharedPreferences()
-        getAllProducts()
+//        getAllProducts()
+//        getAllWeatherFromFav()
     }
 
     private fun updateLocationFromSharedPreferences() {
@@ -38,13 +42,23 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
         unit=sharedPreferenceSource.getUnits().toString()
     }
 
-    private fun getAllProducts() {
+     fun getAllProducts() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewModel")
             val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
             Log.i("TAG", "getAllProducts: $lang")
 
             _products.postValue(productList)
+        }
+    }
+
+    fun getAllWeatherFromFav(latitude: Double,
+                                  longitude: Double) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("TAG", "getAllProducts: ViewMOdel")
+            val ProductList=repo.getAllWeather(latitude,longitude,"7f6473d2786753ccda5811e204914fff",lang,unit)
+            Log.i("TAGMap", "getAllProducts: $latitude   + $longitude")
+            _Favproducts.postValue(ProductList)
         }
     }
 }
@@ -58,7 +72,7 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 //       getAllProducts(latitude,longitude,"7f6473d2786753ccda5811e204914fff","metric")
 //    }
 //
-//    private fun getAllProducts(     latitude: Double,
+//     fun getAllWeatherFromFav(     latitude: Double,
 //                                    longitude: Double,
 //                                    apiKey: String,
 //                                    units: String) {
@@ -69,5 +83,5 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 //
 //            _products.postValue(ProductList)
 //        }
-//    }
+//  }
 //}

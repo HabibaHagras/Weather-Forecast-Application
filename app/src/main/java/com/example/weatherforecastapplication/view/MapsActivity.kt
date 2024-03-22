@@ -90,6 +90,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val addresses = geocoder.getFromLocation(selectedLatitude, selectedLongitude, 1)
                 if (addresses != null && addresses.isNotEmpty()) {
                     val cityName = addresses[0].getAddressLine(0)
+                    val lat = addresses[0].latitude
+                    val lon = addresses[0].longitude
                     if (cityName != null) {
                         sharedPreferencesManager.saveFavCity(cityName.toString())
                         sharedPreferencesManager.saveFavCity(cityName.toString())
@@ -106,7 +108,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 base = "baseValue",
                                 clouds = Clouds(all = 0),
                                 cod = 200,
-                                coord = Coord(lat = 0.0, lon = 0.0),
+                                coord = Coord(lat = selectedLatitude, lon = selectedLongitude),
                                 dt = 123456789,
                                 main = Main(
                                     feels_like = 0.0,
