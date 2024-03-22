@@ -5,6 +5,7 @@ import android.content.Intent
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -70,6 +71,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (receivedIntent != null && receivedIntent.hasExtra("favorite")) {
                 sharedPreferencesManager.saveFavLatitude(selectedLatitude.toFloat())
                 sharedPreferencesManager.saveFavLongitude(selectedLongitude.toFloat())
+                Log.i("TAGMap", "onMapReady:$selectedLatitude + $selectedLongitude ")
                 allMapsFactroy = MapsFactory(
                     RepositoryImp.getInstance(
                         RemoteDataSourceImp.getInstance(),
@@ -78,19 +80,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
                 allMapsViewModel =
                     ViewModelProvider(this, allMapsFactroy).get(Maps::class.java)
-
-                allMapsViewModel.weatherMaps.observe(this,
-                    Observer<Responce> { value ->
-                        city_name=value.city.toString()
-                    })
+//
+//                allMapsViewModel.weatherMaps.observe(this,
+//                    Observer<Responce> { value ->
+//                        city_name=value.city.name.toString()
+//                    })
 
                 val geocoder = Geocoder(this)
                 val addresses = geocoder.getFromLocation(selectedLatitude, selectedLongitude, 1)
                 if (addresses != null && addresses.isNotEmpty()) {
-                    val cityName = addresses[0].locality
+                    val cityName = addresses[0].getAddressLine(0)
                     if (cityName != null) {
-                        sharedPreferencesManager.saveFavCity(cityName)
-                        sharedPreferencesManager.saveFavCity(cityName)
+                        sharedPreferencesManager.saveFavCity(cityName.toString())
+                        sharedPreferencesManager.saveFavCity(cityName.toString())
                         allFavFactroy = FavFactory(
                             RepositoryImp.getInstance(
                                 RemoteDataSourceImp.getInstance(),
@@ -117,7 +119,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     temp_max = 0.0,
                                     temp_min = 0.0
                                 ),
-                                name = city_name,
+                                name = cityName.toString(),
                                 sys = Sys(""),
                                 timezone = 0,
                                 visibility = 1000,
@@ -133,15 +135,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             )
                         )
                         finish()
-                    }           else {
-                    Toast.makeText(this, "City name is null", Toast.LENGTH_LONG).show()
+//                    }
+//                    else {
+//                    Toast.makeText(this, "City name is null", Toast.LENGTH_LONG).show()
 
 
-                }}else {
+                }
+
+               }
+                else {
                     Toast.makeText(
                         this, "this is not a city",
                         Toast.LENGTH_LONG     ).show()              }
-            } else {
+            }
+        else {
                 sharedPreferencesManager.saveLatitude(selectedLatitude.toFloat())
                 sharedPreferencesManager.saveLongitude(selectedLongitude.toFloat())
                 Toast.makeText(
