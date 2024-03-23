@@ -177,7 +177,8 @@ class HomeFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         if (isNetworkAvailable()) {
-           allProductViewModel.getAllProducts()
+
+//           allProductViewModel.getAllWeatherGps()
             requestLocationPermission()
         if (!favName.isNullOrEmpty()) {
 
@@ -196,21 +197,28 @@ class HomeFragment : Fragment() {
         }
 
         else{
-//            allProductFactroy = homeFactory(
-//                RepositoryImp.getInstance(
-//                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-//                ), SharedPreferencesManager.getInstance(requireContext()
-//            ))
-//            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
-            allProductViewModel.getAllProducts()
+            if(SharedPreferencesManager.getInstance(requireContext()).getLatitude() != 0.0f){
+                allProductViewModel.getAllWeatherMap()
 
-            allProductViewModel.products.observe(viewLifecycleOwner,
-                Observer<Responce> { value ->
-                    mAdapter.setDataAndFilterByDate(value.list)
-                    mWeekAdapter.setData(value.list)
-                    updateUI(value)
-                    allProductViewModel.insertHome(value)
-                })
+                allProductViewModel.products.observe(viewLifecycleOwner,
+                    Observer<Responce> { value ->
+                        mAdapter.setDataAndFilterByDate(value.list)
+                        mWeekAdapter.setData(value.list)
+                        updateUI(value)
+                    })
+                SharedPreferencesManager.getInstance(requireContext()).clearLatitude()
+            }
+            else{
+                allProductViewModel.getAllWeatherGps()
+
+                allProductViewModel.products.observe(viewLifecycleOwner,
+                    Observer<Responce> { value ->
+                        mAdapter.setDataAndFilterByDate(value.list)
+                        mWeekAdapter.setData(value.list)
+                        updateUI(value)
+                        allProductViewModel.insertHome(value)
+                    })
+            }
         }
 
     }else {

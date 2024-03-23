@@ -30,11 +30,15 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun saveLatitude(latitude: Float) {
         editor?.putFloat("latitude", latitude)!!.apply()
     }
-
+    fun clearLatitude() {
+        editor?.remove("latitude")?.apply()
+    }
     fun saveLongitude(longitude: Float) {
         editor?.putFloat("longitude", longitude)!!.apply()
     }
-
+    fun clearLongitude() {
+        editor?.remove("longitude")?.apply()
+    }
     fun getLatitude(): Float {
         return sharedPreferences?.getFloat("latitude", 0.0f) !!
     }
@@ -45,12 +49,48 @@ class  SharedPreferencesManager private constructor(context: Context){
 
 
 
+    fun saveGpsLat(Gps_latitude:Float){
+        editor?.putFloat("Gps_latitude", Gps_latitude)!!.apply()
+
+
+    }
+    fun getGpsLat(): Float{
+        return  sharedPreferences?.getFloat("Gps_latitude", 0.0f) !!
+    }
+    fun saveGpsLon(Gps_longitude:Float){
+        editor?.putFloat("Gps_longitude", Gps_longitude)!!.apply()
+
+    }
+    fun getGpsLon(): Float{
+        return  sharedPreferences?.getFloat("Gps_longitude", 0.0f) !!
+
+    }
 
 
 
+    fun saveGpsAddress(Gps_city:String){
+        editor?.putString("Gps_city", Gps_city)!!.apply()
 
+    }
+    fun getGpsAddress(): String{
+        return  sharedPreferences?.getString("Gps_city", "Tanta") !!
 
+    }
+    fun saveGpsState(is_checked:Boolean){
+        editor?.putBoolean("is_checked", is_checked)!!.apply()
 
+    }
+
+    fun saveMapState(is_checked:Boolean){
+        editor?.putBoolean("is_checked", is_checked)!!.apply()
+
+    }
+    fun getMapState():Boolean{
+        return  sharedPreferences?.getBoolean("is_checked",false)!!
+    }
+    fun getGpsState():Boolean{
+        return  sharedPreferences?.getBoolean("is_checked",false)!!
+    }
     fun saveFavLatitude(latitude: Float) {
         editor?.putFloat("fav_latitude", latitude)!!.apply()
     }

@@ -29,7 +29,9 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 
     private var location: Locations = Locations()
     private var latitude: Double = 0.0
+    private var latitudeGps: Double = 0.0
     private var longitude: Double = 0.0
+    private var longitudeGps: Double = 0.0
     private var lang: String = "en"
     private var unit: String = ""
 
@@ -47,9 +49,11 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
         longitude = sharedPreferenceSource.getLongitude().toDouble()
         lang=sharedPreferenceSource.getLanguageUnit().toString()
         unit=sharedPreferenceSource.getUnits().toString()
+        latitudeGps=sharedPreferenceSource.getGpsLat().toDouble()
+        longitudeGps=sharedPreferenceSource.getGpsLon().toDouble()
     }
 
-     fun getAllProducts() {
+     fun getAllWeatherMap() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewModel")
             val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
@@ -68,7 +72,12 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
             _Favproducts.postValue(ProductList)
         }
     }
-
+    fun getAllWeatherGps(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val productList = repo.getAllWeather(latitudeGps, longitudeGps, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
+            _products.postValue(productList)
+        }
+    }
 
     fun getStoredHome(){
         viewModelScope.launch(Dispatchers.IO) {
