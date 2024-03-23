@@ -74,8 +74,9 @@ class NotificationFragment : Fragment() {
         allProductFactroy= notificationFactory(
             RepositoryImp.getInstance(
                 RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())) ,
-            SharedPreferencesManager.getInstance(requireContext())
-        )
+           SharedPreferencesManager.getInstance(requireContext()
+            )
+      )
         allProductViewModel= ViewModelProvider(this,allProductFactroy).get(notification::class.java)
 
 

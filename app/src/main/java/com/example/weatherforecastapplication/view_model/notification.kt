@@ -11,7 +11,9 @@ import com.example.weatherforecastapplication.model2.WeatherData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class notification (private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager): ViewModel() {
+class notification (private val repo: Repository,
+                    private val sharedPreferenceSource: SharedPreferencesManager
+): ViewModel() {
     private var _products: MutableLiveData<WeatherData> =
         MutableLiveData<WeatherData>()
     val products: LiveData<WeatherData> = _products
@@ -23,7 +25,7 @@ class notification (private val repo: Repository, private val sharedPreferenceSo
     init {
 
         updateLocationFromSharedPreferences()
-        getAllProducts()
+//        getAllProducts()
     }
 
     private fun updateLocationFromSharedPreferences() {
@@ -32,7 +34,7 @@ class notification (private val repo: Repository, private val sharedPreferenceSo
         lang=sharedPreferenceSource.getLanguageUnit().toString()
         unit=sharedPreferenceSource.getUnits().toString()    }
 
-    private fun getAllProducts() {
+     fun getAllProducts() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewMOdel")
             val ProductList=repo.getWeatherWithCity(latitude,longitude,"7f6473d2786753ccda5811e204914fff",unit)

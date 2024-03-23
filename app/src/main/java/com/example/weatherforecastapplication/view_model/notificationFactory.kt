@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.weatherforecastapplication.model2.Repository
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 
-class notificationFactory(private var repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager) :
+class notificationFactory(private var repo: Repository
+,
+                          private val sharedPreferenceSource: SharedPreferencesManager
+) :
     ViewModelProvider.Factory
 
 {

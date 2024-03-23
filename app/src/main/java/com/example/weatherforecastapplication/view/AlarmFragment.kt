@@ -1,4 +1,197 @@
 package com.example.weatherforecastapplication.view
+//
+//import android.Manifest
+//import android.app.*
+//import android.content.BroadcastReceiver
+//import android.content.Context
+//import android.content.Intent
+//import android.content.pm.PackageManager
+//import android.graphics.PixelFormat
+//import android.media.MediaPlayer
+//import android.media.RingtoneManager
+//import android.net.Uri
+//import android.os.Build
+//import android.os.Bundle
+//import android.provider.Settings
+//import android.util.Log
+//import android.view.Gravity
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import android.view.WindowManager
+//import android.widget.Button
+//import android.widget.TextView
+//import androidx.core.app.ActivityCompat
+//import androidx.core.app.NotificationCompat
+//import androidx.core.app.NotificationManagerCompat
+//import androidx.fragment.app.Fragment
+//import androidx.lifecycle.ViewModelProvider
+//import androidx.lifecycle.ViewModelStore
+//import com.example.weatherforecastapplication.MainActivity
+//import com.example.weatherforecastapplication.R
+//import com.example.weatherforecastapplication.databinding.FragmentAlarmBinding
+//import com.example.weatherforecastapplication.model2.RepositoryImp
+//import com.example.weatherforecastapplication.model2.SharedPreferencesManager
+//import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+//import com.example.weatherforecastapplication.view_model.notification
+//import com.example.weatherforecastapplication.view_model.notificationFactory
+//import java.util.*
+//
+//
+//class AlarmFragment : Fragment() {
+//    private lateinit var binding: FragmentAlarmBinding
+//    private lateinit var alarmManager: AlarmManager
+//    private lateinit var allProductFactory: notificationFactory
+//    private lateinit var allProductViewModel: notification
+//    private var title: String = ""
+//    private var text: String = ""
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View {
+//        binding = FragmentAlarmBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//
+//        binding.setAlarmButton.setOnClickListener {
+//            setAlarm()
+//        }
+//    }
+//
+//    private fun setAlarm() {
+//        // Get the hour and minute from TimePicker
+//        val hour = binding.timePicker.hour
+//        val minute = binding.timePicker.minute
+//
+//        // Set the alarm time using Calendar
+//        val calendar = Calendar.getInstance().apply {
+//            set(Calendar.HOUR_OF_DAY, hour)
+//            set(Calendar.MINUTE, minute)
+//            set(Calendar.SECOND, 0)
+//        }
+//
+//        // Create an intent for AlarmReceiver
+//        val intent = Intent(requireContext(), AlarmReceiver::class.java).apply {
+//            putExtra("title", title)
+//            putExtra("temp", text)
+//        }
+//        val pendingIntent = PendingIntent.getBroadcast(
+//            requireContext(),
+//            0,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        try {
+//            // Schedule the alarm
+//            alarmManager.setExact(
+//                AlarmManager.RTC_WAKEUP,
+//                calendar.timeInMillis,
+//                pendingIntent
+//            )
+//        } catch (e: SecurityException) {
+//            // Handle SecurityException here
+//            openDrawOverOtherAppsSettings(requireContext())
+//        }
+//    }
+//
+//    companion object {
+//        @JvmStatic
+//        fun openDrawOverOtherAppsSettings(context: Context) {
+//            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+//            intent.data = Uri.parse("package:${context.packageName}")
+//            context.startActivity(intent)
+//        }
+//
+//        fun newInstance(param1: String, param2: String) =
+//            AlarmFragment().apply {
+//                arguments = Bundle().apply {
+//                }
+//            }
+//    }
+//}
+//
+//class AlarmReceiver : BroadcastReceiver() {
+//    companion object {
+//        var alarmMediaPlayer: MediaPlayer? = null
+//        private  val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+//        } else {
+//            WindowManager.LayoutParams.TYPE_PHONE
+//        }
+//    }
+//    override fun onReceive(context: Context, intent: Intent) {
+//        // Fetch title and text from the intent
+//        val title = intent.getStringExtra("title")
+//        val text = intent.getStringExtra("temp")
+//
+//        // Display the alert dialog
+//        if (Settings.canDrawOverlays(context)) {
+//            val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
+//            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//            val layoutParams = WindowManager.LayoutParams(
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.WRAP_CONTENT,
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+//                } else {
+//                    WindowManager.LayoutParams.TYPE_PHONE
+//                },
+//                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+//                PixelFormat.TRANSLUCENT
+//            )
+//            layoutParams.gravity = Gravity.TOP
+//            windowManager.addView(alertView, layoutParams)
+//            val cityname: TextView = alertView.findViewById(R.id.titleTextView)
+//            cityname.text = title
+//            val temp: TextView = alertView.findViewById(R.id.messageTextView)
+//            temp.text = text
+//
+//            val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
+//            dismissButton.setOnClickListener {
+//                // Stop the alarm sound
+//                alarmMediaPlayer?.stop()
+//                alarmMediaPlayer?.release()
+//                alarmMediaPlayer = null
+//
+//                // Remove the alert dialog view from the window manager
+//                windowManager.removeView(alertView)
+//
+//                // Cancel the notification
+//                val notificationManager = NotificationManagerCompat.from(context)
+//                notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
+//            }
+//        } else {
+//            openDrawOverOtherAppsSettings(context)
+//        }
+//    }
+//
+//    private fun openDrawOverOtherAppsSettings(context: Context) {
+//        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//        context.startActivity(intent)
+//    }
+//}
+//
+//
+//class DismissAlarmReceiver : BroadcastReceiver() {
+//    override fun onReceive(context: Context, intent: Intent) {
+//        // Stop the alarm sound
+//        AlarmReceiver.alarmMediaPlayer?.stop()
+//        AlarmReceiver.alarmMediaPlayer?.release()
+//        AlarmReceiver.alarmMediaPlayer = null
+//
+//        // Cancel the notification
+//        val notificationManager = NotificationManagerCompat.from(context)
+//        notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
+//    }
+//}
+
 import WeatherLocalDataSourceImp
 import android.Manifest
 import android.app.AlarmManager
@@ -255,8 +448,11 @@ class AlarmReceiver : BroadcastReceiver() {
         // Fetch title and text from the intent
         val title = intent.getStringExtra("title")
         val text = intent.getStringExtra("temp")
+        val sharedPreferenceSource: SharedPreferencesManager
+        sharedPreferenceSource= SharedPreferencesManager.getInstance(context)
+        if (Settings.canDrawOverlays(context)) {
 
-        // Create a notification intent
+            // Create a notification intent
         val notificationIntent = Intent(context, MainActivity::class.java)
         notificationIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(
@@ -268,13 +464,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val allProductFactory = notificationFactory(
             RepositoryImp.getInstance(
                 RemoteDataSourceImp.getInstance(), WeatherLocalDataSourceImp(context)
-            ), SharedPreferencesManager.getInstance(context)
+            ) , SharedPreferencesManager.getInstance(context)
         )
         val allProductViewModel = ViewModelProvider(ViewModelStore(), allProductFactory).get(notification::class.java)
-
-
-
-//        allProductViewModel.getAllProducts(30.7914776, 30.9957296, "7f6473d2786753ccda5811e204914fff", "metric")
+        allProductViewModel.getAllProducts()
         Log.i("TAG,", "onReceive:2 ")
         // Create a dismiss intent
         val dismissIntent = Intent(context, DismissAlarmReceiver::class.java)
@@ -400,7 +593,10 @@ class AlarmReceiver : BroadcastReceiver() {
             windowManager.addView(alertView, layoutParams)
         }
         */
-    }
+    } else {
+            openDrawOverOtherAppsSettings(context)
+        }
+
 }
 
 class DismissAlarmReceiver : BroadcastReceiver() {
@@ -415,6 +611,14 @@ class DismissAlarmReceiver : BroadcastReceiver() {
         notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
     }
 }
+
+    private fun openDrawOverOtherAppsSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+    }
+}
+
 
 
 
