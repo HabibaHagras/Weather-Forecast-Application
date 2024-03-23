@@ -20,6 +20,13 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
     private var _Favproducts: MutableLiveData<Responce> =
         MutableLiveData<Responce>()
     val Favproducts: LiveData<Responce> = _Favproducts
+
+
+    private var _weatherHome: MutableLiveData<List<Responce>> =
+        MutableLiveData<List<Responce>>()
+    val weatherHome: LiveData<List<Responce>> =  _weatherHome
+
+
     private var location: Locations = Locations()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
@@ -61,6 +68,26 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
             _Favproducts.postValue(ProductList)
         }
     }
+
+
+    fun getStoredHome(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val ProductList = repo.getStoredHome()
+            _weatherHome.postValue(ProductList)
+
+        }
+
+    }
+    fun insertHome(responce: Responce){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertResponceData(responce)
+            getStoredHome()
+
+        }
+
+    }
+
+
 }
 //    init {
 ////        loction=Locations()

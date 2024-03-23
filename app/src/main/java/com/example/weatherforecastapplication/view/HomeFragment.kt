@@ -2,10 +2,12 @@ package com.example.weatherforecastapplication
 
 import WeatherLocalDataSourceImp
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -174,20 +176,11 @@ class HomeFragment : Fragment() {
         geocoder = Geocoder(requireContext(), Locale.getDefault())
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-        requestLocationPermission()
+        if (isNetworkAvailable()) {
+           allProductViewModel.getAllProducts()
+            requestLocationPermission()
         if (!favName.isNullOrEmpty()) {
-//            allFavFactroy = FavFactory(
-//                RepositoryImp.getInstance(
-//                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-//                ),favName
-//            )
-//            allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
-//
-//            allFavViewModel.products.observe(viewLifecycleOwner,
-//                Observer<WeatherData> { value ->
-//                    updateUI2(value)
-//                })
+
             if (favLat != null) {
                 if (favLon != null) {
                     allProductViewModel.getAllWeatherFromFav(favLat,favLon)
@@ -210,13 +203,33 @@ class HomeFragment : Fragment() {
 //            ))
 //            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
             allProductViewModel.getAllProducts()
+
             allProductViewModel.products.observe(viewLifecycleOwner,
                 Observer<Responce> { value ->
                     mAdapter.setDataAndFilterByDate(value.list)
                     mWeekAdapter.setData(value.list)
                     updateUI(value)
+                    allProductViewModel.insertHome(value)
                 })
         }
+
+    }else {
+            Log.i("TAG", "nooo network: ")
+            allProductViewModel.getStoredHome()
+            allProductViewModel.weatherHome.observe(viewLifecycleOwner,
+                Observer<List<Responce>> { value ->
+                    Log.i("TAG", "o $value")
+                    mAdapter.setDataAndFilterByDate(value[0].list)
+                    mWeekAdapter.setData(value[0].list)
+                    updateUI(value[0])
+                })
+
+        }
+    }
+    fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
     private fun convertWindSpeedToKmh(windSpeed: Double): Double {
         return windSpeed * 3.6

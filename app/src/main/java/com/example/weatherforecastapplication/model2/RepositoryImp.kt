@@ -1,6 +1,7 @@
 package com.example.weatherforecastapplication.model2
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSource
 import kotlin.collections.List
@@ -48,5 +49,13 @@ return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,
 
     override suspend fun insertWeatherData(product: WeatherData) {
         return LocalDataSource.insertWeatherData(product)
+    }
+
+    override suspend fun getStoredHome(): List<Responce> {
+        return LocalDataSource.getStoredWeatherHome()
+    }
+
+    override suspend fun insertResponceData(weather: Responce) {
+        return LocalDataSource.insertWeatherHome(weather)
     }
 }

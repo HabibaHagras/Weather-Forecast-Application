@@ -1,5 +1,7 @@
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
+import com.example.weatherforecastapplication.dp.ResponceDao
 import com.example.weatherforecastapplication.dp.WeatherDataDAO
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.dp.db
@@ -7,6 +9,7 @@ import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
 import com.example.weatherforecastapplication.model2.CoordWeather
 import com.example.weatherforecastapplication.model2.Main
+import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
@@ -16,6 +19,11 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     private val dao: WeatherDataDAO by lazy {
         val dbInstance = db.getInstance(context)
         dbInstance.getWeatherDataDao()
+
+    }
+    private val daoResponce: ResponceDao by lazy {
+        val dbInstance = db.getInstance(context)
+        dbInstance.responceDao()
 
     }
 
@@ -72,5 +80,13 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
             )
 
         }
+    }
+
+    override suspend fun insertWeatherHome(weather: Responce) {
+        daoResponce.insertResponce(weather)
+    }
+
+    override suspend fun getStoredWeatherHome(): List<Responce> {
+        return daoResponce.getAllResponces()
     }
 }
