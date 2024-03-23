@@ -29,8 +29,8 @@ class notification (private val repo: Repository,
     }
 
     private fun updateLocationFromSharedPreferences() {
-        latitude = sharedPreferenceSource.getLatitude().toDouble()
-        longitude = sharedPreferenceSource.getLongitude().toDouble()
+        latitude = sharedPreferenceSource.getGpsLat().toDouble()
+        longitude = sharedPreferenceSource.getGpsLon().toDouble()
         lang=sharedPreferenceSource.getLanguageUnit().toString()
         unit=sharedPreferenceSource.getUnits().toString()    }
 

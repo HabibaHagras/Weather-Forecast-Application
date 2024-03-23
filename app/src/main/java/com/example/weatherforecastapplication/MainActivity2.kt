@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.view.AlarmFragment
 import com.example.weatherforecastapplication.view.FavFragment
+import com.example.weatherforecastapplication.view.NotificationFragment
 import com.example.weatherforecastapplication.view.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import java.util.Locale
@@ -54,6 +55,8 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                     .replace(R.id.fragment_container, AlarmFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment()).commit()
+                R.id.nav_notification -> supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, NotificationFragment()).commit()
 //                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
             }
             drawerLayout.closeDrawer(GravityCompat.START)

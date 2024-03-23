@@ -25,8 +25,10 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.databinding.FragmentNotificationBinding
 import com.example.weatherforecastapplication.model2.RepositoryImp
@@ -71,21 +73,14 @@ class NotificationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         createNotificationChannel()
-        allProductFactroy= notificationFactory(
-            RepositoryImp.getInstance(
-                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())) ,
-           SharedPreferencesManager.getInstance(requireContext()
-            )
-      )
-        allProductViewModel= ViewModelProvider(this,allProductFactroy).get(notification::class.java)
 
 
 
 
             // Now you can use title and temperature to display or update your notification
         binding.btnShowNotif.setOnClickListener {
-            val title = "Sample Title"
-            val text = "This is a sample body notification"
+            var title = "Sample Title"
+            var text = "This is a sample body notification"
             val selectedTime = getSelectedDateTime()
 
             if (ActivityCompat.checkSelfPermission(
@@ -96,23 +91,8 @@ class NotificationFragment : Fragment() {
                 requestPermissions()
             } else {
                 Log.i("TAG", "onViewCreated:scheduleNotification ")
-                allProductViewModel.products.observe(viewLifecycleOwner,
 
-                    object: Observer<WeatherData> {
-                        override fun onChanged(value: WeatherData) {
-                            Log.i("TAG", "Observer: Observer")
-                            if (value != null) {
-                                Log.i("TAG", "Observer: $value")
-
-                                val titles = value.name // uUse the city name as the title
-                                val temperature = value.main.temp.toString() // Use temperatu
-                                scheduleNotification(titles, temperature,selectedTime)
-
-                            }
-
-
-                        }})
-           //    scheduleNotification(title, text, selectedTime)
+            scheduleNotification(title, text, selectedTime)
             }
         }
 
@@ -206,46 +186,133 @@ class NotificationFragment : Fragment() {
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val title = intent.getStringExtra("title")
-        val text = intent.getStringExtra("text")
+        var title = intent.getStringExtra("title")
+        var text = intent.getStringExtra("text")
         Log.i("TAG", "onReceive: onReceive onReceive onReceive onReceive ")
         if (title != null && text != null) {
-            val notification = buildNotification(context, title, text)
-            Log.i("TAG", "onReceive: $notification")
-
-            val notificationManager = NotificationManagerCompat.from(context)
-
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.SET_ALARM
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Handle the case where permission is not granted.
-                // You can show a notification indicating the lack of permissions or request it.
-                return
+//            val notification = buildNotification(context,title,text)
+//            Log.i("TAG", "onReceive: $notification")
+            val intent = Intent(context, MainActivity::class.java)
+            val pendingIntent = TaskStackBuilder.create(context).run {
+                addNextIntentWithParentStack(intent)
+                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
             }
 
-            notificationManager.notify(0, notification.build())
-        }
-    }
+            val allProductFactory = notificationFactory(
+                RepositoryImp.getInstance(
+                    RemoteDataSourceImp.getInstance(), WeatherLocalDataSourceImp(context)
+                ),
+                SharedPreferencesManager.getInstance(context)
+            )
 
-    private fun buildNotification(
-        context: Context,
-        title: String,
-        text: String
-    ): NotificationCompat.Builder {
+            val allProductViewModel = ViewModelProvider(
+                ViewModelStore(),
+                allProductFactory
+            ).get(com.example.weatherforecastapplication.view_model.notification::class.java)
+            allProductViewModel.getAllProducts()
+            val notificationBuilder = NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
+                .setSmallIcon(R.drawable.cloud_white_24dp)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+
+            allProductViewModel.products.observeForever { value ->
+                Log.i("TAG", "Observer: Observer")
+                Log.i("TAG", "Observer: $value")
+
+                val updatedTitle = value.name
+                val updatedText = value.main.temp.toString()
+
+                // Update notification content based on LiveData
+                notificationBuilder.setContentTitle(updatedTitle)
+                notificationBuilder.setContentText(updatedText)
+
+                // Notify system to update the notification
+                val notificationManager = NotificationManagerCompat.from(context)
+                if (ActivityCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                }
+                notificationManager.notify(0, notificationBuilder.build())
+            }
+            val notificationManager = NotificationManagerCompat.from(context)
+            notificationManager.notify(0, notificationBuilder.build())
+
+
+//           val notificationManager = NotificationManagerCompat.from(context)
+//
+//            if (ActivityCompat.checkSelfPermission(
+//                    context,
+//                    Manifest.permission.SET_ALARM
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                // TODO: Handle the case where permission is not granted.
+//                // You can show a notification indicating the lack of permissions or request it.
+//                return
+//            }
+//
+//            notificationManager.notify(0, notification.build())
+//        }
+    }}
+
+    private fun buildNotification(context: Context,title: String,text: String): NotificationCompat.Builder {
+
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)
             getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
         }
 
-        return NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(text)
+        val allProductFactory = notificationFactory(
+            RepositoryImp.getInstance(
+                RemoteDataSourceImp.getInstance(), WeatherLocalDataSourceImp(context)
+            ),
+            SharedPreferencesManager.getInstance(context)
+        )
+
+        val allProductViewModel = ViewModelProvider(
+            ViewModelStore(),
+            allProductFactory
+        ).get(notification::class.java)
+        allProductViewModel.getAllProducts()
+        val notificationBuilder = NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
             .setSmallIcon(R.drawable.cloud_white_24dp)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
+
+        allProductViewModel.products.observeForever { value ->
+            Log.i("TAG", "Observer: Observer")
+            Log.i("TAG", "Observer: $value")
+
+            val updatedTitle = value.name
+            val updatedText = value.main.temp.toString()
+
+            // Update notification content based on LiveData
+            notificationBuilder.setContentTitle(updatedTitle)
+            notificationBuilder.setContentText(updatedText)
+
+            // Notify system to update the notification
+            val notificationManager = NotificationManagerCompat.from(context)
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+            }
+            notificationManager.notify(0, notificationBuilder.build())
+        }
+
+        return notificationBuilder
     }
+
 
 }
