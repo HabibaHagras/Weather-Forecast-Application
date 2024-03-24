@@ -11,9 +11,9 @@ interface WeatherLocalDataSource {
     suspend fun insertWeatherData(product: WeatherData)
     suspend fun deleteWeather(product: Weather)
     suspend fun deleteWeatherData(product: WeatherData)
-    suspend fun getStoredProducts(): List<WeatherData>
+    suspend fun getStoredProducts(): Flow<List<WeatherData>>
     suspend fun insertWeatherHome(weather: Responce)
-    suspend fun getStoredWeatherHome(): List<Responce>
+    suspend fun getStoredWeatherHome(): Flow<List<Responce>>
 
 
 

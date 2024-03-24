@@ -8,7 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherforecastapplication.model2.Repository
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
+import com.example.weatherforecastapplication.network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class Maps (private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager
@@ -16,6 +19,10 @@ class Maps (private val repo: Repository, private val sharedPreferenceSource: Sh
     private var _weatherMaps: MutableLiveData<Responce> =
         MutableLiveData<Responce>()
     val weatherMaps: LiveData<Responce> = _weatherMaps
+
+
+    private val _weatherStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.loading)
+    val weatherStateFlow =  _weatherStateFlow.asStateFlow()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private var lang: String = "en"

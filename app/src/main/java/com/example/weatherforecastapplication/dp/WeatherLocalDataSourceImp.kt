@@ -14,6 +14,9 @@ import com.example.weatherforecastapplication.model2.Sys
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.model2.Wind
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 
 class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
     private val dao: WeatherDataDAO by lazy {
@@ -44,26 +47,12 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
         // Not needed for WeatherDataDAO
     }
 
-    override suspend fun getStoredProducts(): List<WeatherData> {
+    override suspend fun getStoredProducts(): Flow<List<WeatherData>> {
 
-        return dao.getAll().map { weatherDataEntity ->
-            val weatherEntities = dao.getWeatherByParentId(weatherDataEntity.id)
-            val weatherList = weatherEntities.map { weatherEntity ->
-                Weather(
-                    description = weatherEntity.description,
-                    icon = weatherEntity.icon,
-                    id = weatherEntity.id,
-                    main = weatherEntity.main
-                )
-            }
-//            WeatherData(
-//                name = weatherDataEntity.name,
-//                main = weatherDataEntity.main,
-//                weather = weatherList
-//            )
-
-
-
+        return dao.getAll().map { weatherDataEntities ->
+            weatherDataEntities.map { weatherDataEntity ->
+                // Fetch weather entities for the current weather data entity
+                val weatherEntities = dao.getWeatherByParentId(weatherDataEntity.id).firstOrNull() ?: emptyList()
             WeatherData(
                 base = "baseValue",
                 clouds = Clouds(all = 0),
@@ -78,15 +67,32 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
                 weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
                 wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
             )
-
+            }
         }
     }
+//
+//            WeatherData(
+//                base = "baseValue",
+//                clouds = Clouds(all = 0),
+//                cod = 200,
+//                coord = CoordWeather(lon =weatherDataEntity.coord.lon,lat = weatherDataEntity.coord.lat),
+//                dt = 123456789,
+//                main = weatherDataEntity.main,
+//                name = weatherDataEntity.name,
+//                sys = Sys(""),
+//                timezone = 0,
+//                visibility = 1000,
+//                weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
+//                wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
+//            )
+
+
 
     override suspend fun insertWeatherHome(weather: Responce) {
         daoResponce.insertResponce(weather)
     }
 
-    override suspend fun getStoredWeatherHome(): List<Responce> {
+    override suspend fun getStoredWeatherHome(): Flow<List<Responce>> {
         return daoResponce.getAllResponces()
     }
 }

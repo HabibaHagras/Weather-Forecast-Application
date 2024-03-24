@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSource
+import kotlinx.coroutines.flow.Flow
 import kotlin.collections.List
 
 class RepositoryImp private constructor(
@@ -43,7 +44,7 @@ return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,
       return  RemoteDataSource.getWeatherWithCity(city,apiKey)
     }
 
-    override suspend fun getStored(): List<WeatherData> {
+    override suspend fun getStored(): Flow<List<WeatherData>> {
         return LocalDataSource.getStoredProducts()
     }
 
@@ -51,7 +52,7 @@ return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,
         return LocalDataSource.insertWeatherData(product)
     }
 
-    override suspend fun getStoredHome(): List<Responce> {
+    override suspend fun getStoredHome(): Flow<List<Responce>> {
         return LocalDataSource.getStoredWeatherHome()
     }
 

@@ -3,6 +3,7 @@ package com.example.weatherforecastapplication.model2
 import androidx.lifecycle.LiveData
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.WeatherData
+import kotlinx.coroutines.flow.Flow
 import kotlin.collections.List
 
 interface Repository {
@@ -16,9 +17,9 @@ interface Repository {
                                    apiKey: String,
                                    units: String): WeatherData
     suspend fun getWeatherWithCity2(city: String,apiKey:String): WeatherData
-    suspend fun getStored(): List<WeatherData>
+    suspend fun getStored(): Flow<List<WeatherData>>
     suspend fun insertWeatherData(product: WeatherData)
-    suspend fun getStoredHome():List<Responce>
+    suspend fun getStoredHome(): Flow<List<Responce>>
     suspend fun insertResponceData(weather: Responce)
 
 

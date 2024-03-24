@@ -9,7 +9,11 @@ import com.example.weatherforecastapplication.Locations
 import com.example.weatherforecastapplication.model2.Repository
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.Responce
+import com.example.weatherforecastapplication.network.ApiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class home(private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager
@@ -25,6 +29,11 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
     private var _weatherHome: MutableLiveData<List<Responce>> =
         MutableLiveData<List<Responce>>()
     val weatherHome: LiveData<List<Responce>> =  _weatherHome
+
+
+
+    private val _weatherStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.loading)
+    val weatherStateFlow =  _weatherStateFlow.asStateFlow()
 
 
     private var location: Locations = Locations()
@@ -81,8 +90,12 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 
     fun getStoredHome(){
         viewModelScope.launch(Dispatchers.IO) {
-            val ProductList = repo.getStoredHome()
-            _weatherHome.postValue(ProductList)
+//            val ProductList = repo.getStoredHome()
+//            _weatherHome.postValue(ProductList)
+           repo.getStoredHome().catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+               .collect{it->
+                   _weatherStateFlow.value= ApiState.Sucess(it)
+               }
 
         }
 

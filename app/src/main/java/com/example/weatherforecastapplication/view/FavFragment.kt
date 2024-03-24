@@ -10,18 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecastapplication.HomeFragment
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
+import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,8 +60,37 @@ class FavFragment : Fragment(), FavListener {
         )
         allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
         recyclerView.adapter = adapter
+
         allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(weatherDataList)})
+            adapter.setData(weatherDataList)
+
+        })
+        lifecycleScope.launch {
+            allFavViewModel.weatherStateFlow.collectLatest {
+                    result->
+                when(result){
+                    is ApiState.loading->{
+                        //    progressBar.visibility = ProgressBar.VISIBLE
+                        Log.i("TAG", "LOOOOODING Fav: ")
+
+                    }
+                    is ApiState.SucessWeatherData->{
+                        //     progressBar.visibility = ProgressBar.GONE
+                        adapter.setData(result.data)
+                    }
+                    else->{
+                        //   progressBar.visibility = ProgressBar.GONE
+
+                        Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+
+                    }
+
+
+                }
+            }
+        }
+
+
         fab = view.findViewById(R.id.fab)
         fab.setOnClickListener {
 //            showAddCityDialog()
