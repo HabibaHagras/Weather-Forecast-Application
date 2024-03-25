@@ -358,11 +358,28 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
-    private fun getIconUrl(iconCode: String): String {
-        return "https://openweathermap.org/img/w/$iconCode.png"
+    private fun getIconUrl(iconCode: String): Int {
+        return when (iconCode) {
+            "01d" -> R.drawable.day_forecast_sun_sunny_weather_icon
+            "01n" -> R.drawable.eclipse_forecast_moon_night_space_icon
+            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_icon
+            "02n" -> R.drawable.weather_clouds_cloudy_moon_icon
+            "03d", "03n" -> R.drawable.weather_cloud_clouds_cloudy_icon
+            "04d", "04n" -> R.drawable.weather_cloud_clouds_cloudyy_icon
+            "09d", "09n" -> R.drawable.clouds_cloudy_foggy_weather_icon
+            "10d" -> R.drawable.weather_clouds_cloudy_forecast_rain_icon
+            "10n" -> R.drawable.weather_clouds_cloudy_rain_sunny_icon
+            "11d", "11n" -> R.drawable.cloud_flash_weather_rain_snow_icon
+            "13d", "13n" -> R.drawable.weather_storm_icon
+            "50d", "50n" -> R.drawable.rain_snowflake_snow_cloud_winter_icon
+            else -> R.drawable.cloud_white_24dp // Default icon for unknown weather conditions
+        }
     }
+
+
+//    private fun getIconUrl(iconCode: String): String {
+//        return "https://openweathermap.org/img/w/$iconCode.png"
+//    }
 
     private fun getCurrentDate(): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
