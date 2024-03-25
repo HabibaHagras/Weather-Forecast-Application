@@ -59,4 +59,8 @@ return RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,
     override suspend fun insertResponceData(weather: Responce) {
         return LocalDataSource.insertWeatherHome(weather)
     }
+
+    override suspend fun deletetWeatherData(weather: WeatherData) {
+        return LocalDataSource.deleteWeatherData(weather)
+    }
 }

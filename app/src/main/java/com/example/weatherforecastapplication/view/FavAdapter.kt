@@ -4,6 +4,7 @@ package com.example.weatherforecastapplication.view
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
+    import android.widget.ImageView
     import android.widget.TextView
     import androidx.cardview.widget.CardView
     import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,9 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
             Log.i("TAGMap", "onBindViewHolder: ${currentItem.coord.lat} + ${currentItem.coord.lon}   +${currentItem.name}")
             listener.OnCLickIteamFav(currentItem.coord.lat,currentItem.coord.lon,currentItem.name)
         }
+        holder.imageView.setOnClickListener {
+            listener.deleteIteamFav(currentItem)
+        }
     }
     override fun getItemCount(): Int {
         return listOfCities.size
@@ -50,6 +54,7 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
     class FavAdapterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var name: TextView = view.findViewById(R.id.city_name)
         var card:CardView =view.findViewById(R.id.FAV_card_view)
+        var imageView:ImageView=view.findViewById(R.id.imageView)
     }
 
 }

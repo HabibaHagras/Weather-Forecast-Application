@@ -21,6 +21,7 @@ interface Repository {
     suspend fun insertWeatherData(product: WeatherData)
     suspend fun getStoredHome(): Flow<List<Responce>>
     suspend fun insertResponceData(weather: Responce)
+    suspend fun deletetWeatherData(weather: WeatherData)
 
 
 }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecastapplication.HomeFragment
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
+import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.Fav
@@ -178,4 +179,7 @@ class FavFragment : Fragment(), FavListener {
             .addToBackStack(null)
             .commit()
     }
+
+    override fun deleteIteamFav(weather: WeatherData) {
+        allFavViewModel.deleteWeather(weather)    }
 }
