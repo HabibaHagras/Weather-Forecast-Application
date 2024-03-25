@@ -7,7 +7,7 @@ import com.example.weatherforecastapplication.network.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlin.collections.List
 
-class RepositoryImp private constructor(
+class RepositoryImp  constructor(
     private var RemoteDataSource: RemoteDataSource,private var LocalDataSource:WeatherLocalDataSource
 ): Repository {
 
@@ -31,7 +31,7 @@ class RepositoryImp private constructor(
         lang: String,
         units: String
     ): Responce {
-        Log.i("TAG", "getAllProduct: ProductRepositoryImp")
+//        Log.i("TAG", "getAllProduct: ProductRepositoryImp")
         return RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,lang,units)    }
 
     override suspend fun getWeatherWithCity(latitude: Double,

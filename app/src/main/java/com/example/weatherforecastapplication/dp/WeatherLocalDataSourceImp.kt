@@ -30,18 +30,13 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
 
     }
 
-    override suspend fun insertWeather(weather: Weather) {
-        // Not needed for WeatherDataDAO
-    }
+
 
     override suspend fun insertWeatherData(weatherData: WeatherData) {
         Log.i("TAG", "insertWeatherData: insertWeatherData")
         dao.insert(weatherData)
     }
 
-    override suspend fun deleteWeather(weather: Weather) {
-        // Not needed for WeatherDataDAO
-    }
 
     override suspend fun deleteWeatherData(weatherData: WeatherData) {
         // Not needed for WeatherDataDAO
