@@ -1,6 +1,7 @@
 package com.example.weatherforecastapplication.view
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -8,6 +9,7 @@ import android.content.res.Resources
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import com.example.weatherforecastapplication.MainActivity2
 import com.example.weatherforecastapplication.databinding.FragmentSettingsBinding
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
@@ -48,96 +51,106 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.gps.setOnCheckedChangeListener { _,isChecked->
-            if (isChecked) {
-                SharedPreferencesManager.getInstance(requireContext()).saveGpsState(true)
-                SharedPreferencesManager.getInstance(requireContext()).saveMapState(false)
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-                requestLocationPermission()
-                geocoder = Geocoder(requireContext(), Locale.getDefault())
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+        if (isNetworkAvailable()) {
+            binding.noConnectionIcon.isGone
+            binding.gps.setOnCheckedChangeListener { _,isChecked->
+                if (isChecked) {
+                    SharedPreferencesManager.getInstance(requireContext()).saveGpsState(true)
+                    SharedPreferencesManager.getInstance(requireContext()).saveMapState(false)
+                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                    requestLocationPermission()
+                    geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
 
+                }
             }
-        }
-        binding.map.setOnCheckedChangeListener { _, isChecked ->
+            binding.map.setOnCheckedChangeListener { _, isChecked ->
 
-            if (isChecked) {
-                SharedPreferencesManager.getInstance(requireContext()).saveGpsState(false)
-                SharedPreferencesManager.getInstance(requireContext()).saveMapState(true)
-                startActivity(Intent(requireContext(), MapsActivity::class.java))
+                if (isChecked) {
+                    SharedPreferencesManager.getInstance(requireContext()).saveGpsState(false)
+                    SharedPreferencesManager.getInstance(requireContext()).saveMapState(true)
+                    startActivity(Intent(requireContext(), MapsActivity::class.java))
+                }
             }
-        }
-        binding.switchLanguageArabic.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("ar")
-                setAppLanguage("ar")
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.switchLanguageArabic.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("ar")
+                    setAppLanguage("ar")
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
             }
-        }
-        binding.switchLanguageEnglish.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("en")
-                setAppLanguage("en")
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.switchLanguageEnglish.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    SharedPreferencesManager.getInstance(requireContext()).saveLanguageUnit("en")
+                    setAppLanguage("en")
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
             }
-        }
-        binding.switchDefaultKelvin.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getKelvinState()
-            setOnCheckedChangeListener { _, isChecked ->
-                binding.switchImperialFahrenheit.isChecked = false
-                binding.switchMetricCelsius.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveUnits("")
-                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchMetricCelsius.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveKelvinState(isChecked)
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.switchDefaultKelvin.apply {
+                isChecked = SharedPreferencesManager.getInstance(requireContext()).getKelvinState()
+                setOnCheckedChangeListener { _, isChecked ->
+                    binding.switchImperialFahrenheit.isChecked = false
+                    binding.switchMetricCelsius.isChecked = false
+                    SharedPreferencesManager.getInstance(requireContext()).saveUnits("")
+                    SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchMetricCelsius.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveKelvinState(isChecked)
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
             }
-        }
-        binding.switchMetricCelsius.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getCelsuisState()
-            setOnCheckedChangeListener { _, isChecked ->
-                binding.switchImperialFahrenheit.isChecked = false
-                binding.switchDefaultKelvin.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveUnits("metric")
-                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(isChecked)
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.switchMetricCelsius.apply {
+                isChecked = SharedPreferencesManager.getInstance(requireContext()).getCelsuisState()
+                setOnCheckedChangeListener { _, isChecked ->
+                    binding.switchImperialFahrenheit.isChecked = false
+                    binding.switchDefaultKelvin.isChecked = false
+                    SharedPreferencesManager.getInstance(requireContext()).saveUnits("metric")
+                    SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchImperialFahrenheit.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(isChecked)
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
             }
-        }
-        binding.switchImperialFahrenheit.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getFahrenheitState()
-            setOnCheckedChangeListener { _, isChecked ->
-                binding.switchMetricCelsius.isChecked = false
-                binding.switchDefaultKelvin.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveUnits("imperial")
-                SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchMetricCelsius.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(isChecked)
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.switchImperialFahrenheit.apply {
+                isChecked = SharedPreferencesManager.getInstance(requireContext()).getFahrenheitState()
+                setOnCheckedChangeListener { _, isChecked ->
+                    binding.switchMetricCelsius.isChecked = false
+                    binding.switchDefaultKelvin.isChecked = false
+                    SharedPreferencesManager.getInstance(requireContext()).saveUnits("imperial")
+                    SharedPreferencesManager.getInstance(requireContext()).saveCelsuisState(binding.switchDefaultKelvin.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(binding.switchMetricCelsius.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveFahrenheitState(isChecked)
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
             }
-        }
-        binding.mSec.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getMperSecState()
-            setOnCheckedChangeListener { _, isChecked ->
-                binding.kmHour.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveWind("m/s")
-                SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(binding.kmHour.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveMperSecState(isChecked)
-                startActivity(Intent(requireContext(), MainActivity2::class.java)) }
-        }
-        binding.kmHour.apply {
-            isChecked = SharedPreferencesManager.getInstance(requireContext()).getKmperHourState()
-            setOnCheckedChangeListener { _, isChecked ->
-                binding.mSec.isChecked = false
-                SharedPreferencesManager.getInstance(requireContext()).saveWind("km/h")
-                SharedPreferencesManager.getInstance(requireContext()).saveMperSecState( binding.mSec.isChecked)
-                SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(isChecked)
-                startActivity(Intent(requireContext(), MainActivity2::class.java))
+            binding.mSec.apply {
+                isChecked = SharedPreferencesManager.getInstance(requireContext()).getMperSecState()
+                setOnCheckedChangeListener { _, isChecked ->
+                    binding.kmHour.isChecked = false
+                    SharedPreferencesManager.getInstance(requireContext()).saveWind("m/s")
+                    SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(binding.kmHour.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveMperSecState(isChecked)
+                    startActivity(Intent(requireContext(), MainActivity2::class.java)) }
             }
-        }
+            binding.kmHour.apply {
+                isChecked = SharedPreferencesManager.getInstance(requireContext()).getKmperHourState()
+                setOnCheckedChangeListener { _, isChecked ->
+                    binding.mSec.isChecked = false
+                    SharedPreferencesManager.getInstance(requireContext()).saveWind("km/h")
+                    SharedPreferencesManager.getInstance(requireContext()).saveMperSecState( binding.mSec.isChecked)
+                    SharedPreferencesManager.getInstance(requireContext()).saveKmperHourState(isChecked)
+                    startActivity(Intent(requireContext(), MainActivity2::class.java))
+                }
+            }
+    }   else{
+        binding.noConnectionIcon.visibility
+    }
     }
 
+    fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
