@@ -4,6 +4,7 @@ package com.example.weatherforecastapplication.view
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
+    import android.widget.Button
     import android.widget.ImageView
     import android.widget.TextView
     import androidx.cardview.widget.CardView
@@ -40,8 +41,17 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
             listener.OnCLickIteamFav(currentItem.coord.lat,currentItem.coord.lon,currentItem.name)
         }
         holder.imageView.setOnClickListener {
+            Log.i("TAG", "deleteIteamFav: ")
+
             listener.deleteIteamFav(currentItem)
         }
+//        holder.button2.setOnClickListener {
+//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssssssssssssssssssssssssssssss: ")
+//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssss:  + $currentItem")
+//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssss:  + ${currentItem.id}")
+//
+//            listener.deleteIteamFav(currentItem)
+//        }
     }
     override fun getItemCount(): Int {
         return listOfCities.size
@@ -55,6 +65,7 @@ class FavAdapter(private val context: FavFragment,private val listener: FavListe
         var name: TextView = view.findViewById(R.id.city_name)
         var card:CardView =view.findViewById(R.id.FAV_card_view)
         var imageView:ImageView=view.findViewById(R.id.imageView)
+//        var button2: Button = view.findViewById(R.id.button2)
     }
 
 }

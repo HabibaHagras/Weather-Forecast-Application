@@ -34,6 +34,7 @@ import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.view.HomeAdapter
 import com.example.weatherforecastapplication.view.HomeWeekAdapter
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
 import com.example.weatherforecastapplication.view_model.home
@@ -182,7 +183,9 @@ class HomeFragment : Fragment() {
         geocoder = Geocoder(requireContext(), Locale.getDefault())
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        if (isNetworkAvailable()) {
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
 
 //           allProductViewModel.getAllWeatherGps()
             requestLocationPermission()

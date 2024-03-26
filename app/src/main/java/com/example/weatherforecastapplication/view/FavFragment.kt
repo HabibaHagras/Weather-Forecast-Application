@@ -138,48 +138,62 @@ class FavFragment : Fragment(), FavListener {
     }
     private fun refreshFavorites() {
         allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(weatherDataList)})
+            adapter.setData(weatherDataList)
+            adapter.notifyDataSetChanged()
+
+        })
     }
-    private fun showAddCityDialog() {
+    private fun showNoNetworkDialog() {
         val dialogView =
             LayoutInflater.from(requireContext()).inflate(R.layout.fav_city_dialog, null)
-        val editTextFavCity = dialogView.findViewById<EditText>(R.id.edit_text_fav_city)
-        val saveButton = dialogView.findViewById<Button>(R.id.button_save)
+//        val editTextFavCity = dialogView.findViewById<EditText>(R.id.edit_text_fav_city)
+//        val saveButton = dialogView.findViewById<Button>(R.id.button_save)
 
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Add Favorite City")
         val alertDialog = dialogBuilder.create()
 
-        saveButton.setOnClickListener {
-            val cityName = editTextFavCity.text.toString().trim()
-            if (cityName.isNotEmpty()) {
-                alertDialog.dismiss()
-            } else {
-                // Handle empty city name
-                editTextFavCity.error = "Please enter a city name"
-            }
-        }
+//        saveButton.setOnClickListener {
+//            val cityName = editTextFavCity.text.toString().trim()
+//            if (cityName.isNotEmpty()) {
+//                alertDialog.dismiss()
+//            } else {
+//                // Handle empty city name
+//                editTextFavCity.error = "Please enter a city name"
+//            }
+//        }
 
         alertDialog.show()
     }
 
     override fun OnCLickIteamFav(lat: Double ,lon:Double,city:String) {
-        val anotherFragment = HomeFragment()
-        val bundle = Bundle().apply {
-            Log.i("TAGMap", "OnCLickIteamFav:$lat + $lon  ")
-            putDouble("selected_lat", lat)
-            putDouble("selected_lon", lon)
-            putString("selected_city", city)
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
+            val anotherFragment = HomeFragment()
+            val bundle = Bundle().apply {
+                Log.i("TAGMap", "OnCLickIteamFav:$lat + $lon  ")
+                putDouble("selected_lat", lat)
+                putDouble("selected_lon", lon)
+                putString("selected_city", city)
+
+            }
+            anotherFragment.arguments = bundle
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, anotherFragment)
+                .addToBackStack(null)
+                .commit()
+        }else {
+            showNoNetworkDialog()
 
         }
-        anotherFragment.arguments = bundle
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, anotherFragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun deleteIteamFav(weather: WeatherData) {
-        allFavViewModel.deleteWeather(weather)    }
+        Log.i("TAG", "deleteIteamFavvvvvvvvvvvvvvvvvvvvvvvvvvvvv: ")
+        allFavViewModel.deleteWeather(weather)
+        refreshFavorites()
+
+    }
 }

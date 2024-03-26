@@ -10,6 +10,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -47,12 +48,15 @@ class SettingsFragment : Fragment() {
     ): View? {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isNetworkAvailable()) {
-            binding.noConnectionIcon.isGone
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
+            binding.ConstraintLayout.visibility = View.GONE
             binding.gps.setOnCheckedChangeListener { _,isChecked->
                 if (isChecked) {
                     SharedPreferencesManager.getInstance(requireContext()).saveGpsState(true)
@@ -142,15 +146,11 @@ class SettingsFragment : Fragment() {
                 }
             }
     }   else{
-        binding.noConnectionIcon.visibility
+            binding.ConstraintLayout.visibility = View.VISIBLE
     }
     }
 
-    fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
+
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),

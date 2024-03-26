@@ -71,31 +71,35 @@ class NotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        createNotificationChannel()
-
-
+        super.onViewCreated(view, savedInstanceState)
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
+            binding.ConstraintLayout.visibility = View.GONE
+            createNotificationChannel()
 
 
             // Now you can use title and temperature to display or update your notification
-        binding.btnShowNotif.setOnClickListener {
-            var title = "Sample Title"
-            var text = "This is a sample body notification"
-            val selectedTime = getSelectedDateTime()
+            binding.btnShowNotif.setOnClickListener {
+                var title = "Sample Title"
+                var text = "This is a sample body notification"
+                val selectedTime = getSelectedDateTime()
 
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions()
-            } else {
-                Log.i("TAG", "onViewCreated:scheduleNotification ")
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissions()
+                } else {
+                    Log.i("TAG", "onViewCreated:scheduleNotification ")
 
-            scheduleNotification(title, text, selectedTime)
+                    scheduleNotification(title, text, selectedTime)
+                }
             }
+        }else{
+            binding.ConstraintLayout.visibility = View.VISIBLE
         }
-
     }
 
     private fun getSelectedDateTime(): Calendar {

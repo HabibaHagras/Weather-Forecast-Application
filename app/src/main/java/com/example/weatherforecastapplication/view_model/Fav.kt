@@ -58,9 +58,10 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
     }
     fun deleteWeather(product:WeatherData) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.i("TAG", "insertProducts: ViewMOdel")
+            Log.i("TAG", "deleteIteamFav: ")
             repo.deletetWeatherData(product)
             getStored()
+
 
 
         }

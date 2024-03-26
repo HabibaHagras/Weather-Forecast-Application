@@ -106,6 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
                         allFavViewModel.insertProducts(
                             WeatherData(
+                                id = 0,
                                 base = "baseValue",
                                 clouds = Clouds(all = 0),
                                 cod = 200,

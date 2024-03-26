@@ -16,13 +16,13 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:id="@+id/toolbar"
+                android:background="@color/weather2"
                 android:elevation="4dp"
-                android:background="@color/weather1"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -36,8 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/img_4"
-        android:paddingTop="70dp"
+        android:background="@color/weather2"
+        android:paddingTop="30dp"
+        app:headerLayout="@layout/nav_header"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/move_dark"
         app:menu="@menu/nav_menu" />

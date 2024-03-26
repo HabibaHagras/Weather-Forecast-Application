@@ -258,11 +258,17 @@ class AlarmFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
+            binding.ConstraintLayout.visibility = View.GONE
+            binding.LinearLayout.visibility = View.VISIBLE
 
-        binding.setAlarmButton.setOnClickListener {
-            setAlarm()
-        }
+            alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            binding.setAlarmButton.setOnClickListener {
+                setAlarm()
+            }
 //      allProductFactroy = notificationFactory(
 //            RepositoryImp.getInstance(
 //                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())))
@@ -284,7 +290,11 @@ class AlarmFragment : Fragment() {
 //                }})
 
 
+        } else{
+                binding.ConstraintLayout.visibility = View.VISIBLE
+                binding.LinearLayout.visibility = View.GONE
 
+        }
     }
     private fun setAlarm() {
         val hour = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -485,35 +495,35 @@ class AlarmReceiver : BroadcastReceiver() {
             dismissPendingIntent
         ).build()
 
-        // Create a notification builder
-        val builder = NotificationCompat.Builder(context, "default")
-            .setSmallIcon(R.drawable.alarm_black_24dp)
-            .setContentTitle(title)
-            .setContentText(text)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .addAction(dismissAction)
-
-        // Show the notification
-        val notificationManager = NotificationManagerCompat.from(context)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "default",
-                "Alarm Channel",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        notificationManager.notify(0, builder.build())
+//        // Create a notification builder
+//        val builder = NotificationCompat.Builder(context, "default")
+//            .setSmallIcon(R.drawable.alarm_black_24dp)
+//            .setContentTitle(title)
+//            .setContentText(text)
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            .setContentIntent(pendingIntent)
+//            .setAutoCancel(true)
+//            .addAction(dismissAction)
+//
+//        // Show the notification
+//        val notificationManager = NotificationManagerCompat.from(context)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                "default",
+//                "Alarm Channel",
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//
+//        if (ActivityCompat.checkSelfPermission(
+//                context,
+//                Manifest.permission.POST_NOTIFICATIONS
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return
+//        }
+//        notificationManager.notify(0, builder.build())
 
         // Play the alarm sound
         val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -522,7 +532,35 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmMediaPlayer?.start()
         allProductViewModel.products.observeForever { weatherData ->
 
+            // Create a notification builder
+            val builder = NotificationCompat.Builder(context, "default")
+                .setSmallIcon(R.drawable.alarm_black_24dp)
+                .setContentTitle(weatherData.name)
+                .setContentText(weatherData.main.temp.toString())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .addAction(dismissAction)
 
+            // Show the notification
+            val notificationManager = NotificationManagerCompat.from(context)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    "default",
+                    "Alarm Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+                notificationManager.createNotificationChannel(channel)
+            }
+
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+            }
+            notificationManager.notify(0, builder.build())
 
 
         val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)

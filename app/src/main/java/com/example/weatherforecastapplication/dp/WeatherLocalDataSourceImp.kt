@@ -39,31 +39,33 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
 
 
     override suspend fun deleteWeatherData(weatherData: WeatherData) {
-        // Not needed for WeatherDataDAO
+        Log.i("TAG", "deleteWeatherDataaaaaaaaaaaaaaaaaaaaaaaaaaa: ")
+        dao.delete(weatherData)
     }
 
     override suspend fun getStoredProducts(): Flow<List<WeatherData>> {
 
-        return dao.getAll().map { weatherDataEntities ->
-            weatherDataEntities.map { weatherDataEntity ->
-                // Fetch weather entities for the current weather data entity
-                val weatherEntities = dao.getWeatherByParentId(weatherDataEntity.id).firstOrNull() ?: emptyList()
-            WeatherData(
-                base = "baseValue",
-                clouds = Clouds(all = 0),
-                cod = 200,
-                coord = CoordWeather(lon =weatherDataEntity.coord.lon,lat = weatherDataEntity.coord.lat),
-                dt = 123456789,
-                main = weatherDataEntity.main,
-                name = weatherDataEntity.name,
-                sys = Sys(""),
-                timezone = 0,
-                visibility = 1000,
-                weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
-                wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
-            )
-            }
-        }
+        return dao.getAll()
+//            .map { weatherDataEntities ->
+//            weatherDataEntities.map { weatherDataEntity ->
+//                // Fetch weather entities for the current weather data entity
+//                val weatherEntities = dao.getWeatherByParentId(weatherDataEntity.id).firstOrNull() ?: emptyList()
+//            WeatherData(
+//                base = "baseValue",
+//                clouds = Clouds(all = 0),
+//                cod = 200,
+//                coord = CoordWeather(lon =weatherDataEntity.coord.lon,lat = weatherDataEntity.coord.lat),
+//                dt = 123456789,
+//                main = weatherDataEntity.main,
+//                name = weatherDataEntity.name,
+//                sys = Sys(""),
+//                timezone = 0,
+//                visibility = 1000,
+//                weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
+//                wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
+//            )
+//            }
+//        }
     }
 //
 //            WeatherData(
