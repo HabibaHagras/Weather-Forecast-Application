@@ -167,7 +167,7 @@ class  SharedPreferencesManager private constructor(context: Context){
     }
 
     fun getUnits(): String {
-        return sharedPreferences?.getString("unit", "")!!
+        return sharedPreferences?.getString("unit", "metric")!!
     }
     fun saveWind(wind: String) {
         sharedPreferences?.edit()!!.putString("Wind", wind).apply()

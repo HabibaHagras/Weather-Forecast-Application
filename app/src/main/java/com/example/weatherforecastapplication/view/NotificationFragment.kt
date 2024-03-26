@@ -233,7 +233,7 @@ class NotificationReceiver : BroadcastReceiver() {
             CoroutineScope(Dispatchers.IO).launch {
                 repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
                     ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
-                    ,SharedPreferencesManager.getInstance(context).getUnits().toString()).collect {
+                    ,SharedPreferencesManager.getInstance(context).getUnits().toString(),SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()).collect {
                     val updatedTitle = it.name
                     val updatedText = it.main.temp.toString()
 
@@ -376,7 +376,7 @@ class NotificationReceiver : BroadcastReceiver() {
        CoroutineScope(Dispatchers.IO).launch {
            repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
                ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
-               ,SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()).collect {
+               ,SharedPreferencesManager.getInstance(context).getUnits(),SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()).collect {
                val updatedTitle = it.name
                val updatedText = it.main.temp.toString()
 

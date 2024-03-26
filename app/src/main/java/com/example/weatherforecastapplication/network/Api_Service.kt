@@ -17,8 +17,10 @@ interface Api_Service {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("appid") apiKey: String,
-        @Query("units") units: String = "metric"
-    ): WeatherData
+        @Query("units") units: String ,
+        @Query("lang") Lang: String
+
+        ): WeatherData
     @GET("forecast")
     suspend fun get5DayForecast(
         @Query("lat") latitude: Double,
@@ -32,7 +34,8 @@ interface Api_Service {
     suspend fun getWeatherWithCity(
         @Query("q") city: String,
         @Query("appid") apiKey: String,
-        @Query("units") units: String = "metric"
+        @Query("units") units: String ,
+        @Query("lang") Lang: String,
     ): WeatherData
 }
 

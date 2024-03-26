@@ -38,11 +38,14 @@ class RepositoryImp  constructor(
     override suspend fun getWeatherWithCity(latitude: Double,
                                             longitude: Double,
                                             apiKey: String,
-                                            units: String): Flow<WeatherData> {
-return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,units)  ) }
+                                            units: String,
+                                            lang: String,
+    ): Flow<WeatherData> {
+return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,lang,units)  ) }
 
-    override suspend fun getWeatherWithCity2(city: String, apiKey: String): Flow<WeatherData> {
-      return  flowOf(RemoteDataSource.getWeatherWithCity(city,apiKey))
+    override suspend fun getWeatherWithCity2(city: String, apiKey: String,units: String,
+                                             lang: String,): Flow<WeatherData> {
+      return  flowOf(RemoteDataSource.getWeatherWithCity(city,apiKey,units,lang))
     }
 
     override suspend fun getStored(): Flow<List<WeatherData>> {

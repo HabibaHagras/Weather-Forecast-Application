@@ -40,10 +40,11 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
 
     private fun getAllProducts(
         cityName: String,
-        apiKey: String
+        apiKey: String  , units: String,
+        lang: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val productList = repo.getWeatherWithCity2(cityName, apiKey).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+            val productList = repo.getWeatherWithCity2(cityName, apiKey,units,lang).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
                 .collect{it->
                     _weatherStateFlow.value= ApiState.SucessedWeather(it)
                 }

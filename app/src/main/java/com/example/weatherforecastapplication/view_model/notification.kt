@@ -44,7 +44,7 @@ class notification (private val repo: Repository,
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewMOdel")
             val ProductList=repo.getWeatherWithCity(latitude,longitude,"7f6473d2786753ccda5811e204914fff"
-                ,unit).catch { e->_weatherStateFlow.value= ApiState.fail(e) }
+                ,unit,lang).catch { e->_weatherStateFlow.value= ApiState.fail(e) }
                 .collect{it->
                     _weatherStateFlow.value= ApiState.SucessedWeather(it)
                 }

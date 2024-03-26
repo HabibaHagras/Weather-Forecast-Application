@@ -540,7 +540,7 @@ class AlarmReceiver : BroadcastReceiver() {
             CoroutineScope(Dispatchers.IO).launch {
                 repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
                     ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
-                    ,SharedPreferencesManager.getInstance(context).getUnits().toString()).collectLatest {
+                    ,SharedPreferencesManager.getInstance(context).getUnits(),SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()).collectLatest {
 
                     // Create a notification builder
                     val builder = NotificationCompat.Builder(context, "default")
@@ -593,11 +593,12 @@ class AlarmReceiver : BroadcastReceiver() {
                         )
                         layoutParams.gravity = Gravity.TOP
                         windowManager.addView(alertView, layoutParams)
-                        var cityname: TextView = alertView.findViewById<Button>(R.id.titleTextView)
+                        var cityname: TextView = alertView.findViewById<TextView>(R.id.titleTextView)
                         cityname.text = it.name
-                        var temp: TextView = alertView.findViewById<Button>(R.id.messageTextView)
+                        var temp: TextView = alertView.findViewById<TextView>(R.id.messageTextView)
                         temp.text = it.main.temp.toString()
-
+                        var desc:TextView = alertView.findViewById<TextView>(R.id.desc)
+                        desc.text=it.weather[0].description
                         val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
                         dismissButton.setOnClickListener {
                             // Stop the alarm sound

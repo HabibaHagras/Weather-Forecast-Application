@@ -38,13 +38,13 @@ class RemoteDataSourceImp private constructor():RemoteDataSource{
     override suspend fun getWeatherWithCityOverNetwork( latitude: Double,
                                                         longitude: Double,
                                                         apiKey: String,
-                                                        units: String): WeatherData {
+                                                        units: String, lang: String): WeatherData {
         Log.i("TAG", "getAllProduct: ProductRemoteDataSourceImp")
-        val responce= weather_Service.getWeather(latitude,longitude,apiKey,units)
+        val responce= weather_Service.getWeather(latitude,longitude,apiKey,units,lang)
         return responce      }
 
-    override suspend fun getWeatherWithCity(city: String, apiKey: String): WeatherData {
-        val responce= weather_Service.getWeatherWithCity(city,apiKey)
+    override suspend fun getWeatherWithCity(city: String, apiKey: String,  units: String,lang: String): WeatherData {
+        val responce= weather_Service.getWeatherWithCity(city,apiKey,units,lang)
         return responce
     }
 }

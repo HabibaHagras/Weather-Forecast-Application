@@ -15,8 +15,12 @@ interface Repository {
     suspend fun getWeatherWithCity(latitude: Double,
                                    longitude: Double,
                                    apiKey: String,
-                                   units: String): Flow<WeatherData>
-    suspend fun getWeatherWithCity2(city: String,apiKey:String): Flow<WeatherData>
+                                   units: String,
+                                   lang: String
+                                   ): Flow<WeatherData>
+    suspend fun getWeatherWithCity2(city: String,apiKey:String,
+                                    units: String,
+                                    lang: String): Flow<WeatherData>
     suspend fun getStored(): Flow<List<WeatherData>>
     suspend fun insertWeatherData(product: WeatherData)
     suspend fun getStoredHome(): Flow<List<Responce>>
