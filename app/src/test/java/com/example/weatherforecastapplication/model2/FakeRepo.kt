@@ -9,7 +9,7 @@ class FakeRepo  :Repository{
         apiKey: String,
         lang: String,
         units: String
-    ): Responce {
+    ): Flow<Responce> {
         TODO("Not yet implemented")
     }
 
@@ -18,11 +18,11 @@ class FakeRepo  :Repository{
         longitude: Double,
         apiKey: String,
         units: String
-    ): WeatherData {
+    ): Flow<WeatherData> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getWeatherWithCity2(city: String, apiKey: String): WeatherData {
+    override suspend fun getWeatherWithCity2(city: String, apiKey: String): Flow<WeatherData>  {
         TODO("Not yet implemented")
     }
 

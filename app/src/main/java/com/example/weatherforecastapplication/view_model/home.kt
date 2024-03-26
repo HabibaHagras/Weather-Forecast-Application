@@ -65,10 +65,14 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
      fun getAllWeatherMap() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewModel")
-            val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
-            Log.i("TAG", "getAllProducts: $lang")
-
-            _products.postValue(productList)
+            repo.getAllWeather(latitude, longitude,
+                "7f6473d2786753ccda5811e204914fff", lang.toString(),unit).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                .collect{it->
+                    _weatherStateFlow.value= ApiState.Sucessed(it)
+                }
+//            Log.i("TAG", "getAllProducts: $lang")
+//
+//            _products.postValue(productList)
         }
     }
 
@@ -76,15 +80,22 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
                                   longitude: Double) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("TAG", "getAllProducts: ViewMOdel")
-            val ProductList=repo.getAllWeather(latitude,longitude,"7f6473d2786753ccda5811e204914fff",lang,unit)
-            Log.i("TAGMap", "getAllProducts: $latitude   + $longitude")
-            _Favproducts.postValue(ProductList)
+          repo.getAllWeather(latitude,longitude,"7f6473d2786753ccda5811e204914fff",
+                lang,unit).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                .collect{it->
+                    _weatherStateFlow.value= ApiState.Sucessed(it)
+                }
+//            Log.i("TAGMap", "getAllProducts: $latitude   + $longitude")
+//            _Favproducts.postValue(ProductList)
         }
     }
     fun getAllWeatherGps(){
         viewModelScope.launch(Dispatchers.IO) {
-            val productList = repo.getAllWeather(latitudeGps, longitudeGps, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
-            _products.postValue(productList)
+                repo.getAllWeather(latitudeGps, longitudeGps, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                    .collect{it->
+                        _weatherStateFlow.value= ApiState.Sucessed(it)
+                    }
+//            _products.postValue(productList)
         }
     }
 

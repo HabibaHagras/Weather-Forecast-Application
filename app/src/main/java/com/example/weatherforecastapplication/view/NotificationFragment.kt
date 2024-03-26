@@ -21,6 +21,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -29,14 +30,24 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.databinding.FragmentNotificationBinding
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.WeatherData
+import com.example.weatherforecastapplication.network.ApiState
+import com.example.weatherforecastapplication.network.RemoteDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -218,28 +229,58 @@ class NotificationReceiver : BroadcastReceiver() {
                 .setSmallIcon(R.drawable.cloud_white_24dp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
+            val repo = RepositoryImp(RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(context))
+            CoroutineScope(Dispatchers.IO).launch {
+                repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
+                    ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
+                    ,SharedPreferencesManager.getInstance(context).getUnits().toString()).collect {
+                    val updatedTitle = it.name
+                    val updatedText = it.main.temp.toString()
 
-            allProductViewModel.products.observeForever { value ->
-                Log.i("TAG", "Observer: Observer")
-                Log.i("TAG", "Observer: $value")
+                    // Update notification content based on LiveData
+                    notificationBuilder.setContentTitle(updatedTitle)
+                    notificationBuilder.setContentText(updatedText)
 
-                val updatedTitle = value.name
-                val updatedText = value.main.temp.toString()
+                    // Notify system to update the notification
+                    val notificationManager = NotificationManagerCompat.from(context)
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
 
-                // Update notification content based on LiveData
-                notificationBuilder.setContentTitle(updatedTitle)
-                notificationBuilder.setContentText(updatedText)
-
-                // Notify system to update the notification
-                val notificationManager = NotificationManagerCompat.from(context)
-                if (ActivityCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
+                    }
+                    notificationManager.notify(0, notificationBuilder.build())
                 }
-                notificationManager.notify(0, notificationBuilder.build())
             }
+//            allProductViewModel.products.observeForever { value ->
+//                Log.i("TAG", "Observer: Observer")
+//                Log.i("TAG", "Observer: $value")
+//
+//                val updatedTitle = value.name
+//                val updatedText = value.main.temp.toString()
+//
+//                // Update notification content based on LiveData
+//                notificationBuilder.setContentTitle(updatedTitle)
+//                notificationBuilder.setContentText(updatedText)
+//
+//                // Notify system to update the notification
+//                val notificationManager = NotificationManagerCompat.from(context)
+//                if (ActivityCompat.checkSelfPermission(
+//                        context,
+//                        Manifest.permission.POST_NOTIFICATIONS
+//                    ) != PackageManager.PERMISSION_GRANTED
+//                ) {
+//                }
+//                notificationManager.notify(0, notificationBuilder.build())
+//            }
             val notificationManager = NotificationManagerCompat.from(context)
             notificationManager.notify(0, notificationBuilder.build())
 
@@ -284,8 +325,101 @@ class NotificationReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.cloud_white_24dp)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
+//        CoroutineScope.launch {}
+//            allProductViewModel.weatherStateFlow.collectLatest {
+//                    result->
+//                when(result){
+//                    is ApiState.loading->{
+//                        //    progressBar.visibility = ProgressBar.VISIBLE
+//                        Log.i("TAG", "LOOOOODING: ")
+//
+//                    }
+//                    is ApiState.SucessedWeather->{
+//                        //     progressBar.visibility = ProgressBar.GONE
+//                        Log.i("TAG", "Observer: Observer")
+//                        Log.i("TAG", "Observer: ${result.data}")
+//                        val updatedTitle = result.data.name
+//                        val updatedText = result.data.main.temp.toString()
+//                        notificationBuilder.setContentTitle(updatedTitle)
+//                        notificationBuilder.setContentText(updatedText)
+//                        val notificationManager = NotificationManagerCompat.from(context)
+//                        if (ActivityCompat.checkSelfPermission(
+//                                context,
+//                                Manifest.permission.POST_NOTIFICATIONS
+//                            ) != PackageManager.PERMISSION_GRANTED
+//                        ) {
+//                            // TODO: Consider calling
+//                            //    ActivityCompat#requestPermissions
+//                            // here to request the missing permissions, and then overriding
+//                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                            //                                          int[] grantResults)
+//                            // to handle the case where the user grants the permission. See the documentation
+//                            // for ActivityCompat#requestPermissions for more details.
+//
+//                        }
+//                        notificationManager.notify(0, notificationBuilder.build())
+//                    }
+//                    else->{
+//                        //   progressBar.visibility = ProgressBar.GONE
+//
+//                        Toast.makeText(context, "Failed to load data", Toast.LENGTH_SHORT).show()
+//
+//                    }
+//
+//
+//                }
+//            }
+//
+//
+//        }
+        val repo = RepositoryImp(RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(context))
+       CoroutineScope(Dispatchers.IO).launch {
+           repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
+               ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
+               ,SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()).collect {
+               val updatedTitle = it.name
+               val updatedText = it.main.temp.toString()
 
-        allProductViewModel.products.observeForever { value ->
+               // Update notification content based on LiveData
+               notificationBuilder.setContentTitle(updatedTitle)
+               notificationBuilder.setContentText(updatedText)
+
+               // Notify system to update the notification
+               val notificationManager = NotificationManagerCompat.from(context)
+               if (ActivityCompat.checkSelfPermission(
+                       context,
+                       Manifest.permission.POST_NOTIFICATIONS
+                   ) != PackageManager.PERMISSION_GRANTED
+               ) {
+                   // TODO: Consider calling
+                   //    ActivityCompat#requestPermissions
+                   // here to request the missing permissions, and then overriding
+                   //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                   //                                          int[] grantResults)
+                   // to handle the case where the user grants the permission. See the documentation
+                   // for ActivityCompat#requestPermissions for more details.
+
+               }
+               notificationManager.notify(0, notificationBuilder.build())
+           }
+       }
+//        repo.getWeatherWithCity(latitude,longitude,"7f6473d2786753ccda5811e204914fff"
+//            ,unit)
+
+        allProductViewModel.products
+
+
+
+
+
+
+
+
+
+
+
+
+            .observeForever { value ->
             Log.i("TAG", "Observer: Observer")
             Log.i("TAG", "Observer: $value")
 

@@ -43,8 +43,11 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
         apiKey: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val productList = repo.getWeatherWithCity2(cityName, apiKey)
-            _products.postValue(productList)
+            val productList = repo.getWeatherWithCity2(cityName, apiKey).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                .collect{it->
+                    _weatherStateFlow.value= ApiState.SucessedWeather(it)
+                }
+//            _products.postValue(productList)
         }
     }
     fun insertProducts(product:WeatherData) {

@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
 import com.example.weatherforecastapplication.model2.Responce
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -78,9 +79,11 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
 
 
     private fun formatTime(time: String): String {
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val language = SharedPreferencesManager.getInstance(context).getLanguageUnit()
+        val locale = Locale(language)
+        val sdf = SimpleDateFormat("HH:mm",locale)
         val parsedDate = sdf.parse(time)
-        val sdf12hr = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val sdf12hr = SimpleDateFormat("hh:mm a",locale)
         return sdf12hr.format(parsedDate)
     }
     override fun getItemCount(): Int {

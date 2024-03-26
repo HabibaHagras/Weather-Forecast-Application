@@ -39,7 +39,9 @@ class RepositoryImpTest{
     )
     val task2=
         WeatherData(
-        base = "baseValue",
+            id=1,
+
+            base = "baseValue",
         clouds = Clouds(all = 0),
         cod = 200,
         coord = CoordWeather(lon =30.9957296,lat = 30.7914776),
@@ -54,6 +56,7 @@ class RepositoryImpTest{
     )
     val task22=
         WeatherData(
+            id=1,
             base = "baseValue",
             clouds = Clouds(all = 0),
             cod = 200,
@@ -89,7 +92,7 @@ class RepositoryImpTest{
     @Test
     fun getWeatherWithCity_allTasksFromRemoteDataSource()=runBlockingTest{
         val result=repo.getWeatherWithCity(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","")
-        MatcherAssert.assertThat(result.name, `is`(task2.name))
+        MatcherAssert.assertThat(result.first().name, `is`(task2.name))
     }
 
     @Test
@@ -101,6 +104,8 @@ class RepositoryImpTest{
     @Test
     fun insertWeatherData()= runBlockingTest{
         var weather= WeatherData(
+            id=1,
+
             base = "baseValue",
             clouds = Clouds(all = 0),
             cod = 404,

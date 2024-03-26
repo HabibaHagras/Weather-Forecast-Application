@@ -208,6 +208,8 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
@@ -231,6 +233,10 @@ import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
@@ -530,76 +536,156 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmMediaPlayer = MediaPlayer.create(context, ringtone)
         alarmMediaPlayer?.isLooping = true
         alarmMediaPlayer?.start()
-        allProductViewModel.products.observeForever { weatherData ->
+            val repo = RepositoryImp(RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(context))
+            CoroutineScope(Dispatchers.IO).launch {
+                repo.getWeatherWithCity(SharedPreferencesManager.getInstance(context).getGpsLat().toDouble()
+                    ,SharedPreferencesManager.getInstance(context).getGpsLon().toDouble(),"7f6473d2786753ccda5811e204914fff"
+                    ,SharedPreferencesManager.getInstance(context).getUnits().toString()).collectLatest {
 
-            // Create a notification builder
-            val builder = NotificationCompat.Builder(context, "default")
-                .setSmallIcon(R.drawable.alarm_black_24dp)
-                .setContentTitle(weatherData.name)
-                .setContentText(weatherData.main.temp.toString())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .addAction(dismissAction)
+                    // Create a notification builder
+                    val builder = NotificationCompat.Builder(context, "default")
+                        .setSmallIcon(R.drawable.alarm_black_24dp)
+                        .setContentTitle(it.name)
+                        .setContentText(it.main.temp.toString())
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+                        .addAction(dismissAction)
 
-            // Show the notification
-            val notificationManager = NotificationManagerCompat.from(context)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(
-                    "default",
-                    "Alarm Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                notificationManager.createNotificationChannel(channel)
-            }
+                    // Show the notification
+                    val notificationManager = NotificationManagerCompat.from(context)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val channel = NotificationChannel(
+                            "default",
+                            "Alarm Channel",
+                            NotificationManager.IMPORTANCE_HIGH
+                        )
+                        notificationManager.createNotificationChannel(channel)
+                    }
 
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
 
-            }
-            notificationManager.notify(0, builder.build())
+                    }
+                    notificationManager.notify(0, builder.build())
+
+                    Handler(Looper.getMainLooper()).post {
+
+                        val alertView =
+                            LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
+
+                        // Add the alert dialog view to the window manager
+                        val windowManager =
+                            context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                        val layoutParams = WindowManager.LayoutParams(
+                            WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.WRAP_CONTENT,
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                            } else {
+                                WindowManager.LayoutParams.TYPE_PHONE
+                            },
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                            PixelFormat.TRANSLUCENT
+                        )
+                        layoutParams.gravity = Gravity.TOP
+                        windowManager.addView(alertView, layoutParams)
+                        var cityname: TextView = alertView.findViewById<Button>(R.id.titleTextView)
+                        cityname.text = it.name
+                        var temp: TextView = alertView.findViewById<Button>(R.id.messageTextView)
+                        temp.text = it.main.temp.toString()
+
+                        val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
+                        dismissButton.setOnClickListener {
+                            // Stop the alarm sound
+                            alarmMediaPlayer?.stop()
+                            alarmMediaPlayer?.release()
+                            alarmMediaPlayer = null
+
+                            // Remove the alert dialog view from the window manager
+                            windowManager.removeView(alertView)
+
+                            // Cancel the notification
+                            notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
+                        }
+
+                    }
 
 
-        val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
-
-        // Add the alert dialog view to the window manager
-        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val layoutParams = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        )
-        layoutParams.gravity = Gravity.TOP
-        windowManager.addView(alertView, layoutParams)
-        var cityname: TextView = alertView.findViewById<Button>(R.id.titleTextView)
-        cityname.text = weatherData.name
-        var temp: TextView = alertView.findViewById<Button>(R.id.messageTextView)
-        temp.text = weatherData.main.temp.toString()
-
-        val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
-        dismissButton.setOnClickListener {
-            // Stop the alarm sound
-            alarmMediaPlayer?.stop()
-            alarmMediaPlayer?.release()
-            alarmMediaPlayer = null
-
-            // Remove the alert dialog view from the window manager
-            windowManager.removeView(alertView)
-
-            // Cancel the notification
-            notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
-        }
-
-    }
+                }}
+//        allProductViewModel.products.observeForever { weatherData ->
+//
+//            // Create a notification builder
+//            val builder = NotificationCompat.Builder(context, "default")
+//                .setSmallIcon(R.drawable.alarm_black_24dp)
+//                .setContentTitle(weatherData.name)
+//                .setContentText(weatherData.main.temp.toString())
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true)
+//                .addAction(dismissAction)
+//
+//            // Show the notification
+//            val notificationManager = NotificationManagerCompat.from(context)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                val channel = NotificationChannel(
+//                    "default",
+//                    "Alarm Channel",
+//                    NotificationManager.IMPORTANCE_HIGH
+//                )
+//                notificationManager.createNotificationChannel(channel)
+//            }
+//
+//            if (ActivityCompat.checkSelfPermission(
+//                    context,
+//                    Manifest.permission.POST_NOTIFICATIONS
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//
+//            }
+//            notificationManager.notify(0, builder.build())
+//
+//
+//        val alertView = LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
+//
+//        // Add the alert dialog view to the window manager
+//        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//        val layoutParams = WindowManager.LayoutParams(
+//            WindowManager.LayoutParams.MATCH_PARENT,
+//            WindowManager.LayoutParams.WRAP_CONTENT,
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+//            } else {
+//                WindowManager.LayoutParams.TYPE_PHONE
+//            },
+//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+//            PixelFormat.TRANSLUCENT
+//        )
+//        layoutParams.gravity = Gravity.TOP
+//        windowManager.addView(alertView, layoutParams)
+//        var cityname: TextView = alertView.findViewById<Button>(R.id.titleTextView)
+//        cityname.text = weatherData.name
+//        var temp: TextView = alertView.findViewById<Button>(R.id.messageTextView)
+//        temp.text = weatherData.main.temp.toString()
+//
+//        val dismissButton = alertView.findViewById<Button>(R.id.dismissButton)
+//        dismissButton.setOnClickListener {
+//            // Stop the alarm sound
+//            alarmMediaPlayer?.stop()
+//            alarmMediaPlayer?.release()
+//            alarmMediaPlayer = null
+//
+//            // Remove the alert dialog view from the window manager
+//            windowManager.removeView(alertView)
+//
+//            // Cancel the notification
+//            notificationManager.cancel(0) // Make sure to use the same notification ID used for displaying the alarm notification
+//        }
+//
+//    }
 
         /*
 

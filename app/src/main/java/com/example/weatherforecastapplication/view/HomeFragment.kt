@@ -197,36 +197,128 @@ class HomeFragment : Fragment() {
                     Log.i("TAGMap", "onCreateView: $favLat +   $favLon ")
                 }
             }
-            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
-                Observer<Responce> { value ->
-                    mAdapter.setDataAndFilterByDate(value.list)
-                    mWeekAdapter.setData(value.list)
-                    updateUIFromFav(value,favName)
-                })
+
+
+            lifecycleScope.launch {
+                allProductViewModel.weatherStateFlow.collectLatest {
+                        result->
+                    when(result){
+                        is ApiState.loading->{
+                            //    progressBar.visibility = ProgressBar.VISIBLE
+                            Log.i("TAG", "LOOOOODING: ")
+
+                        }
+                        is ApiState.Sucessed->{
+                            //     progressBar.visibility = ProgressBar.GONE
+                            mAdapter.setDataAndFilterByDate(result.data.list)
+                            mWeekAdapter.setData(result.data.list)
+                            updateUIFromFav(result.data,favName)
+                        }
+                        else->{
+                            //   progressBar.visibility = ProgressBar.GONE
+
+                            Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+
+                        }
+
+
+                    }
+                }
+            }
+
+
+//            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
+//                Observer<Responce> { value ->
+//                    mAdapter.setDataAndFilterByDate(value.list)
+//                    mWeekAdapter.setData(value.list)
+//                    updateUIFromFav(value,favName)
+//                })
         }
 
         else{
             if(SharedPreferencesManager.getInstance(requireContext()).getLatitude() != 0.0f){
                 allProductViewModel.getAllWeatherMap()
 
-                allProductViewModel.products.observe(viewLifecycleOwner,
-                    Observer<Responce> { value ->
-                        mAdapter.setDataAndFilterByDate(value.list)
-                        mWeekAdapter.setData(value.list)
-                        updateUI(value)
-                    })
+
+                lifecycleScope.launch {
+                    allProductViewModel.weatherStateFlow.collectLatest {
+                            result->
+                        when(result){
+                            is ApiState.loading->{
+                                //    progressBar.visibility = ProgressBar.VISIBLE
+                                Log.i("TAG", "LOOOOODING: ")
+
+                            }
+                            is ApiState.Sucessed->{
+                                //     progressBar.visibility = ProgressBar.GONE
+                                mAdapter.setDataAndFilterByDate(result.data.list)
+                                mWeekAdapter.setData(result.data.list)
+                                updateUI(result.data)
+                            }
+                            else->{
+                                //   progressBar.visibility = ProgressBar.GONE
+
+                                Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+
+                            }
+
+
+                        }
+                    }
+                }
+
+
+
+
+
+//                allProductViewModel.products.observe(viewLifecycleOwner,
+//                    Observer<Responce> { value ->
+//                        mAdapter.setDataAndFilterByDate(value.list)
+//                        mWeekAdapter.setData(value.list)
+//                        updateUI(value)
+//                    })
                 SharedPreferencesManager.getInstance(requireContext()).clearLatitude()
             }
             else{
                 allProductViewModel.getAllWeatherGps()
+                lifecycleScope.launch {
+                    allProductViewModel.weatherStateFlow.collectLatest {
+                            result->
+                        when(result){
+                            is ApiState.loading->{
+                                //    progressBar.visibility = ProgressBar.VISIBLE
+                                Log.i("TAG", "LOOOOODING: ")
 
-                allProductViewModel.products.observe(viewLifecycleOwner,
-                    Observer<Responce> { value ->
-                        mAdapter.setDataAndFilterByDate(value.list)
-                        mWeekAdapter.setData(value.list)
-                        updateUI(value)
-                        allProductViewModel.insertHome(value)
-                    })
+                            }
+                            is ApiState.Sucessed->{
+                                //     progressBar.visibility = ProgressBar.GONE
+                                mAdapter.setDataAndFilterByDate(result.data.list)
+                                mWeekAdapter.setData(result.data.list)
+                                updateUI(result.data)
+                                mAdapter.setDataAndFilterByDate(result.data.list)
+                                mWeekAdapter.setData(result.data.list)
+                                updateUI(result.data)
+                                allProductViewModel.insertHome(result.data)
+                            }
+                            else->{
+                                //   progressBar.visibility = ProgressBar.GONE
+
+                                Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+
+                            }
+
+
+                        }
+                    }
+                }
+
+//                allProductViewModel.products.observe(viewLifecycleOwner,
+//                    Observer<Responce> { value ->
+//                        mAdapter.setDataAndFilterByDate(value.list)
+//                        mWeekAdapter.setData(value.list)
+//                        updateUI(value)
+//                        allProductViewModel.insertHome(value)
+//                    })
             }
         }
 
@@ -270,11 +362,7 @@ class HomeFragment : Fragment() {
 
         }
     }
-    fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
+
     private fun convertWindSpeedToKmh(windSpeed: Double): Double {
         return windSpeed * 3.6
     }

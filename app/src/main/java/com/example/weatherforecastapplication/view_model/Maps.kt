@@ -12,6 +12,7 @@ import com.example.weatherforecastapplication.network.ApiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class Maps (private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager
@@ -41,8 +42,11 @@ class Maps (private val repo: Repository, private val sharedPreferenceSource: Sh
 
     private fun getWeatherCity() {
         viewModelScope.launch(Dispatchers.IO) {
-            val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit)
-            _weatherMaps.postValue(productList)
+            val productList = repo.getAllWeather(latitude, longitude, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                .collect{it->
+                    _weatherStateFlow.value= ApiState.Sucessed(it)
+                }
+//            _weatherMaps.postValue(productList)
         }
     }
 }

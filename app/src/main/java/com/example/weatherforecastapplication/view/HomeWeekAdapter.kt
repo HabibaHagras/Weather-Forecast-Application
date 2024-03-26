@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -34,7 +35,9 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
         return dateFormat.format(Date())
     }
     private fun getDayNameFromDateString(dateString: String): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val language = SharedPreferencesManager.getInstance(context).getLanguageUnit()
+        val locale = Locale(language)
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", locale)
         val date = sdf.parse(dateString)
         val calendar = Calendar.getInstance().apply {
             time = date
