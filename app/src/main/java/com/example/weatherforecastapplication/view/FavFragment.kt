@@ -82,7 +82,7 @@ class FavFragment : Fragment(), FavListener {
                     else->{
                         //   progressBar.visibility = ProgressBar.GONE
 
-                        Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT)
 
                     }
 
