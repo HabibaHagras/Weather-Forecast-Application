@@ -100,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             RepositoryImp.getInstance(
                                 RemoteDataSourceImp.getInstance(),
                                 WeatherLocalDataSourceImp(this)
-                            ), city_name
+                            ), city_name,SharedPreferencesManager.getInstance(this)
                         )
                         allFavViewModel =
                             ViewModelProvider(this, allFavFactroy).get(Fav::class.java)

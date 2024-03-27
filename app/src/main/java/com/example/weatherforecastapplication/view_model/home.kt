@@ -18,17 +18,17 @@ import kotlinx.coroutines.launch
 
 class home(private val repo: Repository, private val sharedPreferenceSource: SharedPreferencesManager
 ): ViewModel() {
-    private var _products: MutableLiveData<Responce> =
-        MutableLiveData<Responce>()
-    val products: LiveData<Responce> = _products
-    private var _Favproducts: MutableLiveData<Responce> =
-        MutableLiveData<Responce>()
-    val Favproducts: LiveData<Responce> = _Favproducts
-
-
-    private var _weatherHome: MutableLiveData<List<Responce>> =
-        MutableLiveData<List<Responce>>()
-    val weatherHome: LiveData<List<Responce>> =  _weatherHome
+//    private var _products: MutableLiveData<Responce> =
+//        MutableLiveData<Responce>()
+//    val products: LiveData<Responce> = _products
+//    private var _Favproducts: MutableLiveData<Responce> =
+//        MutableLiveData<Responce>()
+//    val Favproducts: LiveData<Responce> = _Favproducts
+//
+//
+//    private var _weatherHome: MutableLiveData<List<Responce>> =
+//        MutableLiveData<List<Responce>>()
+//    val weatherHome: LiveData<List<Responce>> =  _weatherHome
 
 
 
@@ -122,26 +122,3 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
 
 
 }
-//    init {
-////        loction=Locations()
-////        l=MainActivity()
-//        val sharedPreferences = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-//        val latitude = sharedPreferences.getFloat("latitude", 0.0f).toDouble()
-//        val longitude = sharedPreferences.getFloat("longitude", 0.0f).toDouble()
-//       // getAllProducts(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","metric")
-//       getAllProducts(latitude,longitude,"7f6473d2786753ccda5811e204914fff","metric")
-//    }
-//
-//     fun getAllWeatherFromFav(     latitude: Double,
-//                                    longitude: Double,
-//                                    apiKey: String,
-//                                    units: String) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            Log.i("TAG", "getAllProducts: ViewMOdel")
-//            val ProductList=repo.getAllWeather(latitude,longitude,apiKey,units)
-//            Log.i("TAG", "getAllProducts: $ProductList")
-//
-//            _products.postValue(ProductList)
-//        }
-//  }
-//}

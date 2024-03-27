@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherforecastapplication.model2.Repository
+import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.ApiState
 import kotlinx.coroutines.Dispatchers
@@ -14,15 +15,32 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class Fav (private val repo: Repository, private val cityName: String) : ViewModel() {
-    private var _products: MutableLiveData<WeatherData> = MutableLiveData<WeatherData>()
-    val products: LiveData<WeatherData> = _products
-    private var _productw: MutableLiveData<List<WeatherData>> = MutableLiveData<List<WeatherData>>()
-    val productsw: LiveData<List<WeatherData>> = _productw
+class Fav (private val repo: Repository, private val cityName: String ,private val sharedPreferenceSource: SharedPreferencesManager) : ViewModel() {
+//    private var _products: MutableLiveData<WeatherData> = MutableLiveData<WeatherData>()
+//    val products: LiveData<WeatherData> = _products
+//    private var _productw: MutableLiveData<List<WeatherData>> = MutableLiveData<List<WeatherData>>()
+//    val productsw: LiveData<List<WeatherData>> = _productw
     private val _weatherStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.loading)
     val weatherStateFlow =  _weatherStateFlow.asStateFlow()
+    private var latitude: Double = 0.0
+    private var latitudeGps: Double = 0.0
+    private var longitude: Double = 0.0
+    private var longitudeGps: Double = 0.0
+    private var lang: String = "en"
+    private var unit: String = ""
     init {
         getStored()
+    }
+    private fun updateLocationFromSharedPreferences() {
+//        val sharedPreferences = MapsActivity.instance.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+//        latitude = sharedPreferences.getFloat("latitude", 0.0f).toDouble()
+//        longitude = sharedPreferences.getFloat("longitude", 0.0f).toDouble()//
+        latitude = sharedPreferenceSource.getLatitude().toDouble()
+        longitude = sharedPreferenceSource.getLongitude().toDouble()
+        lang=sharedPreferenceSource.getLanguageUnit().toString()
+        unit=sharedPreferenceSource.getUnits().toString()
+        latitudeGps=sharedPreferenceSource.getGpsLat().toDouble()
+        longitudeGps=sharedPreferenceSource.getGpsLon().toDouble()
     }
 
       fun getStored() {
@@ -38,13 +56,9 @@ class Fav (private val repo: Repository, private val cityName: String) : ViewMod
         }
     }
 
-    private fun getAllProducts(
-        cityName: String,
-        apiKey: String  , units: String,
-        lang: String
-    ) {
+     fun getAllWeather(cityName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val productList = repo.getWeatherWithCity2(cityName, apiKey,units,lang).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+            repo.getWeatherWithCity2(cityName, "7f6473d2786753ccda5811e204914fff",unit,lang).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
                 .collect{it->
                     _weatherStateFlow.value= ApiState.SucessedWeather(it)
                 }
