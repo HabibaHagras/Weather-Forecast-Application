@@ -16,10 +16,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class Fav (private val repo: Repository, private val cityName: String ,private val sharedPreferenceSource: SharedPreferencesManager) : ViewModel() {
-//    private var _products: MutableLiveData<WeatherData> = MutableLiveData<WeatherData>()
-//    val products: LiveData<WeatherData> = _products
-//    private var _productw: MutableLiveData<List<WeatherData>> = MutableLiveData<List<WeatherData>>()
-//    val productsw: LiveData<List<WeatherData>> = _productw
     private val _weatherStateFlow: MutableStateFlow<ApiState> = MutableStateFlow(ApiState.loading)
     val weatherStateFlow =  _weatherStateFlow.asStateFlow()
     private var latitude: Double = 0.0
@@ -29,12 +25,10 @@ class Fav (private val repo: Repository, private val cityName: String ,private v
     private var lang: String = "en"
     private var unit: String = ""
     init {
+        updateLocationFromSharedPreferences()
         getStored()
     }
     private fun updateLocationFromSharedPreferences() {
-//        val sharedPreferences = MapsActivity.instance.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-//        latitude = sharedPreferences.getFloat("latitude", 0.0f).toDouble()
-//        longitude = sharedPreferences.getFloat("longitude", 0.0f).toDouble()//
         latitude = sharedPreferenceSource.getLatitude().toDouble()
         longitude = sharedPreferenceSource.getLongitude().toDouble()
         lang=sharedPreferenceSource.getLanguageUnit().toString()
@@ -45,10 +39,6 @@ class Fav (private val repo: Repository, private val cityName: String ,private v
 
       fun getStored() {
         viewModelScope.launch(Dispatchers.IO) {
-//
-//            val productList = repo.getStored()
-//            _productw.postValue(productList)
-
             repo.getStored().catch { e->_weatherStateFlow.value=ApiState.fail(e) }
                 .collect{it->
                     _weatherStateFlow.value= ApiState.SucessWeatherData(it)
@@ -62,26 +52,18 @@ class Fav (private val repo: Repository, private val cityName: String ,private v
                 .collect{it->
                     _weatherStateFlow.value= ApiState.SucessedWeather(it)
                 }
-//            _products.postValue(productList)
         }
     }
     fun insertProducts(product:WeatherData) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.i("TAG", "insertProducts: ViewMOdel")
             repo.insertWeatherData(product)
             getStored()
-
-
         }
     }
     fun deleteWeather(product:WeatherData) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.i("TAG", "deleteIteamFav: ")
             repo.deletetWeatherData(product)
             getStored()
-
-
-
         }
     }
 }

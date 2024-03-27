@@ -16,11 +16,6 @@ interface WeatherDataDAO {
      fun getAll(): Flow<List<WeatherData>>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(product: WeatherData): Long
-    @Update
-    fun update(product: WeatherData)
-
-    @Query("SELECT * FROM weather_table WHERE id = :parentId")
-     fun getWeatherByParentId(parentId: Int): Flow<List<Weather>>
     @Delete
     fun delete(product: WeatherData): Int
 }

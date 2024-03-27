@@ -93,7 +93,53 @@ class ResponceDaoTest {
 
     @Test
     fun getAllResponces()= runBlockingTest {
+        //given
+        val response = Responce(1, City(
+            Coord(30.7914776,30.9957296),"EG",
+            347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
+            ,listOf(
+                Listt(
+                    Clouds(0),
+                    0,
+                    "dt_txt",
+                    Main(0.0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0),
+                    0.0,
+                    Rain(0.0),
+                    Sys("pod"),
+                    0,
+                    listOf(Weather("description", "icon", 0, "main")),
+                    Wind(0, 0.0, 0.0)
+                )
+            ),0
 
+        )
+
+        val responce2= Responce(2, City(
+            Coord(30.7914776,30.9957296),"EG",
+            347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
+            ,listOf(
+                Listt(
+                    Clouds(0),
+                    0,
+                    "dt_txt",
+                    Main(0.0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0),
+                    0.0,
+                    Rain(0.0),
+                    Sys("pod"),
+                    0,
+                    listOf(Weather("description", "icon", 0, "main")),
+                    Wind(0, 0.0, 0.0)
+                )
+            ),0
+
+        )
+        database.responceDao().insertResponce(response)
+        database.responceDao().insertResponce(responce2)
+        // WHEN
+        val loaded = database.responceDao().getAllResponces().first()
+        //Then
+        MatcherAssert.assertThat(loaded[0], CoreMatchers.`is`(response))
+        MatcherAssert.assertThat(loaded[1], CoreMatchers.`is`(responce2))
     }
 
 }

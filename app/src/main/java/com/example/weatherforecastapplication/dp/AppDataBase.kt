@@ -10,10 +10,9 @@ import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
 
 @TypeConverters(WeatherListConverter::class)
-@Database(entities = arrayOf( WeatherData::class,Weather::class , Responce::class), version = 1 )
+@Database(entities = arrayOf( WeatherData::class, Responce::class), version = 1 )
 abstract class db : RoomDatabase() {
     abstract fun getWeatherDataDao(): WeatherDataDAO
-    abstract fun getWeatherDao(): WeatherDAO
     abstract fun responceDao(): ResponceDao
 
     companion object{
