@@ -7,7 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherforecastapplication.view.HomeAdapter
+import com.example.weatherforecastapplication.view.home_view.HomeAdapter
+import com.example.weatherforecastapplication.view.home_view.HomeFragment
 import com.example.weatherforecastapplication.view_model.home
 import com.example.weatherforecastapplication.view_model.homeFactory
 import com.google.android.gms.location.FusedLocationProviderClient

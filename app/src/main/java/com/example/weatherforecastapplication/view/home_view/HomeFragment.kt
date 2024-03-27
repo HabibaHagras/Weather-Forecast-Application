@@ -1,39 +1,33 @@
-package com.example.weatherforecastapplication
+package com.example.weatherforecastapplication.view.home_view
 
 import WeatherLocalDataSourceImp
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
-import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.network.ApiState
-import com.example.weatherforecastapplication.view.HomeAdapter
-import com.example.weatherforecastapplication.view.HomeWeekAdapter
 import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
@@ -43,8 +37,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -57,7 +49,7 @@ class HomeFragment : Fragment() {
     lateinit var FeelsLike:TextView
     val LOCATION_PERMISSION_REQUEST_CODE = 10
     lateinit var mAdapter: HomeAdapter
-    lateinit var mWeekAdapter:HomeWeekAdapter
+    lateinit var mWeekAdapter: HomeWeekAdapter
     lateinit var mWeekLayoutManager: LinearLayoutManager
 
     lateinit var rv: RecyclerView
@@ -72,81 +64,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
-//        FeelsLike=rootView.findViewById(R.id.Feels_Like)
-//        textViewCity = rootView.findViewById(R.id.textViewCity)
-//        rv = rootView.findViewById(R.id.rv)
-//        rvWeek = rootView.findViewById(R.id.rv_Week)
-//        val favName = arguments?.getString("selected_city")
-//        val favLat = arguments?.getDouble("selected_lat")
-//        val favLon = arguments?.getDouble("selected_lon")
-//        Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
-//
-//        mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-//        mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-//        mAdapter = HomeAdapter(requireContext())
-//        mWeekAdapter = HomeWeekAdapter(requireContext())
-//        allProductFactroy = homeFactory(
-//            RepositoryImp.getInstance(
-//                RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-//            ), SharedPreferencesManager.getInstance(requireContext()
-//            ))
-//        allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
-//        rv.apply {
-//            adapter = mAdapter
-//            layoutManager = mLayoutManager
-//        }
-//        rvWeek.apply {
-//            adapter=mWeekAdapter
-//            layoutManager=mWeekLayoutManager
-//        }
-//
-//        geocoder = Geocoder(requireContext(), Locale.getDefault())
-//
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-//
-//        requestLocationPermission()
-//        if (!favName.isNullOrEmpty()) {
-////            allFavFactroy = FavFactory(
-////                RepositoryImp.getInstance(
-////                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-////                ),favName
-////            )
-////            allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
-////
-////            allFavViewModel.products.observe(viewLifecycleOwner,
-////                Observer<WeatherData> { value ->
-////                    updateUI2(value)
-////                })
-//            if (favLat != null) {
-//                if (favLon != null) {
-//                    allProductViewModel.getAllWeatherFromFav(favLat,favLon)
-//                    Log.i("TAGMap", "onCreateView: $favLat +   $favLon ")
-//                }
-//            }
-//            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
-//                Observer<Responce> { value ->
-//                    mAdapter.setDataAndFilterByDate(value.list)
-//                    mWeekAdapter.setData(value.list)
-//                    updateUIFromFav(value,favName)
-//                })
-//        }
-//
-//        else{
-////            allProductFactroy = homeFactory(
-////                RepositoryImp.getInstance(
-////                    RemoteDataSourceImp.getInstance(),WeatherLocalDataSourceImp(requireContext())
-////                ), SharedPreferencesManager.getInstance(requireContext()
-////            ))
-////            allProductViewModel = ViewModelProvider(this, allProductFactroy).get(home::class.java)
-//            allProductViewModel.getAllProducts()
-//            allProductViewModel.products.observe(viewLifecycleOwner,
-//                Observer<Responce> { value ->
-//                    mAdapter.setDataAndFilterByDate(value.list)
-//                    mWeekAdapter.setData(value.list)
-//                    updateUI(value)
-//                })
-//        }
-
         return rootView
     }
 
@@ -160,7 +77,6 @@ class HomeFragment : Fragment() {
         val favLat = arguments?.getDouble("selected_lat")
         val favLon = arguments?.getDouble("selected_lon")
         Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
-
         mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
@@ -179,9 +95,7 @@ class HomeFragment : Fragment() {
             adapter=mWeekAdapter
             layoutManager=mWeekLayoutManager
         }
-
         geocoder = Geocoder(requireContext(), Locale.getDefault())
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         val networkAvailability = NetworkAvailability()
         val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
@@ -190,15 +104,12 @@ class HomeFragment : Fragment() {
 //           allProductViewModel.getAllWeatherGps()
             requestLocationPermission()
         if (!favName.isNullOrEmpty()) {
-
             if (favLat != null) {
                 if (favLon != null) {
                     allProductViewModel.getAllWeatherFromFav(favLat,favLon)
                     Log.i("TAGMap", "onCreateView: $favLat +   $favLon ")
                 }
             }
-
-
             lifecycleScope.launch {
                 allProductViewModel.weatherStateFlow.collectLatest {
                         result->
@@ -217,7 +128,7 @@ class HomeFragment : Fragment() {
                         else->{
                             //   progressBar.visibility = ProgressBar.GONE
 
-                            Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Failed to load data favName", Toast.LENGTH_SHORT).show()
 
                         }
 
@@ -238,8 +149,6 @@ class HomeFragment : Fragment() {
         else{
             if(SharedPreferencesManager.getInstance(requireContext()).getLatitude() != 0.0f){
                 allProductViewModel.getAllWeatherMap()
-
-
                 lifecycleScope.launch {
                     allProductViewModel.weatherStateFlow.collectLatest {
                             result->
@@ -258,7 +167,7 @@ class HomeFragment : Fragment() {
                             else->{
                                 //   progressBar.visibility = ProgressBar.GONE
 
-                                Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Failed to load data getAllWeatherMap", Toast.LENGTH_SHORT).show()
 
                             }
 
@@ -291,21 +200,20 @@ class HomeFragment : Fragment() {
 
                             }
                             is ApiState.Sucessed->{
-                                //     progressBar.visibility = ProgressBar.GONE
-                                mAdapter.setDataAndFilterByDate(result.data.list)
-                                mWeekAdapter.setData(result.data.list)
-                                updateUI(result.data)
+                                //    progressBar.visibility = ProgressBar.GONE
                                 mAdapter.setDataAndFilterByDate(result.data.list)
                                 mWeekAdapter.setData(result.data.list)
                                 updateUI(result.data)
                                 allProductViewModel.insertHome(result.data)
                             }
-                            else->{
-                                //   progressBar.visibility = ProgressBar.GONE
-
-                                Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
-
+                            is ApiState.fail -> {
+                                // Hide loading indicator
+                                // Show error message to user
+                                val errorMessage = result.msg.message
+                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                             }
+                            else->{Toast.makeText(requireContext(), "errorMessage", Toast.LENGTH_SHORT).show()
+                        }
 
 
                         }
@@ -344,7 +252,7 @@ class HomeFragment : Fragment() {
                         else->{
                          //   progressBar.visibility = ProgressBar.GONE
 
-                            Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Failed to load data nooo net", Toast.LENGTH_SHORT).show()
 
                         }
 
@@ -408,8 +316,19 @@ class HomeFragment : Fragment() {
 
 
     private fun updateUI(weatherForecast: Responce) {
-        val rootView = view ?: return  // Check if the root view is null
-        textViewCity.text=weatherForecast.city.name.toString()
+        val rootView = view ?: return
+        Log.i("City", "updateUI:  ${weatherForecast.city.name.toString()} ")
+        if(SharedPreferencesManager.getInstance(requireContext()).getLatitude() != 0.0f) {
+            val addresses: List<Address>? =
+                geocoder.getFromLocation(
+                    SharedPreferencesManager.getInstance(requireContext()).getLatitude().toDouble(), SharedPreferencesManager.getInstance(requireContext()).getLongitude().toDouble(), 1)
+            if (addresses?.isNotEmpty() == true) {
+                    val cityName = addresses[0].getAddressLine(0)
+                    textViewCity.text=weatherForecast.city.name.toString()
+            }
+        }
+        else{
+             textViewCity.text=weatherForecast.city.name.toString()}
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
@@ -472,10 +391,7 @@ class HomeFragment : Fragment() {
 //        return "https://openweathermap.org/img/w/$iconCode.png"
 //    }
 
-    private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return dateFormat.format(Date())
-    }
+
 
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(
@@ -534,4 +450,10 @@ class HomeFragment : Fragment() {
         latitude = location.latitude
         longitude = location.longitude
     }
+
+
+
+
+
+
 }

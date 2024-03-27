@@ -58,9 +58,11 @@ class HomeTest {
                 ),0
 
             )
-      viewModel.getAllWeatherGps()
-        MatcherAssert.assertThat(viewModel.weatherStateFlow.value,`is`(ApiState.loading))
+        val result=viewModel.getAllWeatherMap()
+        viewModel.getAllWeatherMap()
+        MatcherAssert.assertThat(viewModel.weatherStateFlow.value as ApiState.Sucessed,`is`(ApiState.loading))
         MatcherAssert.assertThat(viewModel.weatherStateFlow.first(),`is`(ApiState.loading))
+        MatcherAssert.assertThat(result,`is`(Unit))
 //
 //// Assert that the weather state is still loading
 //        MatcherAssert.assertThat(viewModel.weatherStateFlow.value, `is`(ApiState.Sucessed::class.java))

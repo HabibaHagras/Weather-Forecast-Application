@@ -28,7 +28,6 @@ class ResponceDaoTest {
     private lateinit var database: db
     @Before
     fun initDb() {
-        // Using an in-memory database so that the information stored here disappears when the process is killed.
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             db::class.java

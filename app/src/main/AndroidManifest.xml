@@ -58,10 +58,10 @@
         </activity>
 
         <receiver
-            android:name=".view.NotificationReceiver"
+            android:name=".view.notifications_view.NotificationReceiver"
             android:enabled="true"
             android:exported="false" />
-        <receiver android:name=".view.AlarmReceiver"/>
+        <receiver android:name=".view.notifications_view.AlarmReceiver"/>
         <receiver android:name=".view.DismissAlarmReceiver"/>
 
 

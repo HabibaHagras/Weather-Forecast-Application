@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.favorite_view
 
 import com.example.weatherforecastapplication.model2.WeatherData
 

@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.notifications_view
 
 import WeatherLocalDataSourceImp
 import android.os.Bundle
@@ -21,32 +21,22 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.lifecycleScope
 import com.example.weatherforecastapplication.MainActivity
 import com.example.weatherforecastapplication.databinding.FragmentNotificationBinding
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
-import com.example.weatherforecastapplication.model2.WeatherData
-import com.example.weatherforecastapplication.network.ApiState
-import com.example.weatherforecastapplication.network.RemoteDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 // TODO: Rename parameter arguments, choose names that match
@@ -225,7 +215,9 @@ class NotificationReceiver : BroadcastReceiver() {
                 allProductFactory
             ).get(com.example.weatherforecastapplication.view_model.notification::class.java)
             allProductViewModel.getAllProducts()
-            val notificationBuilder = NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
+            val notificationBuilder = NotificationCompat.Builder(context,
+                NotificationFragment.CHANNEL_ID
+            )
                 .setSmallIcon(R.drawable.cloud_white_24dp)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
@@ -321,7 +313,9 @@ class NotificationReceiver : BroadcastReceiver() {
             allProductFactory
         ).get(notification::class.java)
         allProductViewModel.getAllProducts()
-        val notificationBuilder = NotificationCompat.Builder(context, NotificationFragment.CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(context,
+            NotificationFragment.CHANNEL_ID
+        )
             .setSmallIcon(R.drawable.cloud_white_24dp)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)

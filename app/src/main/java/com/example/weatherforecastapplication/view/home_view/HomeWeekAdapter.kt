@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.home_view
 
 import android.content.Context
 import android.content.res.Resources
@@ -8,9 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager

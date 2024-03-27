@@ -1,38 +1,32 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.favorite_view
 
 import WeatherLocalDataSourceImp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherforecastapplication.HomeFragment
+import com.example.weatherforecastapplication.view.home_view.HomeFragment
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.WeatherData
 import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.view.MapsActivity
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -62,20 +56,20 @@ class FavFragment : Fragment(), FavListener {
         allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
         recyclerView.adapter = adapter
 
-        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(weatherDataList)
-
-        })
+//        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
+//            adapter.setData(weatherDataList)
+//
+//        })
         lifecycleScope.launch {
             allFavViewModel.weatherStateFlow.collectLatest {
                     result->
                 when(result){
-                    is ApiState.loading->{
+                    is ApiState.loading ->{
                         //    progressBar.visibility = ProgressBar.VISIBLE
                         Log.i("TAG", "LOOOOODING Fav: ")
 
                     }
-                    is ApiState.SucessWeatherData->{
+                    is ApiState.SucessWeatherData ->{
                         //     progressBar.visibility = ProgressBar.GONE
                         adapter.setData(result.data)
                     }
@@ -137,11 +131,39 @@ class FavFragment : Fragment(), FavListener {
 
     }
     private fun refreshFavorites() {
-        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-            adapter.setData(weatherDataList)
-            adapter.notifyDataSetChanged()
 
-        })
+        lifecycleScope.launch {
+            allFavViewModel.weatherStateFlow.collectLatest {
+                    result->
+                when(result){
+                    is ApiState.loading ->{
+                        //    progressBar.visibility = ProgressBar.VISIBLE
+                        Log.i("TAG", "LOOOOODING Fav: ")
+
+                    }
+                    is ApiState.SucessWeatherData ->{
+                        //     progressBar.visibility = ProgressBar.GONE
+                        adapter.setData(result.data)
+                    }
+                    else->{
+                        //   progressBar.visibility = ProgressBar.GONE
+
+                        Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT)
+
+                    }
+
+
+                }
+            }
+        }
+
+
+
+//        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
+//            adapter.setData(weatherDataList)
+//            adapter.notifyDataSetChanged()
+//
+//        })
     }
     private fun showNoNetworkDialog() {
         val dialogView =

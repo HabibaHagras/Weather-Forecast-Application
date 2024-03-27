@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.notifications_view
 //
 //import android.Manifest
 //import android.app.*
@@ -231,6 +231,7 @@ import com.example.weatherforecastapplication.databinding.FragmentAlarmBinding
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.notification
 import com.example.weatherforecastapplication.view_model.notificationFactory
 import kotlinx.coroutines.CoroutineScope
@@ -727,9 +728,9 @@ class AlarmReceiver : BroadcastReceiver() {
 class DismissAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // Stop the alarm sound
-        AlarmReceiver.alarmMediaPlayer?.stop()
-        AlarmReceiver.alarmMediaPlayer?.release()
-        AlarmReceiver.alarmMediaPlayer = null
+        alarmMediaPlayer?.stop()
+        alarmMediaPlayer?.release()
+        alarmMediaPlayer = null
 
         // Cancel the notification
         val notificationManager = NotificationManagerCompat.from(context)

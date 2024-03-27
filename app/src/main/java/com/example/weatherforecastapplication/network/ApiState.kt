@@ -10,5 +10,7 @@ sealed class ApiState {
     class SucessedWeather(val data:WeatherData):ApiState()
     class SucessWeatherData(val data:List<WeatherData>):ApiState()
     class fail(val msg:Throwable):ApiState()
+    data class Failure(val exception: Exception) : ApiState()
+
     object loading:ApiState()
 }

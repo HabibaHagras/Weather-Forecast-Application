@@ -1,4 +1,4 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.home_view
 
 import android.content.Context
 import android.util.Log
@@ -8,12 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
-import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -36,7 +32,10 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
         notifyDataSetChanged()
     }
     private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val language = SharedPreferencesManager.getInstance(context).getLanguageUnit()
+        val locale = Locale("en")
+//        Locale.getDefault()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd",locale)
         return dateFormat.format(Date())
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
@@ -80,11 +79,11 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
 
     private fun formatTime(time: String): String {
         val language = SharedPreferencesManager.getInstance(context).getLanguageUnit()
-        val locale = Locale(language)
+        val locale = Locale("en")
         val sdf = SimpleDateFormat("HH:mm",locale)
         val parsedDate = sdf.parse(time)
         val sdf12hr = SimpleDateFormat("hh:mm a",locale)
-        return sdf12hr.format(parsedDate)
+        return sdf12hr.format(parsedDate!!)
     }
     override fun getItemCount(): Int {
         return listOfWeatherToday.size

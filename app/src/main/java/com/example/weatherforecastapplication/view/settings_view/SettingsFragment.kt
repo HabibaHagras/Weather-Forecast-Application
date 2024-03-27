@@ -1,7 +1,6 @@
-package com.example.weatherforecastapplication.view
+package com.example.weatherforecastapplication.view.settings_view
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -9,8 +8,6 @@ import android.content.res.Resources
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,10 +16,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import com.example.weatherforecastapplication.MainActivity2
 import com.example.weatherforecastapplication.databinding.FragmentSettingsBinding
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
+import com.example.weatherforecastapplication.view.MapsActivity
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.util.Locale
