@@ -45,6 +45,7 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     lateinit var allFavFactroy: FavFactory
     private lateinit var adapter: FavAdapter
     lateinit var recyclerViewCities: RecyclerView
+    lateinit var recyclerView: RecyclerView
     lateinit var searchBar: EditText
     var sharedFlow = MutableSharedFlow<String>()
 
@@ -54,7 +55,7 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_fav, container, false)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = FavAdapter(FavFragment(), this)
         searchBar = view.findViewById(R.id.searchEditText)
@@ -67,11 +68,6 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
         )
         allFavViewModel = ViewModelProvider(this, allFavFactroy).get(Fav::class.java)
         recyclerView.adapter = adapter
-
-//        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-//            adapter.setData(weatherDataList)
-//
-//        })
         lifecycleScope.launch {
             allFavViewModel.weatherStateFlow.collectLatest { result ->
                 when (result) {
@@ -101,17 +97,11 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
 
         fab = view.findViewById(R.id.fab)
         fab.setOnClickListener {
-//            showAddCityDialog()
             val intent = Intent(requireContext(), MapsActivity::class.java).apply {
                 putExtra("favorite", 0) // Replace latitudeValue with the actual latitude
             }
             startActivity(intent)
-            //startActivity(Intent(requireContext(), MapsActivity::class.java))
 
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, NotificationFragment())
-//                .addToBackStack(null)
-//                .commit()
         }
 
         return view
@@ -141,14 +131,21 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                lifecycleScope.launch {
-//                    sharedFlow.emit(s.toString())
-//                }
             }
 
             override fun afterTextChanged(s: Editable?) {
-                lifecycleScope.launch {
-                    sharedFlow.emit(s.toString())
+                val searchText = s.toString().trim()
+                if (searchText.isEmpty()) {
+                    recyclerViewCities.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+
+                } else {
+                    recyclerViewCities.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+
+                    lifecycleScope.launch {
+                        sharedFlow.emit(searchText)
+                    }
                 }
             }
         })
@@ -213,36 +210,15 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
                 }
             }
         }
-
-
-//        allFavViewModel.productsw.observe(viewLifecycleOwner, Observer { weatherDataList ->
-//            adapter.setData(weatherDataList)
-//            adapter.notifyDataSetChanged()
-//
-//        })
     }
 
     private fun showNoNetworkDialog() {
         val dialogView =
             LayoutInflater.from(requireContext()).inflate(R.layout.fav_city_dialog, null)
-//        val editTextFavCity = dialogView.findViewById<EditText>(R.id.edit_text_fav_city)
-//        val saveButton = dialogView.findViewById<Button>(R.id.button_save)
-
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setTitle("Add Favorite City")
+            .setTitle("No Network Connection ...")
         val alertDialog = dialogBuilder.create()
-
-//        saveButton.setOnClickListener {
-//            val cityName = editTextFavCity.text.toString().trim()
-//            if (cityName.isNotEmpty()) {
-//                alertDialog.dismiss()
-//            } else {
-//                // Handle empty city name
-//                editTextFavCity.error = "Please enter a city name"
-//            }
-//        }
-
         alertDialog.show()
     }
 
@@ -252,11 +228,9 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
         if (isNetworkAvailable) {
             val anotherFragment = HomeFragment()
             val bundle = Bundle().apply {
-                Log.i("TAGMap", "OnCLickIteamFav:$lat + $lon  ")
                 putDouble("selected_lat", lat)
                 putDouble("selected_lon", lon)
                 putString("selected_city", city)
-
             }
             anotherFragment.arguments = bundle
             requireActivity().supportFragmentManager.beginTransaction()
@@ -277,6 +251,8 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     }
 
     override fun onCitySelected(cityName: String) {
+        recyclerViewCities.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
         allFavViewModel.getAllWeather(cityName)
         lifecycleScope.launch {
             allFavViewModel.weatherStateFlow.collectLatest { result ->
