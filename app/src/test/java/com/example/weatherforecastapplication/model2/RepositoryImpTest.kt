@@ -1,10 +1,9 @@
 package com.example.weatherforecastapplication.model2
 
+import com.example.weatherforecastapplication.dp.FakeLocalDataSource
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
-import com.example.weatherforecastapplication.network.ApiState
+import com.example.weatherforecastapplication.network.FakeRemoteDataSource
 import com.example.weatherforecastapplication.network.RemoteDataSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runBlockingTest
@@ -17,7 +16,7 @@ import org.junit.Test
 class RepositoryImpTest{
     lateinit var  fakeremote : RemoteDataSource
     lateinit var  fakelocal : WeatherLocalDataSource
-    lateinit var  repo :RepositoryImp
+    lateinit var  repo :Repository
     val task1=
         Responce(0,City(Coord(30.7914776,30.9957296),"EG",
         347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
@@ -77,35 +76,32 @@ class RepositoryImpTest{
     fun createRepository() {
         fakeremote = FakeRemoteDataSource(task1,task2)
         fakelocal = FakeLocalDataSource(task3,task4)
-        repo = RepositoryImp(
-            fakeremote, fakelocal
-        )
+        repo = FakeRepo(task3,task4)
     }
     @Test
    fun getWeatherOverNetwork_allTasksFromRemoteDataSource()=runBlockingTest{
         val result=repo.getAllWeather(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","en","")
-        MatcherAssert.assertThat(result, `is`(task1))
+        MatcherAssert.assertThat(result.first(), `is`(task1))
     }
 
 
 
     @Test
     fun getWeatherWithCity_allTasksFromRemoteDataSource()=runBlockingTest{
-        val result=repo.getWeatherWithCity(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","")
+        val result=repo.getWeatherWithCity(30.7914776,30.9957296,"7f6473d2786753ccda5811e204914fff","","en")
         MatcherAssert.assertThat(result.first().name, `is`(task2.name))
     }
 
     @Test
     fun getWeatherWithCity2_allTasks()= runBlockingTest{
-        val result=repo.getWeatherWithCity2("Tanta","7f6473d2786753ccda5811e204914fff")
-        MatcherAssert.assertThat(result, `is`(task2))
+        val result=repo.getWeatherWithCity2("Tanta","7f6473d2786753ccda5811e204914fff","metric","en")
+        MatcherAssert.assertThat(result.first(), `is`(task2))
     }
 
     @Test
     fun insertWeatherData()= runBlockingTest{
         var weather= WeatherData(
             id=1,
-
             base = "baseValue",
             clouds = Clouds(all = 0),
             cod = 404,

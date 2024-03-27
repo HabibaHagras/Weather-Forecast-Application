@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "response_table")
 data class Responce(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0 ,
+    val id: Int ,
     val city: City,
     val cnt: Int,
     val cod: String,

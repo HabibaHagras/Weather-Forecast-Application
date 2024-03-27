@@ -1,12 +1,12 @@
-package com.example.weatherforecastapplication.model2
+package com.example.weatherforecastapplication.dp
 
-import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
+import com.example.weatherforecastapplication.model2.Responce
+import com.example.weatherforecastapplication.model2.WeatherData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flowOf
 
-class FakeLocalDataSource ( var weather : MutableList<WeatherData> = mutableListOf(),
-                            var weatherResponce : MutableList<Responce> = mutableListOf()
+class FakeLocalDataSource (var weather : MutableList<WeatherData> = mutableListOf(),
+                           var weatherResponce : MutableList<Responce> = mutableListOf()
     ) :WeatherLocalDataSource {
 
     override suspend fun insertWeatherData(product: WeatherData) {
