@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layoutDirection="ltr"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:backgroundTint="@color/weather3"
-        android:elevation="20dp"
+        android:elevation="10dp"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,8 +23,8 @@
 
         <ImageView
             android:id="@+id/product_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_weight="1"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -33,11 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="10dp"
             android:text="hi product"
             android:textColor="@color/weather1"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -46,9 +47,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
             android:layout_marginTop="20dp"
-            android:text="Day Name"
+            android:text="sunday"
             android:textColor="@color/weather1"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/product_name"
             app:layout_constraintEnd_toEndOf="@id/product_name"
             app:layout_constraintStart_toStartOf="@id/product_name"
@@ -58,10 +60,10 @@
             android:id="@+id/temp_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:text="TextView" />
+            android:layout_gravity="center|top"
+            android:layout_marginTop="46dp"
+            android:text="14/13"
+            android:textColor="@color/weather1" />
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

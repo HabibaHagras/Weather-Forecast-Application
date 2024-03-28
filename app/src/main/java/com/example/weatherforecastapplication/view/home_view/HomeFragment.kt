@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
         val favLat = arguments?.getDouble("selected_lat")
         val favLon = arguments?.getDouble("selected_lon")
         Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
-        mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         mAdapter = HomeAdapter(requireContext())
         mWeekAdapter = HomeWeekAdapter(requireContext())
@@ -284,21 +284,35 @@ class HomeFragment : Fragment() {
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
-            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
-                "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
+
+            var windString= "m/s"
+           when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                "m/s" -> windString = "m/s"
+                "km/h" -> windString = "km/h"
+                else -> todayWeather.wind.speed }
             val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
                 "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
                 "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
-                else -> todayWeather.wind.speed // Default to original value if no unit is found
+                else -> todayWeather.wind.speed
             }
-            rootView.findViewById<TextView>(R.id.Wind)?.text = "${windSpeed.toInt().toString()}"
-            rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()
+            val formattedWindSpeed = String.format("%.2f", windSpeed)
+            rootView.findViewById<TextView>(R.id.Wind)?.text = "${formattedWindSpeed} $windString"
+            rootView.findViewById<TextView>(R.id.pressurs)?.text = "${todayWeather.main.pressure.toString()} hpa"
+
             rootView.findViewById<TextView>(R.id.humidity)?.text=
                 "${todayWeather.main.humidity.toString()} %"
             rootView.findViewById<TextView>(R.id.clouds)?.text=
                 "${ todayWeather.clouds.all.toString()} %"
+            var currentTemp="°C"
+            when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
+                "metric" -> currentTemp = "°C"
+                "imperial" -> currentTemp = "F"
+                ""->currentTemp = "K"
+                else -> "K"}
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
+                " ${ todayWeather.main.feels_like.toInt().toString() } $currentTemp"
             rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
-                "${todayWeather.main.temp.toInt()}°C"
+                "${todayWeather.main.temp.toInt()} $currentTemp"
 
             val iconCode = todayWeather.weather[0].icon
             val iconUrl = getIconUrl(iconCode)
@@ -332,27 +346,33 @@ class HomeFragment : Fragment() {
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
-
-            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
-          "Feels Like :  ${ todayWeather.main.feels_like.toInt().toString() }"
-
+            var windString= "m/s"
+            when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                "m/s" -> windString = "m/s"
+                "km/h" -> windString = "km/h"
+                else -> todayWeather.wind.speed }
             val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
                 "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
                 "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
-                else -> todayWeather.wind.speed // Default to original value if no unit is found
+                else -> todayWeather.wind.speed
             }
-
-            rootView.findViewById<TextView>(R.id.Wind)?.text = "${windSpeed.toInt().toString()}"
-
-//            rootView.findViewById<TextView>(R.id.Wind)?.text=
-//                todayWeather.wind.speed.toString()
-            rootView.findViewById<TextView>(R.id.pressurs)?.text=todayWeather.main.pressure.toString()
+            val formattedWindSpeed = String.format("%.2f", windSpeed)
+            rootView.findViewById<TextView>(R.id.Wind)?.text = "${formattedWindSpeed} $windString"
+            rootView.findViewById<TextView>(R.id.pressurs)?.text = "${todayWeather.main.pressure.toString()} hpa"
             rootView.findViewById<TextView>(R.id.humidity)?.text=
                  "${todayWeather.main.humidity.toString()} %"
             rootView.findViewById<TextView>(R.id.clouds)?.text=
              "${ todayWeather.clouds.all.toString()} %"
+            var currentTemp="°C"
+            when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
+                "metric" -> currentTemp = "°C"
+                "imperial" -> currentTemp = "F"
+                ""->currentTemp = "K"
+                else -> "K"}
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
+                " ${ todayWeather.main.feels_like.toInt().toString() } $currentTemp"
             rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
-                "${todayWeather.main.temp.toInt()}°C"
+                "${todayWeather.main.temp.toInt()} $currentTemp"
 
             val iconCode = todayWeather.weather[0].icon
             val iconUrl = getIconUrl(iconCode)

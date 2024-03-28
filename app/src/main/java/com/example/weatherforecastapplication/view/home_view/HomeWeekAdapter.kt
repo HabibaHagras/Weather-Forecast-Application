@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
@@ -63,17 +64,16 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
         val currentItem = listOfWeatherToday[position]
 
         holder.name.text = currentItem.weather[0].description.toString()
-//        Glide.with(context)
-//            .load(getIconUrl(currentItem.weather[0].icon))
-//            .apply(RequestOptions().placeholder(R.drawable.ic_launcher_foreground))
-//            .transition(DrawableTransitionOptions.withCrossFade())
-//            .into(holder.thumbnail)
         holder.thumbnail.setImageResource(getIconUrl(currentItem.weather[0].icon))
-
-        // Convert date to day name and set it to the TextView
         val dayName = getDayNameFromDateString(currentItem.dt_txt)
+        var currentTemp="°C"
+        when (SharedPreferencesManager.getInstance(context).getUnits()) {
+            "metric" -> currentTemp = "°C"
+            "imperial" -> currentTemp = "F"
+            ""->currentTemp = "K"
+            else -> "K"}
         holder.day.text = dayName
-        holder.temp.text="${currentItem.main.temp_max.toInt().toString()}"+ "/" +"${currentItem.main.temp_min.toInt().toString()}"
+        holder.temp.text="${currentItem.main.temp_max.toInt().toString()}"+ "/" +"${currentItem.main.temp_min.toInt().toString()} $currentTemp"
     }
 
     override fun getItemCount(): Int {

@@ -46,15 +46,14 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
 
     override fun onBindViewHolder(holder: FavViewHolder, position: Int) {
         val currentItem = listOfWeatherToday[position]
-
-        holder.name.text = currentItem.main.temp.toInt().toString()
+        var currentTemp="°C"
+        when (SharedPreferencesManager.getInstance(context).getUnits()) {
+            "metric" -> currentTemp = "°C"
+            "imperial" -> currentTemp = "F"
+            ""->currentTemp = "K"
+            else -> "K"}
+        holder.name.text = "${currentItem.main.temp.toInt().toString()} $currentTemp"
         holder.thumbnail.setImageResource(getIconUrl(currentItem.weather[0].icon))
-
-//        Glide.with(context)
-//            .load(getIconUrl(currentItem.weather[0].icon))
-//            .apply(RequestOptions().placeholder(R.drawable.ic_launcher_foreground))
-//            .transition(DrawableTransitionOptions.withCrossFade())
-//            .into(holder.thumbnail)
         val timeFormatted = formatTime(currentItem.dt_txt.substring(11))
         holder.clock.text = timeFormatted
     }
