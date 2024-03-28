@@ -138,10 +138,13 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
                 if (searchText.isEmpty()) {
                     recyclerViewCities.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
+                    fab.visibility = View.VISIBLE
 
                 } else {
                     recyclerViewCities.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
+                    fab.visibility = View.GONE
+
 
                     lifecycleScope.launch {
                         sharedFlow.emit(searchText)
@@ -253,6 +256,7 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     override fun onCitySelected(cityName: String) {
         recyclerViewCities.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+        fab.visibility = View.VISIBLE
         allFavViewModel.getAllWeather(cityName)
         lifecycleScope.launch {
             allFavViewModel.weatherStateFlow.collectLatest { result ->

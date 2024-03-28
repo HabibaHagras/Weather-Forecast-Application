@@ -5,6 +5,7 @@
     <string name="s">Navigation Drawer</string>
     <string name="network">لا يوجد إتصال بالإنترنت</string>
     <string name="feels_like">الشعور كأن درجة الحرارة : </string>
+    <string name="search">البحث عن مدينة</string>
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="sunday">الأحد</string>
     <string name="monday">الإثنين</string>
