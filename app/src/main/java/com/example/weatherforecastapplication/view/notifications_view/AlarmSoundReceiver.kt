@@ -50,6 +50,7 @@ class AlarmSoundReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
+        val NotificationOnly=intent.getBooleanExtra("NotificationOnly",false)
         if (Settings.canDrawOverlays(context)) {
             val notificationIntent = Intent(context, MainActivity::class.java)
             notificationIntent.flags =
@@ -77,10 +78,6 @@ class AlarmSoundReceiver : BroadcastReceiver() {
                 dismissPendingIntent
             ).build()
             // Play the alarm sound
-            val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-            alarmMediaPlayer = MediaPlayer.create(context, ringtone)
-            alarmMediaPlayer?.isLooping = true
-            alarmMediaPlayer?.start()
             val repo =
                 RepositoryImp(RemoteDataSourceImp.getInstance(), WeatherLocalDataSourceImp(context))
             CoroutineScope(Dispatchers.IO).launch {
@@ -118,9 +115,12 @@ class AlarmSoundReceiver : BroadcastReceiver() {
 
                     }
                     notificationManager.notify(resultCode, builder.build())
-
+                    if(!NotificationOnly){
+                        val ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                        alarmMediaPlayer = MediaPlayer.create(context, ringtone)
+                        alarmMediaPlayer?.isLooping = true
+                        alarmMediaPlayer?.start()
                     Handler(Looper.getMainLooper()).post {
-
                         val alertView =
                             LayoutInflater.from(context).inflate(R.layout.alert_dialog, null)
 
@@ -163,7 +163,7 @@ class AlarmSoundReceiver : BroadcastReceiver() {
                     }
 
 
-                }
+                }}
             }
         } else {
             openDrawOverOtherAppsSettings(context)

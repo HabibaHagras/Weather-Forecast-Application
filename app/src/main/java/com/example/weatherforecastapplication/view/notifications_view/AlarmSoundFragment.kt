@@ -1,12 +1,17 @@
 package com.example.weatherforecastapplication.view.notifications_view
 
 import WeatherLocalDataSourceImp
+import android.Manifest
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +19,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +46,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
     lateinit var viewModel: AlarmSound
     lateinit var factory:AlarmSoundFactory
     private lateinit var alarmAdapter: AlarmAdapter
+    var NotificationOnly:Boolean=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +73,20 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         )
         viewModel= ViewModelProvider(this, factory).get(AlarmSound::class.java)
         binding.floatingActionButton.setOnClickListener {
-            showDateTimePicker()
+            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alarm_type, null)
+            val alertDialogBuilder = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+            dialogView.findViewById<Button>(R.id.btnAlarmWithNotification)?.setOnClickListener {
+                alertDialog.dismiss()
+                showDateTimePicker(false)
+            }
+            dialogView.findViewById<Button>(R.id.btnNotificationOnly)?.setOnClickListener {
+                alertDialog.dismiss()
+                NotificationOnly=true
+                showDateTimePicker(true)            }
         }
         alarmAdapter = AlarmAdapter(AlarmFragment()
         ,this
@@ -101,7 +122,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
             }
         }
     }
-    private fun showDateTimePicker() {
+    private fun showDateTimePicker(NotificationOnly:Boolean) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -120,7 +141,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                         var lat = SharedPreferencesManager.getInstance(requireContext()).getGpsLat().toDouble()
                         var log = SharedPreferencesManager.getInstance(requireContext()).getGpsLon().toDouble()
                         viewModel.insertAlarm(lat,log,selectedYear, selectedMonth,selectedDay,selectedHour,selectedMinute,requestCode)
-                        scheduleAlarm(lat,log,selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute,requestCode)
+                        scheduleAlarm(lat,log,selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute,requestCode,NotificationOnly)
 
                         Toast.makeText(
                             requireContext(),
@@ -144,7 +165,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
     private fun generateUniqueRequestCode(): Int {
         return System.currentTimeMillis().toInt()
     }
-    private fun scheduleAlarm(lat:Double,log:Double,year: Int, month: Int, day: Int, hour: Int, minute: Int, requestCode: Int) {
+    private fun scheduleAlarm(lat:Double,log:Double,year: Int, month: Int, day: Int, hour: Int, minute: Int, requestCode: Int,NotificationOnly:Boolean) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month)
@@ -156,12 +177,35 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         val intent = Intent(requireContext(), AlarmSoundReceiver::class.java)
         intent.putExtra("latitude", lat)
         intent.putExtra("longitude", log)
+        intent.putExtra("NotificationOnly",NotificationOnly)
+        val intentNotification = Intent(requireContext(), NotificationsReceiver::class.java)
+        intentNotification.putExtra("latitude", lat)
+        intentNotification.putExtra("longitude", log)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             requestCode,
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
+        val pendingIntentNotication = PendingIntent.getBroadcast(
+            requireContext(),
+            requestCode,
+            intentNotification,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                NotificationFragment.CHANNEL_ID,
+                "channelName",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                lightColor = Color.BLUE
+                enableLights(true)
+            }
+            val manager =
+                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -179,9 +223,24 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                 calendar.timeInMillis,
                 pendingIntent
             )
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntentNotication
+            )
         } catch (e: SecurityException) {
             AlarmFragment.openDrawOverOtherAppsSettings(requireContext())
+            requestPermissions()
+
         }
+    }
+    private fun requestPermissions() {
+        // Request necessary permissions here
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.SET_ALARM),
+            NotificationFragment.PERMISSION_REQUEST_CODE
+        )
     }
     companion object {
         @JvmStatic
