@@ -1,10 +1,12 @@
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.weatherforecastapplication.dp.AlarmDao
 import com.example.weatherforecastapplication.dp.ResponceDao
 import com.example.weatherforecastapplication.dp.WeatherDataDAO
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.dp.db
+import com.example.weatherforecastapplication.model2.Alarm
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
 import com.example.weatherforecastapplication.model2.CoordWeather
@@ -28,6 +30,10 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
         dbInstance.responceDao()
 
     }
+    private val daoAlarm: AlarmDao by lazy {
+        val dbInstance = db.getInstance(context)
+        dbInstance.AlarmDao()
+    }
 
     override suspend fun insertWeatherData(weatherData: WeatherData) {
         dao.insert(weatherData)
@@ -50,5 +56,17 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
 
     override suspend fun getStoredWeatherHome(): Flow<List<Responce>> {
         return daoResponce.getAllResponces()
+    }
+
+    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
+        return  daoAlarm.getAllAlarms()
+    }
+
+    override suspend fun insertAlarms(alarm: Alarm) {
+        daoAlarm.insertAlarm(alarm)
+    }
+
+    override suspend fun deleteAlarms(alarm: Alarm) {
+        daoAlarm.deleteAlarm(alarm)
     }
 }

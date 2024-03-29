@@ -14,6 +14,7 @@ import com.example.weatherforecastapplication.view.favorite_view.FavFragment
 import com.example.weatherforecastapplication.view.notifications_view.NotificationFragment
 import com.example.weatherforecastapplication.view.settings_view.SettingsFragment
 import com.example.weatherforecastapplication.view.home_view.HomeFragment
+import com.example.weatherforecastapplication.view.notifications_view.AlarmSoundFragment
 import com.google.android.material.navigation.NavigationView
 import java.util.Locale
 
@@ -53,7 +54,7 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                 R.id.nav_settings -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, FavFragment()).commit()
                 R.id.nav_share -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, AlarmFragment()).commit()
+                    .replace(R.id.fragment_container, AlarmSoundFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment()).commit()
                 R.id.nav_notification -> supportFragmentManager.beginTransaction()

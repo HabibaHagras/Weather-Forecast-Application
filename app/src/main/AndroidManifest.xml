@@ -64,7 +64,16 @@
         <receiver android:name=".view.notifications_view.AlarmReceiver"/>
         <receiver android:name=".view.DismissAlarmReceiver"/>
 
+        <receiver
+            android:name=".view.notifications_view.AlarmSoundReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
+        <!-- Register DismissAlarmSoundReceiver -->
+        <receiver
+            android:name=".view.notifications_view.DismissAlarmSoundReceiver"
+            android:enabled="true"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false">

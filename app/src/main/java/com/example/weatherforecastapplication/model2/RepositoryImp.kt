@@ -67,4 +67,16 @@ return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude
     override suspend fun deletetWeatherData(weather: WeatherData) {
         return LocalDataSource.deleteWeatherData(weather)
     }
+
+    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
+        return LocalDataSource.getStoredAlarms()
+    }
+
+    override suspend fun insertAlarms(alarm: Alarm) {
+        return LocalDataSource.insertAlarms(alarm)
+    }
+
+    override suspend fun deleteAlarms(alarm: Alarm) {
+        return LocalDataSource.deleteAlarms(alarm)
+    }
 }

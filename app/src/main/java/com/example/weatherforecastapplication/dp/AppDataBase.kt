@@ -5,15 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.weatherforecastapplication.model2.Alarm
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
 
 @TypeConverters(WeatherListConverter::class)
-@Database(entities = arrayOf( WeatherData::class, Responce::class), version = 1 )
+@Database(entities = arrayOf( WeatherData::class, Responce::class ,Alarm::class), version = 1 )
 abstract class db : RoomDatabase() {
     abstract fun getWeatherDataDao(): WeatherDataDAO
     abstract fun responceDao(): ResponceDao
+    abstract fun AlarmDao(): AlarmDao
 
     companion object{
         @Volatile

@@ -1,6 +1,7 @@
 package com.example.weatherforecastapplication.dp
 
 import androidx.lifecycle.LiveData
+import com.example.weatherforecastapplication.model2.Alarm
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.Weather
 import com.example.weatherforecastapplication.model2.WeatherData
@@ -12,6 +13,10 @@ interface WeatherLocalDataSource {
     suspend fun getStoredProducts(): Flow<List<WeatherData>>
     suspend fun insertWeatherHome(weather: Responce)
     suspend fun getStoredWeatherHome(): Flow<List<Responce>>
+    suspend fun getStoredAlarms(): Flow<List<Alarm>>
+    suspend fun insertAlarms(alarm: Alarm)
+    suspend fun deleteAlarms(alarm: Alarm)
+
 
 
 

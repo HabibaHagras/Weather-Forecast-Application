@@ -1,6 +1,7 @@
 package com.example.weatherforecastapplication.dp
 
 import androidx.room.TypeConverter
+import com.example.weatherforecastapplication.model2.Alarm
 import com.example.weatherforecastapplication.model2.City
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
@@ -101,4 +102,16 @@ class WeatherListConverter {
     fun cityToString(city: City): String {
         return Gson().toJson(city)
     }
+
+
+    @TypeConverter
+    fun fromAlarmJson(alarm: Alarm): String {
+        return Gson().toJson(alarm)
+    }
+    @TypeConverter
+    fun toAlarmJson(alarm: String): Alarm {
+        return Gson().fromJson(alarm, Alarm::class.java)
+    }
+
+
 }
