@@ -178,34 +178,34 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         intent.putExtra("latitude", lat)
         intent.putExtra("longitude", log)
         intent.putExtra("NotificationOnly",NotificationOnly)
-        val intentNotification = Intent(requireContext(), NotificationsReceiver::class.java)
-        intentNotification.putExtra("latitude", lat)
-        intentNotification.putExtra("longitude", log)
+//        val intentNotification = Intent(requireContext(), NotificationsReceiver::class.java)
+//        intentNotification.putExtra("latitude", lat)
+//        intentNotification.putExtra("longitude", log)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             requestCode,
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        val pendingIntentNotication = PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode,
-            intentNotification,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                NotificationFragment.CHANNEL_ID,
-                "channelName",
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                lightColor = Color.BLUE
-                enableLights(true)
-            }
-            val manager =
-                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
-        }
+//        val pendingIntentNotication = PendingIntent.getBroadcast(
+//            requireContext(),
+//            requestCode,
+//            intentNotification,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                NotificationFragment.CHANNEL_ID,
+//                "channelName",
+//                NotificationManager.IMPORTANCE_DEFAULT
+//            ).apply {
+//                lightColor = Color.BLUE
+//                enableLights(true)
+//            }
+//            val manager =
+//                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            manager.createNotificationChannel(channel)
+//        }
         val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         try {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -223,11 +223,11 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                 calendar.timeInMillis,
                 pendingIntent
             )
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntentNotication
-            )
+//            alarmManager.setExact(
+//                AlarmManager.RTC_WAKEUP,
+//                calendar.timeInMillis,
+//                pendingIntentNotication
+//            )
         } catch (e: SecurityException) {
             AlarmFragment.openDrawOverOtherAppsSettings(requireContext())
             requestPermissions()
