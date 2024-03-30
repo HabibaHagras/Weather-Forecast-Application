@@ -11,6 +11,7 @@ import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
+import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.AlarmSound
 import com.example.weatherforecastapplication.view_model.AlarmSoundFactory
 import com.example.weatherforecastapplication.view_model.Fav
@@ -65,6 +67,11 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val networkAvailability = NetworkAvailability()
+        val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
+        if (isNetworkAvailable) {
+            binding.ConstraintLayout.visibility = View.GONE
+        requestPermissions()
         factory = AlarmSoundFactory(
             RepositoryImp.getInstance(
                 RemoteDataSourceImp.getInstance(),
@@ -73,6 +80,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         )
         viewModel= ViewModelProvider(this, factory).get(AlarmSound::class.java)
         binding.floatingActionButton.setOnClickListener {
+            requestPermissions()
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_alarm_type, null)
             val alertDialogBuilder = AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -121,6 +129,12 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                 }
             }
         }
+        }
+            else{
+                binding.ConstraintLayout.visibility = View.VISIBLE
+            }
+
+
     }
     private fun showDateTimePicker(NotificationOnly:Boolean) {
         val calendar = Calendar.getInstance()
@@ -173,20 +187,20 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
         calendar.set(Calendar.SECOND, 0)
-
-        val intent = Intent(requireContext(), AlarmSoundReceiver::class.java)
-        intent.putExtra("latitude", lat)
-        intent.putExtra("longitude", log)
-        intent.putExtra("NotificationOnly",NotificationOnly)
+        if (checkNotificationPermissions()) {
+            val intent = Intent(requireContext(), AlarmSoundReceiver::class.java)
+            intent.putExtra("latitude", lat)
+            intent.putExtra("longitude", log)
+            intent.putExtra("NotificationOnly", NotificationOnly)
 //        val intentNotification = Intent(requireContext(), NotificationsReceiver::class.java)
 //        intentNotification.putExtra("latitude", lat)
 //        intentNotification.putExtra("longitude", log)
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            requestCode,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+            val pendingIntent = PendingIntent.getBroadcast(
+                requireContext(),
+                requestCode,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
 //        val pendingIntentNotication = PendingIntent.getBroadcast(
 //            requireContext(),
 //            requestCode,
@@ -206,33 +220,45 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
 //                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //            manager.createNotificationChannel(channel)
 //        }
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        !alarmManager.canScheduleExactAlarms()
-                    } else {
-                        TODO("VERSION.SDK_INT < S")
+            val alarmManager =
+                requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            try {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+                            !alarmManager.canScheduleExactAlarms()
+                        } else {
+                            TODO("VERSION.SDK_INT < S")
+                        }
+                    ) {
+                        return
                     }
-                ) {
-                    return
                 }
-            }
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
 //            alarmManager.setExact(
 //                AlarmManager.RTC_WAKEUP,
 //                calendar.timeInMillis,
 //                pendingIntentNotication
 //            )
-        } catch (e: SecurityException) {
-            AlarmFragment.openDrawOverOtherAppsSettings(requireContext())
-            requestPermissions()
+            } catch (e: SecurityException) {
+                AlarmFragment.openDrawOverOtherAppsSettings(requireContext())
+//            requestPermissions()
 
+            }
+        } else {
+            requestPermissions()
+            }
         }
+    private fun checkNotificationPermissions(): Boolean {
+        // Check if notification permissions are granted
+        return ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.SET_ALARM
+        ) == PackageManager.PERMISSION_GRANTED
     }
     private fun requestPermissions() {
         // Request necessary permissions here

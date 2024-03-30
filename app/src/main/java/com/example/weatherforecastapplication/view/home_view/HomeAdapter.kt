@@ -1,13 +1,21 @@
 package com.example.weatherforecastapplication.view.home_view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.Listt
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
@@ -53,15 +61,44 @@ class HomeAdapter(private val context: Context) : RecyclerView.Adapter<HomeAdapt
             ""->currentTemp = "K"
             else -> "K"}
         holder.name.text = "${currentItem.main.temp.toInt().toString()} $currentTemp"
-        holder.thumbnail.setImageResource(getIconUrl(currentItem.weather[0].icon))
+//        holder.thumbnail.setImageResource(getIconUrl(currentItem.weather[0].icon))
+        val iconUrl = IconUrl().getIconDrawable(currentItem.weather[0].icon, context)
+        Glide.with(holder.itemView)
+            .load(iconUrl)
+            .listener(object : RequestListener<Drawable> {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    val rotateAnimation = RotateAnimation(-10f, 10f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+                    rotateAnimation.duration = 1000 // 1 second
+                    rotateAnimation.interpolator = LinearInterpolator()
+                    rotateAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+                    holder.thumbnail.startAnimation(rotateAnimation)
+                    return false                }
+
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: com.bumptech.glide.request.target.Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    TODO("Not yet implemented")
+                }
+            })
+            .into(holder.thumbnail)
+
         val timeFormatted = formatTime(currentItem.dt_txt.substring(11))
         holder.clock.text = timeFormatted
     }
     private fun getIconUrl(iconCode: String): Int {
         return when (iconCode) {
             "01d" -> R.drawable.day_forecast_sun_sunny_weather_icon
-            "01n" -> R.drawable.eclipse_forecast_moon_night_space_icon
-            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_icon
+            "01n" -> R.drawable.eclipse_forecast_moon_night_space_iconn
+            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_iconn
             "02n" -> R.drawable.weather_clouds_cloudy_moon_icon
             "03d", "03n" -> R.drawable.weather_cloud_clouds_cloudy_icon
             "04d", "04n" -> R.drawable.weather_cloud_clouds_cloudyy_icon

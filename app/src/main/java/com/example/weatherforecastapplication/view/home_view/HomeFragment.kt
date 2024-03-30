@@ -3,8 +3,10 @@ package com.example.weatherforecastapplication.view.home_view
 import WeatherLocalDataSourceImp
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -13,6 +15,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,7 +30,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.weatherforecastapplication.MainActivity2
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
@@ -34,8 +42,6 @@ import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.network.ApiState
 import com.example.weatherforecastapplication.view.MapsActivity
 import com.example.weatherforecastapplication.view.NetworkAvailability
-import com.example.weatherforecastapplication.view_model.Fav
-import com.example.weatherforecastapplication.view_model.FavFactory
 import com.example.weatherforecastapplication.view_model.home
 import com.example.weatherforecastapplication.view_model.homeFactory
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -286,13 +292,63 @@ class HomeFragment : Fragment() {
             rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
                 "${todayWeather.main.temp.toInt()} $currentTemp"
 
+//            val iconCode = todayWeather.weather[0].icon
+//            val iconUrl = getIconUrl(iconCode)
+//            val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
+//            imageViewWeatherIcon?.let {
+//                Glide.with(requireContext())
+//                    .load(iconUrl)
+//                    .into(it)
+//            }
+//        } else {
+//            Log.i("TAG", "updateUI: No data available")
+//        }
             val iconCode = todayWeather.weather[0].icon
-            val iconUrl = getIconUrl(iconCode)
+            val icon=IconUrl()
+            val iconUrl = icon.getIconDrawable(iconCode,requireContext())
+//            val iconUrl = getIconDrawable(iconCode,requireContext())
+//
+//            val iconUrl = icon.WeatherIcon(iconCode)
 
             val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
             imageViewWeatherIcon?.let {
                 Glide.with(requireContext())
                     .load(iconUrl)
+                    .listener(object : RequestListener<Drawable> {
+
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            model: Any,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            val rotateAnimation = RotateAnimation(-10f, 10f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+                            rotateAnimation.duration = 1000 // 1 second
+                            rotateAnimation.interpolator = LinearInterpolator()
+//                            val scaleAnimation = ScaleAnimation(1f, 1.1f, 1f, 1.1f, Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.2f)
+//                            scaleAnimation.duration = 1000 // 1 second
+//                            scaleAnimation.interpolator = OvershootInterpolator()
+                            rotateAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+                            imageViewWeatherIcon.startAnimation(rotateAnimation)
+//                            val alphaAnimation = AlphaAnimation(1f, 0f) // From fully visible to fully transparent
+//                            alphaAnimation.duration = 1000 // 1 second for each fade-in/fade-out cycle
+//                            alphaAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+//                            alphaAnimation.repeatMode = Animation.REVERSE // Reverse the animation to fade in and out smoothly
+//                            imageViewWeatherIcon.startAnimation(alphaAnimation)
+                            return false
+                        }
+
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            Log.e("TAG", "Error loading image", e)
+                            return false                        }
+
+                    })
                     .into(it)
             }
         } else {
@@ -347,12 +403,53 @@ class HomeFragment : Fragment() {
                 "${todayWeather.main.temp.toInt()} $currentTemp"
 
             val iconCode = todayWeather.weather[0].icon
-            val iconUrl = getIconUrl(iconCode)
+
+//            val iconUrl = getIconUrl(iconCode)
+            val icon=IconUrl()
+            val iconUrl = icon.getIconDrawable(iconCode,requireContext())
+//            val iconUrl = getIconDrawable(iconCode,requireContext())
+//
+//            val iconUrl = icon.WeatherIcon(iconCode)
 
             val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
             imageViewWeatherIcon?.let {
                 Glide.with(requireContext())
                     .load(iconUrl)
+                    .listener(object : RequestListener<Drawable> {
+
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            model: Any,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            val rotateAnimation = RotateAnimation(-10f, 10f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+                            rotateAnimation.duration = 1000 // 1 second
+                            rotateAnimation.interpolator = LinearInterpolator()
+//                            val scaleAnimation = ScaleAnimation(1f, 1.1f, 1f, 1.1f, Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.2f)
+//                            scaleAnimation.duration = 1000 // 1 second
+//                            scaleAnimation.interpolator = OvershootInterpolator()
+                            rotateAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+                            imageViewWeatherIcon.startAnimation(rotateAnimation)
+//                            val alphaAnimation = AlphaAnimation(1f, 0f) // From fully visible to fully transparent
+//                            alphaAnimation.duration = 1000 // 1 second for each fade-in/fade-out cycle
+//                            alphaAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+//                            alphaAnimation.repeatMode = Animation.REVERSE // Reverse the animation to fade in and out smoothly
+//                            imageViewWeatherIcon.startAnimation(alphaAnimation)
+                            return false
+                        }
+
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            Log.e("TAG", "Error loading image", e)
+                            return false                        }
+
+                    })
                     .into(it)
             }
         } else {
@@ -360,11 +457,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun getIconUrl(iconCode: String): Int {
         return when (iconCode) {
             "01d" -> R.drawable.day_forecast_sun_sunny_weather_icon
-            "01n" -> R.drawable.eclipse_forecast_moon_night_space_icon
-            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_icon
+            "01n" -> R.drawable.eclipse_forecast_moon_night_space_iconn
+            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_iconn
             "02n" -> R.drawable.weather_clouds_cloudy_moon_icon
             "03d", "03n" -> R.drawable.weather_cloud_clouds_cloudy_icon
             "04d", "04n" -> R.drawable.weather_cloud_clouds_cloudyy_icon
@@ -377,6 +475,27 @@ class HomeFragment : Fragment() {
             else -> R.drawable.cloud_white_24dp // Default icon for unknown weather conditions
         }
     }
+    private fun getIconDrawable(iconCode: String, context: Context): Drawable {
+        return when (iconCode) {
+            "01d" -> ContextCompat.getDrawable(context, R.drawable.animated_weather)!!
+            "01n" -> ContextCompat.getDrawable(context, R.drawable.icon01n)!!
+            "02d" -> ContextCompat.getDrawable(context, R.drawable.icon02d)!!
+            "02n" -> ContextCompat.getDrawable(context, R.drawable.icon02n)!!
+            "03d", "03n" -> ContextCompat.getDrawable(context, R.drawable.icon03d)!!
+            "04d", "04n" -> ContextCompat.getDrawable(context, R.drawable.icon03d)!!
+            "09d", "09n" -> ContextCompat.getDrawable(context, R.drawable.icon_09d)!!
+            "10d" -> ContextCompat.getDrawable(context, R.drawable.icon10d)!!
+            "10n" -> ContextCompat.getDrawable(context, R.drawable.icon10n)!!
+            "11d", "11n" -> ContextCompat.getDrawable(context, R.drawable.icon11d)!!
+            "13d", "13n" -> ContextCompat.getDrawable(context, R.drawable.icon13d)!!
+            "50d", "50n" -> ContextCompat.getDrawable(context, R.drawable.icon50d)!!
+            else -> ContextCompat.getDrawable(context, R.drawable.animated_weather)!! // Default icon for unknown weather conditions
+        }
+
+    }
+
+// Call this function passing in the iconCode and the context
+// val iconDrawable = getIconDrawable("01d", context)
 
 
     fun showLocationSelectionDialog() {
