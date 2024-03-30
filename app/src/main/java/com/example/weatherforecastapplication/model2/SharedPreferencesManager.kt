@@ -27,6 +27,12 @@ class  SharedPreferencesManager private constructor(context: Context){
 
         }
     }
+    fun saveAppstate(first:Boolean){
+        editor?.putBoolean("AppState",first)
+    }
+    fun getAppstate():Boolean{
+        return sharedPreferences?.getBoolean("AppState", false) !!
+    }
     fun saveLatitude(latitude: Float) {
         editor?.putFloat("latitude", latitude)!!.apply()
     }

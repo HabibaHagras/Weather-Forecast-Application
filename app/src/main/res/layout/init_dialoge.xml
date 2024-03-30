@@ -25,7 +25,7 @@
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnAlarmWithNotification"
+            android:id="@+id/Gps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -34,7 +34,7 @@
             android:textColor="#E3F2FD" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnNotificationOnly"
+            android:id="@+id/Map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/weather3"

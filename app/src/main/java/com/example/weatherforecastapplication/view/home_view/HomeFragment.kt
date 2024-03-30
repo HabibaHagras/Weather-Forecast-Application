@@ -2,6 +2,8 @@ package com.example.weatherforecastapplication.view.home_view
 
 import WeatherLocalDataSourceImp
 import android.Manifest
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -11,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,12 +25,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherforecastapplication.MainActivity2
 import com.example.weatherforecastapplication.R
 import com.example.weatherforecastapplication.model2.RepositoryImp
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.network.RemoteDataSourceImp
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.network.ApiState
+import com.example.weatherforecastapplication.view.MapsActivity
 import com.example.weatherforecastapplication.view.NetworkAvailability
 import com.example.weatherforecastapplication.view_model.Fav
 import com.example.weatherforecastapplication.view_model.FavFactory
@@ -44,14 +49,11 @@ class HomeFragment : Fragment() {
     private lateinit var geocoder: Geocoder
     lateinit var allProductFactroy: homeFactory
     lateinit var allProductViewModel: home
-   lateinit var allFavViewModel:Fav
-    lateinit var allFavFactroy: FavFactory
     lateinit var FeelsLike:TextView
     val LOCATION_PERMISSION_REQUEST_CODE = 10
     lateinit var mAdapter: HomeAdapter
     lateinit var mWeekAdapter: HomeWeekAdapter
     lateinit var mWeekLayoutManager: LinearLayoutManager
-
     lateinit var rv: RecyclerView
     lateinit var rvWeek: RecyclerView
     lateinit var mLayoutManager: LinearLayoutManager
@@ -100,10 +102,13 @@ class HomeFragment : Fragment() {
         val networkAvailability = NetworkAvailability()
         val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
         if (isNetworkAvailable) {
+//            if (!SharedPreferencesManager.getInstance(requireContext()).getAppstate()){
+//                SharedPreferencesManager.getInstance(requireContext()).saveAppstate(true)
+//                showLocationSelectionDialog()
+//            }
+//            requestLocationPermission()
+            if (!favName.isNullOrEmpty()) {
 
-//           allProductViewModel.getAllWeatherGps()
-            requestLocationPermission()
-        if (!favName.isNullOrEmpty()) {
             if (favLat != null) {
                 if (favLon != null) {
                     allProductViewModel.getAllWeatherFromFav(favLat,favLon)
@@ -136,14 +141,6 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-
-
-//            allProductViewModel.Favproducts.observe(viewLifecycleOwner,
-//                Observer<Responce> { value ->
-//                    mAdapter.setDataAndFilterByDate(value.list)
-//                    mWeekAdapter.setData(value.list)
-//                    updateUIFromFav(value,favName)
-//                })
         }
 
         else{
@@ -175,17 +172,6 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-
-
-
-
-
-//                allProductViewModel.products.observe(viewLifecycleOwner,
-//                    Observer<Responce> { value ->
-//                        mAdapter.setDataAndFilterByDate(value.list)
-//                        mWeekAdapter.setData(value.list)
-//                        updateUI(value)
-//                    })
                 SharedPreferencesManager.getInstance(requireContext()).clearLatitude()
             }
             else{
@@ -220,13 +206,6 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-//                allProductViewModel.products.observe(viewLifecycleOwner,
-//                    Observer<Responce> { value ->
-//                        mAdapter.setDataAndFilterByDate(value.list)
-//                        mWeekAdapter.setData(value.list)
-//                        updateUI(value)
-//                        allProductViewModel.insertHome(value)
-//                    })
             }
         }
 
@@ -260,13 +239,6 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-//            allProductViewModel.weatherHome.observe(viewLifecycleOwner,
-//                Observer<List<Responce>> { value ->
-//                    Log.i("TAG", "o $value")
-//                    mAdapter.setDataAndFilterByDate(value[0].list)
-//                    mWeekAdapter.setData(value[0].list)
-//                    updateUI(value[0])
-//                })
 
         }
     }
@@ -407,11 +379,21 @@ class HomeFragment : Fragment() {
     }
 
 
-//    private fun getIconUrl(iconCode: String): String {
-//        return "https://openweathermap.org/img/w/$iconCode.png"
-//    }
-
-
+    fun showLocationSelectionDialog() {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.init_dialoge, null)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+        dialogView.findViewById<Button>(R.id.Gps)?.setOnClickListener {
+            alertDialog.dismiss()
+            requestLocationPermission()
+        }
+        dialogView.findViewById<Button>(R.id.Map)?.setOnClickListener {
+            alertDialog.dismiss()
+            startActivity(Intent(requireContext(), MapsActivity::class.java))
+        }
+    }
 
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(
@@ -467,13 +449,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateLocationTextView(location: Location) {
-        latitude = location.latitude
-        longitude = location.longitude
+        SharedPreferencesManager.getInstance(requireContext()).saveGpsLat(location.latitude.toFloat())
+        SharedPreferencesManager.getInstance(requireContext()).saveGpsLon(location.longitude.toFloat())
     }
-
-
-
-
-
 
 }

@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/humidity"
                 android:textColor="@color/weather1"
@@ -170,45 +170,45 @@
 
             <TextView
                 android:id="@+id/Wind"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginBottom="8dp"
                 android:text="10.29 km/hr"
-                android:textStyle="bold"
                 android:textColor="@color/weather1"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/Wind1"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/clouds"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:layout_marginBottom="8dp"
                 android:text="100 %"
-                android:textStyle="bold"
                 android:textColor="@color/weather1"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/clouds1"
                 app:layout_constraintStart_toEndOf="@+id/Wind" />
 
             <TextView
                 android:id="@+id/pressurs"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:layout_marginBottom="8dp"
                 android:text="1078 hpa"
-                android:textStyle="bold"
                 android:textColor="@color/weather1"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/pressurss"
                 app:layout_constraintStart_toEndOf="@+id/clouds" />
 
             <TextView
                 android:id="@+id/humidity"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
+                android:layout_marginStart="40dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 android:text="100 %"
@@ -260,6 +260,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="18"
+        android:layoutDirection="ltr"
         android:textColor="@color/weather1"
         app:layout_constraintStart_toEndOf="@+id/Feels_Likee"
         app:layout_constraintTop_toBottomOf="@+id/textViewCity" />

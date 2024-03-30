@@ -1,24 +1,37 @@
 package com.example.weatherforecastapplication
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
+import com.example.weatherforecastapplication.view.InitFragment
+import com.example.weatherforecastapplication.view.MapsActivity
 import com.example.weatherforecastapplication.view.notifications_view.AlarmFragment
 import com.example.weatherforecastapplication.view.favorite_view.FavFragment
 import com.example.weatherforecastapplication.view.notifications_view.NotificationFragment
 import com.example.weatherforecastapplication.view.settings_view.SettingsFragment
 import com.example.weatherforecastapplication.view.home_view.HomeFragment
 import com.example.weatherforecastapplication.view.notifications_view.AlarmSoundFragment
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.navigation.NavigationView
 import java.util.Locale
 
 private lateinit var drawerLayout: DrawerLayout
+
 
 class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelectedListener{
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +55,22 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
             drawerLayout.addDrawerListener(toggle)
             toggle.syncState()
             if (savedInstanceState == null) {
+                val fragmentToLoad = intent.getStringExtra("fragment_to_load")
+                if (fragmentToLoad != null) {
+                    // Handle navigation to the desired fragment based on the tag or identifier
+                    val fragment = when (fragmentToLoad) {
+                        "YourFragmentTag" -> InitFragment()
+                        else -> null // Handle default case or invalid tag
+                    }
+                    if (fragment != null) {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, fragment)
+                            .commit()
+                    }
+                } else{
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, HomeFragment()).commit()
-                navigationView.setCheckedItem(R.id.nav_home)
+                navigationView.setCheckedItem(R.id.nav_home)}
             }
         }
         override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -72,4 +98,5 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                 onBackPressedDispatcher.onBackPressed()
             }
         }
-    }
+
+}
