@@ -13,8 +13,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -49,7 +51,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
     lateinit var factory:AlarmSoundFactory
     private lateinit var alarmAdapter: AlarmAdapter
     var NotificationOnly:Boolean=false
-
+     val OVERLAY_PERMISSION_REQUEST_CODE = 123
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -61,6 +63,8 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        requestPermissions()
+        requestOverlayPermissionIfNeeded()
         binding = FragmentAlarmSoundBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -135,6 +139,29 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
 
 
     }
+    private fun requestOverlayPermissionIfNeeded() {
+        if (!checkOverlayPermission()) {
+            requestOverlayPermission()
+        }
+    }
+
+    private fun checkOverlayPermission(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return Settings.canDrawOverlays(requireContext())
+        }
+        return true  // Assuming permission is granted for pre-M devices
+    }
+
+    private fun requestOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + requireActivity().packageName)
+            )
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE)
+        }
+    }
+
     private fun showDateTimePicker(NotificationOnly:Boolean) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
