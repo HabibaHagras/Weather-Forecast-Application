@@ -4,6 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="s">Navigation Drawer</string>
     <string name="network">لا يوجد إتصال بالإنترنت</string>
+    <string name="fav">َأضف الى المفضلة </string>
     <string name="feels_like">الشعور كأن درجة الحرارة : </string>
     <string name="search">البحث عن مدينة</string>
     <string name="open_nav">Open Navigation Drawer</string>

@@ -5,6 +5,7 @@
     <string name="s">Navigation Drawer</string>
     <string name="search">Search For City</string>
     <string name="network">No Network !</string>
+    <string name="fav">Add To Favorite </string>
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>
     <string name="feels_like">Feels Like :</string>

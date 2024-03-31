@@ -87,10 +87,10 @@ class AlarmSoundReceiver : BroadcastReceiver() {
                     SharedPreferencesManager.getInstance(context).getUnits(),
                     SharedPreferencesManager.getInstance(context).getLanguageUnit().toString()
                 ).collectLatest {
-
+                    Log.i("TAGn", "onReceive: ${SharedPreferencesManager.getInstance(context).getUnits()} ")
                     // Create a notification builder
                     val builder = NotificationCompat.Builder(context, "default")
-                        .setSmallIcon(R.drawable.alarm_black_24dp)
+                        .setSmallIcon(R.drawable.cloud_white_24dp)
                         .setContentTitle(it.name)
                         .setContentText(it.main.temp.toString())
                         .setPriority(NotificationCompat.PRIORITY_HIGH)

@@ -71,9 +71,6 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
         val currentItem = listOfWeatherToday[position]
 
         holder.name.text = currentItem.weather[0].description.toString()
-        val icon=IconUrl()
-      //  holder.thumbnail.setImageResource(getIconUrl(currentItem.weather[0].icon))
-
         val iconUrl = IconUrl().getIconDrawable(currentItem.weather[0].icon, context)
         Glide.with(holder.itemView)
             .load(iconUrl)
@@ -108,13 +105,37 @@ class HomeWeekAdapter(private val context: Context) : RecyclerView.Adapter<HomeW
 
         val dayName = getDayNameFromDateString(currentItem.dt_txt)
         var currentTemp="°C"
-        when (SharedPreferencesManager.getInstance(context).getUnits()) {
-            "metric" -> currentTemp = "°C"
-            "imperial" -> currentTemp = "F"
-            ""->currentTemp = "K"
-            else -> "K"}
+        if (SharedPreferencesManager.getInstance(context).getLanguageUnit()=="en"){
+            when (SharedPreferencesManager.getInstance(context).getUnits()) {
+
+                "metric" -> currentTemp = "°C"
+                "imperial" -> currentTemp = "F"
+                ""->currentTemp = "K"
+                else -> "K"}}else{
+            when (SharedPreferencesManager.getInstance(context).getUnits()) {
+
+                "metric" -> currentTemp = "سيليزي"
+                "imperial" -> currentTemp = " فهرنهاي"
+                ""->currentTemp ="كلفن"
+                else -> " كلفن"}
+        }
+
         holder.day.text = dayName
-        holder.temp.text="${currentItem.main.temp_max.toInt().toString()}"+ "/" +"${currentItem.main.temp_min.toInt().toString()} $currentTemp"
+        val tempNumbermin = currentItem.main.temp_min.toInt()
+        val formattedtempNumbermin= if (SharedPreferencesManager.getInstance(context).getLanguageUnit()=="ar") {
+            val arabicNumber = convertNumber().convertNumberToArabic(tempNumbermin)
+            "$arabicNumber"
+        } else {
+            "$tempNumbermin"
+        }
+        val tempNumbermax =currentItem.main.temp_max.toInt()
+        val formattedtempNumbermax= if (SharedPreferencesManager.getInstance(context).getLanguageUnit()=="ar") {
+            val arabicNumber = convertNumber().convertNumberToArabic(tempNumbermax)
+            "$arabicNumber"
+        } else {
+            "$tempNumbermax"
+        }
+        holder.temp.text="$formattedtempNumbermax"+ "/" +"$formattedtempNumbermin $currentTemp"
     }
 
     override fun getItemCount(): Int {

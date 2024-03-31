@@ -108,11 +108,6 @@ class HomeFragment : Fragment() {
         val networkAvailability = NetworkAvailability()
         val isNetworkAvailable = networkAvailability.isNetworkAvailable(requireContext())
         if (isNetworkAvailable) {
-//            if (!SharedPreferencesManager.getInstance(requireContext()).getAppstate()){
-//                SharedPreferencesManager.getInstance(requireContext()).saveAppstate(true)
-//                showLocationSelectionDialog()
-//            }
-//            requestLocationPermission()
             if (!favName.isNullOrEmpty()) {
 
             if (favLat != null) {
@@ -262,12 +257,19 @@ class HomeFragment : Fragment() {
         val todayEntries = weatherForecast.list
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
-
             var windString= "m/s"
+            if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                    "m/s" -> windString ="م/ث"
+                    "km/h" -> windString = "كم/س"
+                    else -> todayWeather.wind.speed}
+
+            }else{
            when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
                 "m/s" -> windString = "m/s"
                 "km/h" -> windString = "km/h"
-                else -> todayWeather.wind.speed }
+                else -> todayWeather.wind.speed}
+            }
             val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
                 "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
                 "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
@@ -275,41 +277,68 @@ class HomeFragment : Fragment() {
             }
             val formattedWindSpeed = String.format("%.2f", windSpeed)
             rootView.findViewById<TextView>(R.id.Wind)?.text = "${formattedWindSpeed} $windString"
-            rootView.findViewById<TextView>(R.id.pressurs)?.text = "${todayWeather.main.pressure.toString()} hpa"
-
-            rootView.findViewById<TextView>(R.id.humidity)?.text=
-                "${todayWeather.main.humidity.toString()} %"
-            rootView.findViewById<TextView>(R.id.clouds)?.text=
-                "${ todayWeather.clouds.all.toString()} %"
+            val pressursnumber = todayWeather.main.pressure
+            val formattedpressursNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(pressursnumber)
+                "$arabicNumber وحدة"
+            } else {
+                "$pressursnumber hpa"
+            }
+            rootView.findViewById<TextView>(R.id.pressurs)?.text = formattedpressursNumber
+            val humiditynumber = todayWeather.main.humidity
+            val formattedhumidityNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(humiditynumber)
+                "$arabicNumber%"
+            } else {
+                "$humiditynumber %"
+            }
+            rootView.findViewById<TextView>(R.id.humidity)?.text=formattedhumidityNumber
+            val cloudnumber = todayWeather.clouds.all
+            val formattedCloudNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(cloudnumber)
+                "$arabicNumber %"
+            } else {
+                "$cloudnumber %"
+            }
+            rootView.findViewById<TextView>(R.id.clouds)?.text=formattedCloudNumber
             var currentTemp="°C"
+            if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="en"){
             when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
+
                 "metric" -> currentTemp = "°C"
                 "imperial" -> currentTemp = "F"
                 ""->currentTemp = "K"
-                else -> "K"}
-            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
-                " ${ todayWeather.main.feels_like.toInt().toString() } $currentTemp"
-            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
-                "${todayWeather.main.temp.toInt()} $currentTemp"
+                else -> "K"}}else{
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
 
-//            val iconCode = todayWeather.weather[0].icon
-//            val iconUrl = getIconUrl(iconCode)
-//            val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
-//            imageViewWeatherIcon?.let {
-//                Glide.with(requireContext())
-//                    .load(iconUrl)
-//                    .into(it)
-//            }
-//        } else {
-//            Log.i("TAG", "updateUI: No data available")
-//        }
+                    "metric" -> currentTemp = " سيليزي"
+                    "imperial" -> currentTemp = " فهرنهايت"
+                    ""->currentTemp = " كلفن"
+                    else -> " كلفن"}
+                }
+            val feelsLikeNumber = todayWeather.main.feels_like.toInt()
+            val feelsLikeText = getString(R.string.feels_like)
+            val formattedFeelsLike = if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(feelsLikeNumber)
+                "$feelsLikeText $arabicNumber $currentTemp"
+            } else {
+                "$feelsLikeText $feelsLikeNumber $currentTemp"
+            }
+
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text = formattedFeelsLike
+
+
+            val tempNumber = todayWeather.main.temp.toInt()
+            val formattedtempNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(tempNumber)
+                "$arabicNumber $currentTemp"
+            } else {
+                "$tempNumber $currentTemp"
+            }
+            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =formattedtempNumber
             val iconCode = todayWeather.weather[0].icon
             val icon=IconUrl()
             val iconUrl = icon.getIconDrawable(iconCode,requireContext())
-//            val iconUrl = getIconDrawable(iconCode,requireContext())
-//
-//            val iconUrl = icon.WeatherIcon(iconCode)
-
             val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
             imageViewWeatherIcon?.let {
                 Glide.with(requireContext())
@@ -326,16 +355,8 @@ class HomeFragment : Fragment() {
                             val rotateAnimation = RotateAnimation(-10f, 10f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
                             rotateAnimation.duration = 1000 // 1 second
                             rotateAnimation.interpolator = LinearInterpolator()
-//                            val scaleAnimation = ScaleAnimation(1f, 1.1f, 1f, 1.1f, Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.2f)
-//                            scaleAnimation.duration = 1000 // 1 second
-//                            scaleAnimation.interpolator = OvershootInterpolator()
-                            rotateAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+                            rotateAnimation.repeatCount = Animation.INFINITE
                             imageViewWeatherIcon.startAnimation(rotateAnimation)
-//                            val alphaAnimation = AlphaAnimation(1f, 0f) // From fully visible to fully transparent
-//                            alphaAnimation.duration = 1000 // 1 second for each fade-in/fade-out cycle
-//                            alphaAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
-//                            alphaAnimation.repeatMode = Animation.REVERSE // Reverse the animation to fade in and out smoothly
-//                            imageViewWeatherIcon.startAnimation(alphaAnimation)
                             return false
                         }
 
@@ -375,10 +396,18 @@ class HomeFragment : Fragment() {
         if (todayEntries.isNotEmpty()) {
             val todayWeather = todayEntries[0]
             var windString= "m/s"
-            when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
-                "m/s" -> windString = "m/s"
-                "km/h" -> windString = "km/h"
-                else -> todayWeather.wind.speed }
+            if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                    "m/s" -> windString ="م/ث"
+                    "km/h" -> windString = "كم/س"
+                    else -> todayWeather.wind.speed}
+
+            }else{
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
+                    "m/s" -> windString = "m/s"
+                    "km/h" -> windString = "km/h"
+                    else -> todayWeather.wind.speed}
+            }
             val windSpeed = when (SharedPreferencesManager.getInstance(requireContext()).getUnitWind()) {
                 "m/s" -> convertWindSpeedToMs(todayWeather.wind.speed)
                 "km/h" -> convertWindSpeedToKmh(todayWeather.wind.speed)
@@ -386,31 +415,68 @@ class HomeFragment : Fragment() {
             }
             val formattedWindSpeed = String.format("%.2f", windSpeed)
             rootView.findViewById<TextView>(R.id.Wind)?.text = "${formattedWindSpeed} $windString"
-            rootView.findViewById<TextView>(R.id.pressurs)?.text = "${todayWeather.main.pressure.toString()} hpa"
-            rootView.findViewById<TextView>(R.id.humidity)?.text=
-                 "${todayWeather.main.humidity.toString()} %"
-            rootView.findViewById<TextView>(R.id.clouds)?.text=
-             "${ todayWeather.clouds.all.toString()} %"
+
+            val pressursnumber = todayWeather.main.pressure
+            val formattedpressursNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(pressursnumber)
+                "$arabicNumber وحدة"
+            } else {
+                "$pressursnumber hpa"
+            }
+            rootView.findViewById<TextView>(R.id.pressurs)?.text = formattedpressursNumber
+            val humiditynumber = todayWeather.main.humidity
+            val formattedhumidityNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(humiditynumber)
+                "$arabicNumber%"
+            } else {
+                "$humiditynumber %"
+            }
+            rootView.findViewById<TextView>(R.id.humidity)?.text=formattedhumidityNumber
+            val cloudnumber = todayWeather.clouds.all
+            val formattedCloudNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(cloudnumber)
+                "$arabicNumber %"
+            } else {
+                "$cloudnumber %"
+            }
+            rootView.findViewById<TextView>(R.id.clouds)?.text=formattedCloudNumber
             var currentTemp="°C"
-            when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
-                "metric" -> currentTemp = "°C"
-                "imperial" -> currentTemp = "F"
-                ""->currentTemp = "K"
-                else -> "K"}
-            rootView.findViewById<TextView>(R.id.Feels_Like)?.text=
-                " ${ todayWeather.main.feels_like.toInt().toString() } $currentTemp"
-            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =
-                "${todayWeather.main.temp.toInt()} $currentTemp"
+            if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="en"){
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
+
+                    "metric" -> currentTemp = "°C"
+                    "imperial" -> currentTemp = "F"
+                    ""->currentTemp = "K"
+                    else -> "K"}}else{
+                when (SharedPreferencesManager.getInstance(requireContext()).getUnits()) {
+
+                    "metric" -> currentTemp = " سيليزي"
+                    "imperial" -> currentTemp = " فهرنهايت"
+                    ""->currentTemp = " كلفن"
+                    else -> " كلفن"}
+            }
+
+            val feelsLikeNumber = todayWeather.main.feels_like.toInt()
+            val feelsLikeText = getString(R.string.feels_like)
+            val formattedFeelsLike = if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(feelsLikeNumber)
+                "$feelsLikeText $arabicNumber $currentTemp"
+            } else {
+                "$feelsLikeText $feelsLikeNumber $currentTemp"
+            }
+            rootView.findViewById<TextView>(R.id.Feels_Like)?.text = formattedFeelsLike
+            val tempNumber = todayWeather.main.temp.toInt()
+            val formattedtempNumber= if (SharedPreferencesManager.getInstance(requireContext()).getLanguageUnit()=="ar") {
+                val arabicNumber = convertNumber().convertNumberToArabic(tempNumber)
+                "$arabicNumber $currentTemp"
+            } else {
+                "$tempNumber $currentTemp"
+            }
+            rootView.findViewById<TextView>(R.id.textViewTemperature)?.text =formattedtempNumber
 
             val iconCode = todayWeather.weather[0].icon
-
-//            val iconUrl = getIconUrl(iconCode)
             val icon=IconUrl()
             val iconUrl = icon.getIconDrawable(iconCode,requireContext())
-//            val iconUrl = getIconDrawable(iconCode,requireContext())
-//
-//            val iconUrl = icon.WeatherIcon(iconCode)
-
             val imageViewWeatherIcon = rootView.findViewById<ImageView>(R.id.imageViewWeatherIcon)
             imageViewWeatherIcon?.let {
                 Glide.with(requireContext())
@@ -427,16 +493,8 @@ class HomeFragment : Fragment() {
                             val rotateAnimation = RotateAnimation(-10f, 10f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
                             rotateAnimation.duration = 1000 // 1 second
                             rotateAnimation.interpolator = LinearInterpolator()
-//                            val scaleAnimation = ScaleAnimation(1f, 1.1f, 1f, 1.1f, Animation.RELATIVE_TO_SELF, 0.2f, Animation.RELATIVE_TO_SELF, 0.2f)
-//                            scaleAnimation.duration = 1000 // 1 second
-//                            scaleAnimation.interpolator = OvershootInterpolator()
-                            rotateAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
+                            rotateAnimation.repeatCount = Animation.INFINITE
                             imageViewWeatherIcon.startAnimation(rotateAnimation)
-//                            val alphaAnimation = AlphaAnimation(1f, 0f) // From fully visible to fully transparent
-//                            alphaAnimation.duration = 1000 // 1 second for each fade-in/fade-out cycle
-//                            alphaAnimation.repeatCount = Animation.INFINITE // Repeat indefinitely
-//                            alphaAnimation.repeatMode = Animation.REVERSE // Reverse the animation to fade in and out smoothly
-//                            imageViewWeatherIcon.startAnimation(alphaAnimation)
                             return false
                         }
 
@@ -475,29 +533,6 @@ class HomeFragment : Fragment() {
             else -> R.drawable.cloud_white_24dp // Default icon for unknown weather conditions
         }
     }
-    private fun getIconDrawable(iconCode: String, context: Context): Drawable {
-        return when (iconCode) {
-            "01d" -> ContextCompat.getDrawable(context, R.drawable.animated_weather)!!
-            "01n" -> ContextCompat.getDrawable(context, R.drawable.icon01n)!!
-            "02d" -> ContextCompat.getDrawable(context, R.drawable.icon02d)!!
-            "02n" -> ContextCompat.getDrawable(context, R.drawable.icon02n)!!
-            "03d", "03n" -> ContextCompat.getDrawable(context, R.drawable.icon03d)!!
-            "04d", "04n" -> ContextCompat.getDrawable(context, R.drawable.icon03d)!!
-            "09d", "09n" -> ContextCompat.getDrawable(context, R.drawable.icon_09d)!!
-            "10d" -> ContextCompat.getDrawable(context, R.drawable.icon10d)!!
-            "10n" -> ContextCompat.getDrawable(context, R.drawable.icon10n)!!
-            "11d", "11n" -> ContextCompat.getDrawable(context, R.drawable.icon11d)!!
-            "13d", "13n" -> ContextCompat.getDrawable(context, R.drawable.icon13d)!!
-            "50d", "50n" -> ContextCompat.getDrawable(context, R.drawable.icon50d)!!
-            else -> ContextCompat.getDrawable(context, R.drawable.animated_weather)!! // Default icon for unknown weather conditions
-        }
-
-    }
-
-// Call this function passing in the iconCode and the context
-// val iconDrawable = getIconDrawable("01d", context)
-
-
     fun showLocationSelectionDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.init_dialoge, null)
         val alertDialogBuilder = AlertDialog.Builder(requireContext())

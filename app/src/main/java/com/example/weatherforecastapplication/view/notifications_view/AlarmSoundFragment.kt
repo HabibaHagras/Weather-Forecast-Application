@@ -129,8 +129,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                 }
             }
         }
-        }
-            else{
+        }else{
                 binding.ConstraintLayout.visibility = View.VISIBLE
             }
 

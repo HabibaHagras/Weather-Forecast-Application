@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -78,8 +79,13 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
                     }
 
                     is ApiState.SucessWeatherData -> {
-                        //     progressBar.visibility = ProgressBar.GONE
+                        view.findViewById<ConstraintLayout>(R.id.ConstraintLayout1).visibility = View.GONE
                         adapter.setData(result.data)
+                        if (result.data.isEmpty()) {
+                            view.findViewById<ConstraintLayout>(R.id.ConstraintLayout1).visibility = View.VISIBLE
+
+                            Log.i("TAG", "Favorites list is empty")
+                        }
                     }
 
                     else -> {
@@ -247,9 +253,26 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     }
 
     override fun deleteIteamFav(weather: WeatherData) {
-        Log.i("TAG", "deleteIteamFavvvvvvvvvvvvvvvvvvvvvvvvvvvvv: ")
-        allFavViewModel.deleteWeather(weather)
-        refreshFavorites()
+//        Log.i("TAG", "deleteIteamFavvvvvvvvvvvvvvvvvvvvvvvvvvvvv: ")
+//        allFavViewModel.deleteWeather(weather)
+//        refreshFavorites()
+
+
+
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Confirm Deletion")
+        alertDialogBuilder.setMessage("Are you sure you want to delete this item?")
+        alertDialogBuilder.setPositiveButton("Yes") { dialog, _ ->
+            allFavViewModel.deleteWeather(weather)
+            refreshFavorites()
+            dialog.dismiss()
+        }
+        alertDialogBuilder.setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
 
     }
 
