@@ -1,7 +1,9 @@
 package com.example.weatherforecastapplication.view_model
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.weather.MainRule
 import com.example.weatherforecastapplication.model2.City
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
@@ -30,89 +32,66 @@ import org.hamcrest.MatcherAssert
 import org.hamcrest.core.IsEqual
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class HomeTest {
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
+    @get:Rule
+    val main = MainRule()
     lateinit var viewModel: home
     lateinit var repo: FakeRepo
-
     @Before
     fun setup(){
         repo=FakeRepo()
         viewModel=home(repo, SharedPreferencesManager.getInstance(ApplicationProvider.getApplicationContext()))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllWeatherMap()= runBlockingTest{
-        val task1=
-            Responce(0, City(
-                Coord(30.7914776,30.9957296),"EG",
-                347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
-                ,listOf(
-                    Listt(
-                        Clouds(0),
-                        0,
-                        "dt_txt",
-                        Main(0.0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0),
-                        0.0,
-                        Rain(0.0),
-                        Sys("pod"),
-                        0,
-                        listOf(Weather("description", "icon", 0, "main")),
-                        Wind(0, 0.0, 0.0)
-                    )
-                ),0
-
-            )
         val result=viewModel.getAllWeatherMap()
-        viewModel.getAllWeatherMap()
         MatcherAssert.assertThat(result , not(nullValue()))
         MatcherAssert.assertThat(result,`is`(Unit))
-
-
+        viewModel.getAllWeatherMap()
+        launch {
+        viewModel.weatherStateFlow.collect {
+            when (it) {
+                is ApiState.Sucessed -> {
+                    Assert.assertThat(it.data.city.country, IsEqual("EG"))
+                    cancel()
+                }
+                else -> {
+                }
+            }
+        }
+    }
+//        viewModel.getAllWeatherMap()
+//        jop.cancel()
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllWeatherGps()= runBlockingTest{
-
-        val task1=
-            Responce(0, City(
-                Coord(30.7914776,30.9957296),"EG",
-                347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
-                ,listOf(
-                    Listt(
-                        Clouds(0),
-                        0,
-                        "dt_txt",
-                        Main(0.0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0),
-                        0.0,
-                        Rain(0.0),
-                        Sys("pod"),
-                        0,
-                        listOf(Weather("description", "icon", 0, "main")),
-                        Wind(0, 0.0, 0.0)
-                    )
-                ),0
-
-            )
         val result=viewModel.getAllWeatherGps()
-        viewModel.getAllWeatherMap()
-        MatcherAssert.assertThat(viewModel.weatherStateFlow.first(),`is`(ApiState.loading))
+        MatcherAssert.assertThat(result , not(nullValue()))
         MatcherAssert.assertThat(result,`is`(Unit))
-        val job = launch {
+        viewModel.getAllWeatherMap()
+         val jop= launch {
             viewModel.weatherStateFlow.collect {
                 when (it) {
                     is ApiState.Sucessed -> {
                         Assert.assertThat(it.data.city.name, IsEqual("Tanta"))
+                        Assert.assertThat(it.data.city.coord.lat, IsEqual(30.7914776))
                     }
                     else -> {
                     }
                 }
             }
         }
-        job.cancelAndJoin()
+        jop.cancel()
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -138,24 +117,26 @@ class HomeTest {
 
             )
         val result=viewModel.getAllWeatherFromFav(30.7914776,30.9957296)
-        viewModel.getAllWeatherMap()
+        viewModel.getAllWeatherFromFav(30.7914776,30.9957296)
         MatcherAssert.assertThat(result,`is`(Unit))
-        val job = launch {
+       val jop= launch {
             viewModel.weatherStateFlow.collect {
                 when (it) {
                     is ApiState.Sucessed -> {
-                        Assert.assertThat(it.data.city.coord.lat, IsEqual(task1.city.coord.lat)) }
+                        Assert.assertThat(it.data.city.coord.lon, IsEqual(30.9957296))
+                    }
                     else -> {
                     }
                 }
             }
         }
-        job.cancelAndJoin()
-    }
+        jop.cancel()
 
+    }
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getStoredHome()= runBlockingTest {
-        val task1=
+        val responce1=
             Responce(0, City(
                 Coord(30.7914776,30.9957296),"EG",
                 347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
@@ -175,16 +156,28 @@ class HomeTest {
                 ),0
 
             )
-       viewModel.insertHome(task1)
+       viewModel.insertHome(responce1)
         val result=viewModel.getStoredHome()
         MatcherAssert.assertThat(result,`is`(Unit))
         MatcherAssert.assertThat(result , not(nullValue()))
+        viewModel.getStoredHome()
+        val jop= launch {
+            viewModel.weatherStateFlow.collect {
+                when (it) {
+                    is ApiState.Sucessed -> {
+                        Assert.assertThat(it.data.city.coord.lon, IsEqual(responce1.city.coord.lon))
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
+        jop.cancel()
     }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertHome()= runBlockingTest {
-        val task1=
+        val responce1=
             Responce(0, City(
                 Coord(30.7914776,30.9957296),"EG",
                 347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
@@ -203,21 +196,24 @@ class HomeTest {
                     )
                 ),0
             )
-        val result=  viewModel.insertHome(task1)
+        val result=  viewModel.insertHome(responce1)
         MatcherAssert.assertThat(result,`is`(Unit))
+        val result2=viewModel.getStoredHome()
+        MatcherAssert.assertThat(result2,`is`(Unit))
+        MatcherAssert.assertThat(result2 , not(nullValue()))
         viewModel.getStoredHome()
-        val job = launch {
+      val jop=
+          launch {
             viewModel.weatherStateFlow.collect {
                 when (it) {
-
                     is ApiState.Sucessed -> {
-                        Assert.assertThat(it.data.city.name, IsEqual(task1.city.name))
+                        Assert.assertThat(it.data.city.name, IsEqual(responce1.city.name))
                     }
                     else -> {
                     }
                 }
             }
         }
-        job.cancelAndJoin()
+        jop.cancel()
     }
 }

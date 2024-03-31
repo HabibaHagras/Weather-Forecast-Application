@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.dp
 
+import com.example.weatherforecastapplication.model2.Alarm
 import com.example.weatherforecastapplication.model2.Responce
 import com.example.weatherforecastapplication.model2.WeatherData
 import kotlinx.coroutines.flow.Flow
@@ -27,4 +28,16 @@ class FakeLocalDataSource (var weather : MutableList<WeatherData> = mutableListO
     override suspend fun getStoredWeatherHome(): Flow<List<Responce>> =weatherResponce.let {
         return@let flowOf(it)
     }
+
+    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
+        TODO("Not yet implemented")
     }
+
+    override suspend fun insertAlarms(alarm: Alarm) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAlarms(alarm: Alarm) {
+        TODO("Not yet implemented")
+    }
+}

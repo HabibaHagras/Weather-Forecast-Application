@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.Button
@@ -42,6 +43,13 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
             Locale.setDefault(locale)
             val configuration = Configuration()
             configuration.locale = locale
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+        }else {
+            // If no language is saved, use the device's default language
+            val deviceLocale = resources.configuration.locale
+            Locale.setDefault(deviceLocale)
+            val configuration = Configuration()
+            configuration.locale = deviceLocale
             resources.updateConfiguration(configuration, resources.displayMetrics)
         }
         super.onCreate(savedInstanceState)
@@ -90,6 +98,22 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
             drawerLayout.closeDrawer(GravityCompat.START)
             return true
         }
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//
+//        // Check if the language configuration has changed
+//        if (newConfig.locale != Locale.getDefault()) {
+//
+//            // Language configuration has changed, update locale
+//            Locale.setDefault(newConfig.locale)
+//            val configuration = Configuration()
+//            configuration.locale = newConfig.locale
+//            resources.updateConfiguration(configuration, resources.displayMetrics)
+//            Log.i("aaaaa", "onConfigurationChanged: ${newConfig.locale.toString()}")
+//            recreate()
+//        }
+//    }
+
         override fun onBackPressed() {
             super.onBackPressed()
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

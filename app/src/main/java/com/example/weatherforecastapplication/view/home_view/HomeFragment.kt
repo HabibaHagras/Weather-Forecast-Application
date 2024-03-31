@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.location.Address
 import android.location.Geocoder
@@ -23,6 +24,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.recreate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -241,6 +243,21 @@ class HomeFragment : Fragment() {
                 }
             }
 
+        }
+    }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // Check if the language configuration has changed
+        if (newConfig.locale != Locale.getDefault()) {
+            // Language configuration has changed, update locale
+            Locale.setDefault(newConfig.locale)
+            val context = requireContext()
+            val resources = context.resources
+            val configuration = Configuration(newConfig)
+            configuration.locale = newConfig.locale
+
+            resources.updateConfiguration(configuration, resources.displayMetrics)
         }
     }
 

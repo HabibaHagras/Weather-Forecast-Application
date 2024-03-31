@@ -193,5 +193,8 @@ class  SharedPreferencesManager private constructor(context: Context){
     fun clearPreferences() {
         editor?.clear()!!.apply()
     }
+    fun clearlan(){
+        editor?.remove("longitude")?.apply()
+    }
 
 }

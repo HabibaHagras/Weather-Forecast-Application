@@ -1,5 +1,6 @@
 package com.example.weatherforecastapplication.model2
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.weatherforecastapplication.dp.FakeLocalDataSource
 import com.example.weatherforecastapplication.dp.WeatherLocalDataSource
 import com.example.weatherforecastapplication.network.FakeRemoteDataSource
@@ -10,10 +11,13 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 
 class RepositoryImpTest{
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
     lateinit var  fakeremote : RemoteDataSource
     lateinit var  fakelocal : WeatherLocalDataSource
     lateinit var  repo :Repository
@@ -69,14 +73,17 @@ class RepositoryImpTest{
             weather = listOf(Weather(description = "description", icon = "icon", id = 800, main = "main")),
             wind = Wind(deg = 0, gust = 0.0, speed = 0.0)
         )
+    val alarm1 =Alarm(0.0,0.0,3,0,3,2024,12,123)
+    val alarm2 =Alarm(0.0,0.0,3,0,4,2024,12,123)
+
     val task3= mutableListOf<WeatherData>(task2,task22)
     val task4=  mutableListOf<Responce>(task1,task1,task1)
-//    val task5=Task("task5")
+    val alarm_list=mutableListOf<Alarm>(alarm1,alarm2)
     @Before
     fun createRepository() {
         fakeremote = FakeRemoteDataSource(task1,task2)
         fakelocal = FakeLocalDataSource(task3,task4)
-        repo = FakeRepo(task3,task4)
+        repo = FakeRepo(task3,task4,alarm_list)
     }
     @Test
    fun getWeatherOverNetwork_allTasksFromRemoteDataSource()=runBlockingTest{
@@ -176,4 +183,24 @@ class RepositoryImpTest{
         MatcherAssert.assertThat(result.size, `is`(1))
     }
 
+    @Test
+    fun getStoredAlarms()= runBlockingTest{
+
+        val result=repo.getStoredAlarms().first()
+        MatcherAssert.assertThat(result[0].lat, `is`(alarm1.lat))
+    }
+
+    @Test
+    fun insertAlarms()= runBlockingTest {
+        val alarm1 =Alarm(0.0,0.0,3,0,3,2024,12,123)
+        repo.insertAlarms(alarm1)
+        val result = repo.getStoredHome().first()
+        MatcherAssert.assertThat(result.size, `is`(3))
+    }
+    @Test
+    fun deleteAlarms()= runBlockingTest{
+        repo.deleteAlarms(alarm1)
+        val result=repo.getStoredAlarms().first()
+        MatcherAssert.assertThat(result.size, `is`(1))
+    }
 }

@@ -1,7 +1,9 @@
 package com.example.weatherforecastapplication.view_model
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.weather.MainRule
 import com.example.weatherforecastapplication.model2.City
 import com.example.weatherforecastapplication.model2.Clouds
 import com.example.weatherforecastapplication.model2.Coord
@@ -27,12 +29,17 @@ import org.hamcrest.MatcherAssert
 import org.hamcrest.core.IsEqual
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 
 class FavTest {
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
+    @get:Rule
+    val main = MainRule()
     lateinit var viewModel: Fav
     lateinit var repo: FakeRepo
     @Before
@@ -74,7 +81,7 @@ class FavTest {
                 }
             }
         }
-        job.cancelAndJoin()
+        job.cancel()
     }
     @Test
     fun insertProducts()= runBlockingTest {
@@ -148,7 +155,7 @@ class FavTest {
                 }
             }
         }
-        job.cancelAndJoin()
+        job.cancel()
         }
     @Test
     fun getAllWeather()= runBlockingTest{
@@ -187,7 +194,7 @@ class FavTest {
                 }
             }
         }
-        job.cancelAndJoin()
+        job.cancel()
     }
 
 }

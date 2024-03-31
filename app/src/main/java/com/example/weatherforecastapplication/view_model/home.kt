@@ -68,6 +68,15 @@ class home(private val repo: Repository, private val sharedPreferenceSource: Sha
                     }
         }
     }
+    fun getAllWeather(lat:Double,long:Double){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAllWeather(lat, long, "7f6473d2786753ccda5811e204914fff", lang.toString(),unit).catch { e->_weatherStateFlow.value=ApiState.fail(e) }
+                .collect{it->
+                    _weatherStateFlow.value= ApiState.Sucessed(it)
+                }
+        }
+    }
+
 
     fun getStoredHome(){
         viewModelScope.launch(Dispatchers.IO) {
