@@ -49,8 +49,6 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     lateinit var recyclerView: RecyclerView
     lateinit var searchBar: EditText
     var sharedFlow = MutableSharedFlow<String>()
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -128,17 +126,12 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.i("TAG", "onViewCreated:  ")
-
         refreshFavorites()
-
-
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
-
             override fun afterTextChanged(s: Editable?) {
                 val searchText = s.toString().trim()
                 if (searchText.isEmpty()) {
@@ -160,7 +153,6 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
         })
         val cities = listOf<String>("Tanta", "Cairo", "London")
         val searchAdapter = SearchAdapter(requireContext(), this)
-
         lifecycleScope.launch {
             sharedFlow
                 .distinctUntilChanged()
@@ -193,7 +185,6 @@ class FavFragment : Fragment(), FavListener ,SearchListener {
     }
 
     private fun refreshFavorites() {
-
         lifecycleScope.launch {
             allFavViewModel.weatherStateFlow.collectLatest { result ->
                 when (result) {

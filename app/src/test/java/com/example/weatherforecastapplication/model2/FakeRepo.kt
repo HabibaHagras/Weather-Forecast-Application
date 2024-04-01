@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeRepo (var weather : MutableList<WeatherData> = mutableListOf(),
-                var weatherResponce : MutableList<Responce> = mutableListOf(),
-                var weatherAlert : MutableList<Alarm> = mutableListOf()) :Repository{
+                var weatherResponce : MutableList<Responce> = mutableListOf()) :Repository{
    private val  _weather:Responce =  Responce(0,City(Coord(30.7914776,30.9957296),"EG",
                         347497,"Tanta",15000,1711338799,1711383021,7200),40,"200"
                         ,listOf(
@@ -25,6 +24,7 @@ class FakeRepo (var weather : MutableList<WeatherData> = mutableListOf(),
                         ),0
 
                     )
+    var weatherAlert : MutableList<Alarm> = mutableListOf()
     override suspend fun getAllWeather(
         latitude: Double,
         longitude: Double,

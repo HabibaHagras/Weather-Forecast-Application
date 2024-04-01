@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 class FakeLocalDataSource (var weather : MutableList<WeatherData> = mutableListOf(),
                            var weatherResponce : MutableList<Responce> = mutableListOf()
     ) :WeatherLocalDataSource {
+    var weatherAlert : MutableList<Alarm> = mutableListOf()
 
     override suspend fun insertWeatherData(product: WeatherData) {
         weather.add(product)
@@ -29,15 +30,16 @@ class FakeLocalDataSource (var weather : MutableList<WeatherData> = mutableListO
         return@let flowOf(it)
     }
 
-    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
-        TODO("Not yet implemented")
+    override suspend fun getStoredAlarms(): Flow<List<Alarm>> =weatherAlert.let {
+        return@let flowOf(it)
     }
 
-    override suspend fun insertAlarms(alarm: Alarm) {
-        TODO("Not yet implemented")
+
+        override suspend fun insertAlarms(alarm: Alarm) {
+        weatherAlert.add(alarm)
     }
 
     override suspend fun deleteAlarms(alarm: Alarm) {
-        TODO("Not yet implemented")
+        weatherAlert.remove(alarm)
     }
 }

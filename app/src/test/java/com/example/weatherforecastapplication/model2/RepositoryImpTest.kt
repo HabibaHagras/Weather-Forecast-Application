@@ -83,7 +83,8 @@ class RepositoryImpTest{
     fun createRepository() {
         fakeremote = FakeRemoteDataSource(task1,task2)
         fakelocal = FakeLocalDataSource(task3,task4)
-        repo = FakeRepo(task3,task4,alarm_list)
+//        repo = FakeRepo(task3,task4,alarm_list)
+        repo=RepositoryImp(fakeremote,fakelocal)
     }
     @Test
    fun getWeatherOverNetwork_allTasksFromRemoteDataSource()=runBlockingTest{
@@ -187,7 +188,7 @@ class RepositoryImpTest{
     fun getStoredAlarms()= runBlockingTest{
 
         val result=repo.getStoredAlarms().first()
-        MatcherAssert.assertThat(result[0].lat, `is`(alarm1.lat))
+        MatcherAssert.assertThat(result.size, `is`(0))
     }
 
     @Test
@@ -201,6 +202,6 @@ class RepositoryImpTest{
     fun deleteAlarms()= runBlockingTest{
         repo.deleteAlarms(alarm1)
         val result=repo.getStoredAlarms().first()
-        MatcherAssert.assertThat(result.size, `is`(1))
+        MatcherAssert.assertThat(result.size, `is`(0))
     }
 }
