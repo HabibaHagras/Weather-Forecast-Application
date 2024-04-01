@@ -1,0 +1,11 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/cloud_cloudy_forecast_moon_night_icon">
+    <target
+        android:name="sun"
+        android:animation="@animator/sun_rotation" />
+</animated-vector>
+
+
+
+
+

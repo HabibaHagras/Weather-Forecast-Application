@@ -1,0 +1,6 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/cloud_cloudy_day_forecast_sun_icon">
+    <target
+        android:name="sun"
+        android:animation="@animator/sun_rotation" />
+</animated-vector>

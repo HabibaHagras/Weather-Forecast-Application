@@ -8,7 +8,16 @@
 <!--<RelativeLayout-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="match_parent">-->
-
+<!--    <androidx.drawerlayout.widget.DrawerLayout-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/drawer_layout"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        tools:openDrawer="start"-->
+<!--        tools:context=".MainActivity">-->
     <TextView
         android:id="@+id/textViewCity"
         android:layout_width="wrap_content"
@@ -34,12 +43,12 @@
         android:layout_marginBottom="20dp"
         android:text="Temperature"
         android:textSize="48sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageViewWeatherIcon"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewWeatherIsskcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageViewWeatherIcon"
+        android:id="@+id/imageViewWeatherIsskcon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_below="@id/textViewTemperature"
@@ -64,5 +73,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv" />
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
     <!--</RelativeLayout>-->
+<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

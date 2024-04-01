@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/weather4"
+    tools:context=".view.settings_view.SettingsFragment">
+
+
+    <Switch
+        android:id="@+id/m_sec"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/meter_sec"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/km_hour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/km_hour"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="17dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/mile_hour"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/map"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/map"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/gps"
+        android:layout_width="365dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="30dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/gps"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switchLanguageArabic"
+        android:layout_width="366dp"
+        android:layout_height="66dp"
+        android:layout_gravity="center|right"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="440dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/arabic"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/switchLanguageEnglish"
+        android:layout_width="366dp"
+        android:layout_height="66dp"
+        android:layout_gravity="center|right"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="372dp"
+        android:layout_weight="1"
+        android:minHeight="48dp"
+        android:text="@string/english"
+        android:textColor="@color/weather2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/temperatureUnitLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="52dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Switch
+            android:id="@+id/switchMetric_Celsius"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/celsius"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchImperial_Fahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/fahrenheit"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switchDefault_Kelvin"
+            android:layout_width="wrap_content"
+            android:layout_height="66dp"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="29dp"
+            android:minHeight="48dp"
+            android:text="@string/kelvin"
+            android:textColor="@color/weather2"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/language"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/switchLanguageArabic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Meter_Sec"
+        android:layout_width="91dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="235dp"
+        android:layout_marginBottom="89dp"
+        android:text="@string/meter_sec"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/m_sec" />
+
+    <TextView
+        android:id="@+id/standard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginBottom="35dp"
+        android:text="@string/mile_hour"
+        android:textColor="@color/weather1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/km_hour" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="329dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/wind_speed"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/m_sec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="307dp"
+        android:layout_marginBottom="129dp"
+        android:text="@string/temperature"
+        android:textColor="@color/weather1"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/weather4"
+        android:backgroundTint="@color/weather4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="102dp"
+            android:text="@string/network"
+            android:textColor="@color/weather1"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/no_connection_icon"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/no_connection_icon"
+            android:layout_width="349dp"
+            android:layout_height="512dp"
+            android:layout_marginBottom="100dp"
+            android:background="@color/weather4"
+            android:backgroundTint="@color/weather4"
+            android:src="@drawable/no_connection"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
