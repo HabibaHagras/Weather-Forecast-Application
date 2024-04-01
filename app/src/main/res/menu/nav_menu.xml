@@ -20,10 +20,7 @@
             android:id="@+id/nav_share"
             android:icon="@drawable/alarm_black_24dp"
             android:title="@string/title_alerts" />
-        <item
-            android:id="@+id/nav_notification"
-            android:icon="@drawable/notifications_white_24dp"
-            android:title="@string/notification" />
+
 
         <item
             android:id="@+id/nav_about"

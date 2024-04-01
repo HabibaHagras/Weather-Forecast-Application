@@ -6,7 +6,7 @@ import com.example.weatherforecastapplication.databinding.ItemAlarmBinding
 import com.example.weatherforecastapplication.model2.Alarm
 
 class AlarmAdapter(
-    private val context: AlarmFragment,
+    private val context: AlarmSoundFragment,
     private val listener: AlarmListener
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmAdapterViewHolder>() {
     private var alarms = listOf<Alarm>()

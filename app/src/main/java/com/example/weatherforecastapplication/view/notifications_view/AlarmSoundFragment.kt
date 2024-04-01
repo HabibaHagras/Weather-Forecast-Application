@@ -52,6 +52,8 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
     private lateinit var alarmAdapter: AlarmAdapter
     var NotificationOnly:Boolean=false
      val OVERLAY_PERMISSION_REQUEST_CODE = 123
+     val PERMISSION_REQUEST_CODE = 123
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -100,7 +102,7 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                 NotificationOnly=true
                 showDateTimePicker(true)            }
         }
-        alarmAdapter = AlarmAdapter(AlarmFragment()
+        alarmAdapter = AlarmAdapter(AlarmSoundFragment()
         ,this
         )
 
@@ -218,34 +220,12 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", log)
             intent.putExtra("NotificationOnly", NotificationOnly)
-//        val intentNotification = Intent(requireContext(), NotificationsReceiver::class.java)
-//        intentNotification.putExtra("latitude", lat)
-//        intentNotification.putExtra("longitude", log)
             val pendingIntent = PendingIntent.getBroadcast(
                 requireContext(),
                 requestCode,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE
             )
-//        val pendingIntentNotication = PendingIntent.getBroadcast(
-//            requireContext(),
-//            requestCode,
-//            intentNotification,
-//            PendingIntent.FLAG_IMMUTABLE
-//        )
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                NotificationFragment.CHANNEL_ID,
-//                "channelName",
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            ).apply {
-//                lightColor = Color.BLUE
-//                enableLights(true)
-//            }
-//            val manager =
-//                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            manager.createNotificationChannel(channel)
-//        }
             val alarmManager =
                 requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             try {
@@ -265,22 +245,14 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
                     calendar.timeInMillis,
                     pendingIntent
                 )
-//            alarmManager.setExact(
-//                AlarmManager.RTC_WAKEUP,
-//                calendar.timeInMillis,
-//                pendingIntentNotication
-//            )
             } catch (e: SecurityException) {
-                AlarmFragment.openDrawOverOtherAppsSettings(requireContext())
-//            requestPermissions()
-
+                AlarmSoundFragment.openDrawOverOtherAppsSettings(requireContext())
             }
         } else {
             requestPermissions()
             }
         }
     private fun checkNotificationPermissions(): Boolean {
-        // Check if notification permissions are granted
         return ActivityCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.SET_ALARM
@@ -291,10 +263,15 @@ class AlarmSoundFragment : Fragment(),AlarmListener {
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(Manifest.permission.SET_ALARM),
-            NotificationFragment.PERMISSION_REQUEST_CODE
+            PERMISSION_REQUEST_CODE
         )
     }
     companion object {
+        fun openDrawOverOtherAppsSettings(context: Context) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.packageName))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK // Add the flag here
+            context.startActivity(intent)
+        }
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             AlarmSoundFragment().apply {

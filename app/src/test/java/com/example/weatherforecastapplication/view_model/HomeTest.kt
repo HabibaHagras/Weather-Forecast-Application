@@ -57,20 +57,18 @@ class HomeTest {
         MatcherAssert.assertThat(result , not(nullValue()))
         MatcherAssert.assertThat(result,`is`(Unit))
         viewModel.getAllWeatherMap()
-        launch {
+       val  jop= launch {
         viewModel.weatherStateFlow.collect {
             when (it) {
                 is ApiState.Sucessed -> {
                     Assert.assertThat(it.data.city.country, IsEqual("EG"))
-                    cancel()
                 }
                 else -> {
                 }
             }
         }
     }
-//        viewModel.getAllWeatherMap()
-//        jop.cancel()
+        jop.cancel()
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

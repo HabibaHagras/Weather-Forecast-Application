@@ -19,18 +19,18 @@ class FakeLocalDataSource (var weather : MutableList<WeatherData> = mutableListO
         weather.remove(product)
     }
 
-    override suspend fun getStoredProducts(): Flow<List<WeatherData>>  = weather.let {
+    override  fun getStoredProducts(): Flow<List<WeatherData>>  = weather.let {
         return@let flowOf(it)
     }
 
     override suspend fun insertWeatherHome(weather: Responce) {
         weatherResponce.add(weather)    }
 
-    override suspend fun getStoredWeatherHome(): Flow<List<Responce>> =weatherResponce.let {
+    override  fun getStoredWeatherHome(): Flow<List<Responce>> =weatherResponce.let {
         return@let flowOf(it)
     }
 
-    override suspend fun getStoredAlarms(): Flow<List<Alarm>> =weatherAlert.let {
+    override  fun getStoredAlarms(): Flow<List<Alarm>> =weatherAlert.let {
         return@let flowOf(it)
     }
 

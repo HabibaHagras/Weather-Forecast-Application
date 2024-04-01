@@ -68,10 +68,9 @@ class AlarmSoundReceiver : BroadcastReceiver() {
                 context,
                 resultCode,
                 dismissIntent,
-                PendingIntent.FLAG_IMMUTABLE // Add mutability flag here
+                PendingIntent.FLAG_IMMUTABLE
             )
 
-            // Create the action for the dismiss button
             val dismissAction = NotificationCompat.Action.Builder(
                 R.drawable.air_white_24dp,
                 "Dismiss",

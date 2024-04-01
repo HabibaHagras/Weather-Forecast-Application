@@ -52,7 +52,7 @@ class FakeRepo (var weather : MutableList<WeatherData> = mutableListOf(),
         weather.forEach { emit(it) }
     }
 
-    override suspend fun getStored(): Flow<List<WeatherData>> = flow{
+    override  fun getStored(): Flow<List<WeatherData>> = flow{
         emit(weather)
     }
 
@@ -60,7 +60,7 @@ class FakeRepo (var weather : MutableList<WeatherData> = mutableListOf(),
         weather.add(product)
     }
 
-    override suspend fun getStoredHome(): Flow<List<Responce>> = flow {
+    override  fun getStoredHome(): Flow<List<Responce>> = flow {
         emit(weatherResponce)
 
     }
@@ -72,7 +72,7 @@ class FakeRepo (var weather : MutableList<WeatherData> = mutableListOf(),
     override suspend fun deletetWeatherData(weatherdata: WeatherData) {
         weather.remove(weatherdata)    }
 
-    override suspend fun getStoredAlarms(): Flow<List<Alarm>> =flow {
+    override  fun getStoredAlarms(): Flow<List<Alarm>> =flow {
         emit(weatherAlert)
 
     }

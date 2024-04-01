@@ -47,13 +47,6 @@ class FavAdapter(private val context: FavFragment, private val listener: FavList
 
             listener.deleteIteamFav(currentItem)
         }
-//        holder.button2.setOnClickListener {
-//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssssssssssssssssssssssssssssss: ")
-//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssss:  + $currentItem")
-//            Log.i("TAG", "deleteIteamFavsssssssssssssssssssssssss:  + ${currentItem.id}")
-//
-//            listener.deleteIteamFav(currentItem)
-//        }
     }
     override fun getItemCount(): Int {
         return listOfCities.size

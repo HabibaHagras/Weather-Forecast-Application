@@ -32,10 +32,9 @@ class RepositoryImp  constructor(
         lang: String,
         units: String
     ):  Flow<Responce> {
-//        Log.i("TAG", "getAllProduct: ProductRepositoryImp")
         return  flowOf( RemoteDataSource.getWeatherOverNetwork(latitude,longitude,apiKey,lang,units)   ) }
 
-    override suspend fun getWeatherWithCity(latitude: Double,
+    override  suspend fun getWeatherWithCity(latitude: Double,
                                             longitude: Double,
                                             apiKey: String,
                                             units: String,
@@ -43,12 +42,12 @@ class RepositoryImp  constructor(
     ): Flow<WeatherData> {
 return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude,apiKey,units,lang)  ) }
 
-    override suspend fun getWeatherWithCity2(city: String, apiKey: String,units: String,
+    override  suspend fun getWeatherWithCity2(city: String, apiKey: String,units: String,
                                              lang: String,): Flow<WeatherData> {
       return  flowOf(RemoteDataSource.getWeatherWithCity(city,apiKey,units,lang))
     }
 
-    override suspend fun getStored(): Flow<List<WeatherData>> {
+    override  fun getStored(): Flow<List<WeatherData>> {
         return LocalDataSource.getStoredProducts()
     }
 
@@ -56,7 +55,7 @@ return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude
         return LocalDataSource.insertWeatherData(product)
     }
 
-    override suspend fun getStoredHome(): Flow<List<Responce>> {
+    override  fun getStoredHome(): Flow<List<Responce>> {
         return LocalDataSource.getStoredWeatherHome()
     }
 
@@ -68,7 +67,7 @@ return flowOf (RemoteDataSource.getWeatherWithCityOverNetwork(latitude,longitude
         return LocalDataSource.deleteWeatherData(weather)
     }
 
-    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
+    override fun getStoredAlarms(): Flow<List<Alarm>> {
         return LocalDataSource.getStoredAlarms()
     }
 

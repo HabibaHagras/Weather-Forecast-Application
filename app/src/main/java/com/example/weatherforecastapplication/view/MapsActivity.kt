@@ -81,12 +81,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
                 allMapsViewModel =
                     ViewModelProvider(this, allMapsFactroy).get(Maps::class.java)
-//
-//                allMapsViewModel.weatherMaps.observe(this,
-//                    Observer<Responce> { value ->
-//                        city_name=value.city.name.toString()
-//                    })
-
                 val geocoder = Geocoder(this)
                 val addresses = geocoder.getFromLocation(selectedLatitude, selectedLongitude, 1)
                 if (addresses != null && addresses.isNotEmpty()) {
@@ -139,11 +133,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             )
                         )
                         finish()
-//                    }
-//                    else {
-//                    Toast.makeText(this, "City name is null", Toast.LENGTH_LONG).show()
-
-
                 }
 
                }

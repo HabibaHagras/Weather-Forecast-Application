@@ -44,7 +44,7 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
         dao.delete(weatherData)
     }
 
-    override suspend fun getStoredProducts(): Flow<List<WeatherData>> {
+    override  fun getStoredProducts(): Flow<List<WeatherData>> {
         return dao.getAll()
     }
 
@@ -54,11 +54,11 @@ class WeatherLocalDataSourceImp(context: Context) : WeatherLocalDataSource {
         daoResponce.insertResponce(weather)
     }
 
-    override suspend fun getStoredWeatherHome(): Flow<List<Responce>> {
+    override  fun getStoredWeatherHome(): Flow<List<Responce>> {
         return daoResponce.getAllResponces()
     }
 
-    override suspend fun getStoredAlarms(): Flow<List<Alarm>> {
+    override  fun getStoredAlarms(): Flow<List<Alarm>> {
         return  daoAlarm.getAllAlarms()
     }
 

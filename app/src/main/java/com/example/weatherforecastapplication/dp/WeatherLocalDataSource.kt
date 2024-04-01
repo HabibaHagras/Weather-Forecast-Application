@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface WeatherLocalDataSource {
     suspend fun insertWeatherData(product: WeatherData)
     suspend fun deleteWeatherData(product: WeatherData)
-    suspend fun getStoredProducts(): Flow<List<WeatherData>>
+     fun getStoredProducts(): Flow<List<WeatherData>>
     suspend fun insertWeatherHome(weather: Responce)
-    suspend fun getStoredWeatherHome(): Flow<List<Responce>>
-    suspend fun getStoredAlarms(): Flow<List<Alarm>>
+     fun getStoredWeatherHome(): Flow<List<Responce>>
+     fun getStoredAlarms(): Flow<List<Alarm>>
     suspend fun insertAlarms(alarm: Alarm)
     suspend fun deleteAlarms(alarm: Alarm)
 

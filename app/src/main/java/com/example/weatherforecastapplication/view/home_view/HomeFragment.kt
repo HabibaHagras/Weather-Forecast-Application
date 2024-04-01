@@ -21,6 +21,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -66,6 +67,9 @@ class HomeFragment : Fragment() {
     lateinit var rvWeek: RecyclerView
     lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var textViewCity: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar1: ProgressBar
+    private lateinit var progressBar2: ProgressBar
     var longitude: Double = 0.0
     var latitude: Double = 0.0
 
@@ -86,6 +90,10 @@ class HomeFragment : Fragment() {
         val favName = arguments?.getString("selected_city")
         val favLat = arguments?.getDouble("selected_lat")
         val favLon = arguments?.getDouble("selected_lon")
+        progressBar = view.findViewById(R.id.progressBar)
+        progressBar1 = view.findViewById(R.id.progressBar3)
+        progressBar2 = view.findViewById(R.id.progressBar2)
+
         Log.i("TAGMap", "OnCLickIteamFav:$favLat + $favLon  ")
         mWeekLayoutManager= LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         mLayoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -123,20 +131,24 @@ class HomeFragment : Fragment() {
                         result->
                     when(result){
                         is ApiState.loading->{
-                            //    progressBar.visibility = ProgressBar.VISIBLE
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.VISIBLE
+                            progressBar2.visibility = ProgressBar.VISIBLE
                             Log.i("TAG", "LOOOOODING: ")
 
                         }
                         is ApiState.Sucessed->{
-                            //     progressBar.visibility = ProgressBar.GONE
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.GONE
+                            progressBar2.visibility = ProgressBar.GONE
                             mAdapter.setDataAndFilterByDate(result.data.list)
                             mWeekAdapter.setData(result.data.list)
                             updateUIFromFav(result.data,favName)
                         }
                         else->{
-                            //   progressBar.visibility = ProgressBar.GONE
-
-                            Toast.makeText(requireContext(), "Failed to load data favName", Toast.LENGTH_SHORT).show()
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.GONE
+                            progressBar2.visibility = ProgressBar.GONE
 
                         }
 
@@ -154,20 +166,24 @@ class HomeFragment : Fragment() {
                             result->
                         when(result){
                             is ApiState.loading->{
-                                //    progressBar.visibility = ProgressBar.VISIBLE
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.VISIBLE
+                                progressBar2.visibility = ProgressBar.VISIBLE
                                 Log.i("TAG", "LOOOOODING: ")
 
                             }
                             is ApiState.Sucessed->{
-                                //     progressBar.visibility = ProgressBar.GONE
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.GONE
+                                progressBar2.visibility = ProgressBar.GONE
                                 mAdapter.setDataAndFilterByDate(result.data.list)
                                 mWeekAdapter.setData(result.data.list)
                                 updateUI(result.data)
                             }
                             else->{
-                                //   progressBar.visibility = ProgressBar.GONE
-
-                                Toast.makeText(requireContext(), "Failed to load data getAllWeatherMap", Toast.LENGTH_SHORT).show()
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.GONE
+                                progressBar2.visibility = ProgressBar.GONE
 
                             }
 
@@ -184,12 +200,16 @@ class HomeFragment : Fragment() {
                             result->
                         when(result){
                             is ApiState.loading->{
-                                //    progressBar.visibility = ProgressBar.VISIBLE
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.VISIBLE
+                                progressBar2.visibility = ProgressBar.VISIBLE
                                 Log.i("TAG", "LOOOOODING: ")
 
                             }
                             is ApiState.Sucessed->{
-                                //    progressBar.visibility = ProgressBar.GONE
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.GONE
+                                progressBar2.visibility = ProgressBar.GONE
                                 mAdapter.setDataAndFilterByDate(result.data.list)
                                 mWeekAdapter.setData(result.data.list)
                                 updateUI(result.data)
@@ -201,7 +221,10 @@ class HomeFragment : Fragment() {
                                 val errorMessage = result.msg.message
                                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                             }
-                            else->{Toast.makeText(requireContext(), "errorMessage", Toast.LENGTH_SHORT).show()
+                            else->{
+                                progressBar.visibility = ProgressBar.GONE
+                                progressBar1.visibility = ProgressBar.GONE
+                                progressBar2.visibility = ProgressBar.GONE
                         }
 
 
@@ -220,21 +243,24 @@ class HomeFragment : Fragment() {
                         result->
                     when(result){
                         is ApiState.loading->{
-                        //    progressBar.visibility = ProgressBar.VISIBLE
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.VISIBLE
+                            progressBar2.visibility = ProgressBar.VISIBLE
                             Log.i("TAG", "LOOOOODING: ")
 
                         }
                         is ApiState.Sucess->{
-                       //     progressBar.visibility = ProgressBar.GONE
-
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.GONE
+                            progressBar2.visibility = ProgressBar.GONE
                             mAdapter.setDataAndFilterByDate(result.data.last().list)
                             mWeekAdapter.setData(result.data.last().list)
                             updateUI(result.data.last())
                         }
                         else->{
-                         //   progressBar.visibility = ProgressBar.GONE
-
-                            Toast.makeText(requireContext(), "Failed to load data nooo net", Toast.LENGTH_SHORT).show()
+                            progressBar.visibility = ProgressBar.GONE
+                            progressBar1.visibility = ProgressBar.GONE
+                            progressBar2.visibility = ProgressBar.GONE
 
                         }
 
@@ -247,8 +273,6 @@ class HomeFragment : Fragment() {
     }
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        // Check if the language configuration has changed
         if (newConfig.locale != Locale.getDefault()) {
             // Language configuration has changed, update locale
             Locale.setDefault(newConfig.locale)
@@ -533,23 +557,6 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun getIconUrl(iconCode: String): Int {
-        return when (iconCode) {
-            "01d" -> R.drawable.day_forecast_sun_sunny_weather_icon
-            "01n" -> R.drawable.eclipse_forecast_moon_night_space_iconn
-            "02d" -> R.drawable.cloud_cloudy_day_forecast_sun_iconn
-            "02n" -> R.drawable.weather_clouds_cloudy_moon_icon
-            "03d", "03n" -> R.drawable.weather_cloud_clouds_cloudy_icon
-            "04d", "04n" -> R.drawable.weather_cloud_clouds_cloudyy_icon
-            "09d", "09n" -> R.drawable.clouds_cloudy_foggy_weather_icon
-            "10d" -> R.drawable.weather_clouds_cloudy_forecast_rain_icon
-            "10n" -> R.drawable.weather_clouds_cloudy_rain_sunny_icon
-            "11d", "11n" -> R.drawable.cloud_flash_weather_rain_snow_icon
-            "13d", "13n" -> R.drawable.weather_storm_icon
-            "50d", "50n" -> R.drawable.rain_snowflake_snow_cloud_winter_icon
-            else -> R.drawable.cloud_white_24dp // Default icon for unknown weather conditions
-        }
-    }
     fun showLocationSelectionDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.init_dialoge, null)
         val alertDialogBuilder = AlertDialog.Builder(requireContext())

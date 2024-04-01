@@ -21,9 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.weatherforecastapplication.model2.SharedPreferencesManager
 import com.example.weatherforecastapplication.view.InitFragment
 import com.example.weatherforecastapplication.view.MapsActivity
-import com.example.weatherforecastapplication.view.notifications_view.AlarmFragment
 import com.example.weatherforecastapplication.view.favorite_view.FavFragment
-import com.example.weatherforecastapplication.view.notifications_view.NotificationFragment
 import com.example.weatherforecastapplication.view.settings_view.SettingsFragment
 import com.example.weatherforecastapplication.view.home_view.HomeFragment
 import com.example.weatherforecastapplication.view.notifications_view.AlarmSoundFragment
@@ -91,28 +89,10 @@ class MainActivity2 : AppCompatActivity(),  NavigationView.OnNavigationItemSelec
                     .replace(R.id.fragment_container, AlarmSoundFragment()).commit()
                 R.id.nav_about -> supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, SettingsFragment()).commit()
-                R.id.nav_notification -> supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, NotificationFragment()).commit()
-//                R.id.nav_logout -> Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show()
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             return true
         }
-//    override fun onConfigurationChanged(newConfig: Configuration) {
-//        super.onConfigurationChanged(newConfig)
-//
-//        // Check if the language configuration has changed
-//        if (newConfig.locale != Locale.getDefault()) {
-//
-//            // Language configuration has changed, update locale
-//            Locale.setDefault(newConfig.locale)
-//            val configuration = Configuration()
-//            configuration.locale = newConfig.locale
-//            resources.updateConfiguration(configuration, resources.displayMetrics)
-//            Log.i("aaaaa", "onConfigurationChanged: ${newConfig.locale.toString()}")
-//            recreate()
-//        }
-//    }
 
         override fun onBackPressed() {
             super.onBackPressed()

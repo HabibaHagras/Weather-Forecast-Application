@@ -29,9 +29,7 @@ class notification (private val repo: Repository,
     private var unit: String = ""
 
     init {
-
         updateLocationFromSharedPreferences()
-//        getAllProducts()
     }
 
     private fun updateLocationFromSharedPreferences() {
